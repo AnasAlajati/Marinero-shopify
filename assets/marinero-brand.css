@@ -280,3 +280,106 @@ section > .title-wrapper h2 {
   font-family: var(--font-serif);
   font-size: clamp(1.8rem, 3vw, 2.8rem);
 }
+
+/* ── Transparent → solid header on scroll ───────────────── */
+header-component {
+  transition:
+    background-color var(--duration-normal, 320ms) cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow       var(--duration-normal, 320ms) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+header-component.marinero-header--scrolled {
+  background-color: var(--marinero-navy) !important;
+  box-shadow: 0 4px 24px rgba(11, 31, 58, 0.18);
+}
+
+header-component.marinero-header--scrolled .header__heading-link,
+header-component.marinero-header--scrolled .header__menu-item a,
+header-component.marinero-header--scrolled a {
+  color: var(--marinero-linen) !important;
+}
+
+/* ── Product card: image crossfade on hover ─────────────── */
+.card {
+  position: relative;
+  overflow: hidden;
+}
+
+.card__media {
+  position: relative;
+  overflow: hidden;
+}
+
+.card__media img:nth-child(2),
+.card__media .card__image--secondary {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--duration-normal, 320ms) cubic-bezier(0.22, 1, 0.36, 1);
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.card:hover .card__media img:nth-child(2),
+.card:hover .card__media .card__image--secondary {
+  opacity: 1;
+}
+
+/* Scale primary image slightly on hover for depth */
+.card__media img:first-child {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card:hover .card__media img:first-child {
+  transform: scale(1.04);
+}
+
+/* ── Quick-add slide up on hover ────────────────────────── */
+.card .quick-add,
+.card [class*="quick-add"] {
+  transform: translateY(100%);
+  transition: transform var(--duration-normal, 320ms) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card:hover .quick-add,
+.card:hover [class*="quick-add"] {
+  transform: translateY(0);
+}
+
+/* ── Card shadow upgrade ────────────────────────────────── */
+.card {
+  box-shadow: var(--shadow-card, 0 2px 16px rgba(11,31,58,0.08));
+  transition:
+    box-shadow var(--duration-normal, 320ms) cubic-bezier(0.22, 1, 0.36, 1),
+    transform  var(--duration-normal, 320ms) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-card-hover, 0 8px 32px rgba(11,31,58,0.16));
+  transform: translateY(-2px);
+}
+
+/* ── Generous section whitespace ────────────────────────── */
+.section-wrapper {
+  padding-block: var(--section-padding-block, 5rem);
+}
+
+/* ── Button hover lift ──────────────────────────────────── */
+.button {
+  transition:
+    background-color var(--duration-fast, 180ms) ease,
+    color            var(--duration-fast, 180ms) ease,
+    transform        var(--duration-fast, 180ms) ease,
+    box-shadow       var(--duration-fast, 180ms) ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(11, 31, 58, 0.2);
+}
+
+.button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}

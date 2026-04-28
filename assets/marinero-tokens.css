@@ -1,0 +1,78 @@
+/* MARINERO Design Tokens — single source of truth for spacing, shadow, motion */
+
+:root {
+  /* Spacing */
+  --space-xs:  0.5rem;
+  --space-sm:  1rem;
+  --space-md:  2rem;
+  --space-lg:  4rem;
+  --space-xl:  7rem;
+  --space-2xl: 11rem;
+
+  /* Shadows */
+  --shadow-card:        0 2px 16px rgba(11, 31, 58, 0.08);
+  --shadow-card-hover:  0 8px 32px rgba(11, 31, 58, 0.16);
+  --shadow-header:      0 1px 0 rgba(11, 31, 58, 0.10);
+  --shadow-header-scrolled: 0 4px 24px rgba(11, 31, 58, 0.18);
+
+  /* Easing */
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Durations */
+  --duration-fast:   180ms;
+  --duration-normal: 320ms;
+  --duration-slow:   600ms;
+
+  /* Section rhythm */
+  --section-padding-block: var(--space-xl);
+  --section-padding-inline: var(--space-md);
+}
+
+@media screen and (max-width: 749px) {
+  :root {
+    --space-xl:  4rem;
+    --space-2xl: 6rem;
+    --section-padding-block: var(--space-lg);
+  }
+}
+
+/* Section rhythm utility — apply to any section wrapper */
+.marinero-section {
+  padding-block: var(--section-padding-block);
+  padding-inline: var(--section-padding-inline);
+}
+
+/* Section label — editorial "NEW IN · SS25" style eyebrow */
+.marinero-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #0B1F3A;
+  margin-bottom: var(--space-sm);
+}
+
+.marinero-label::before {
+  content: '';
+  display: block;
+  width: 2rem;
+  height: 1px;
+  background-color: #0B1F3A;
+  flex-shrink: 0;
+}
+
+/* Dark scheme variant */
+.color-scheme-3 .marinero-label,
+.color-scheme-4 .marinero-label {
+  color: #D3CEBE;
+}
+
+.color-scheme-3 .marinero-label::before,
+.color-scheme-4 .marinero-label::before {
+  background-color: #D3CEBE;
+}

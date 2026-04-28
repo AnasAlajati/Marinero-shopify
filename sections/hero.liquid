@@ -549,6 +549,10 @@
   </div>
 </div>
 
+{% if section.index == 1 %}
+  <div id="marinero-scroll-sentinel" style="height:1px;pointer-events:none;" aria-hidden="true"></div>
+{% endif %}
+
 {% stylesheet %}
   .hero-wrapper {
     --hero-height-offset: 0px;
@@ -731,6 +735,21 @@
       display: none;
     }
   }
+
+  /* ── Hero entrance animations ── */
+  @keyframes hero-rise {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes hero-drop {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .marinero-hero-anchor  { animation: hero-drop 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0ms    both; }
+  .marinero-hero-wordmark{ animation: hero-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 200ms  both; }
+  .marinero-hero-tagline { animation: hero-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 450ms  both; }
 
   /* ── MARINERO brand hero (no-image fallback) ── */
   .marinero-hero-brand {
