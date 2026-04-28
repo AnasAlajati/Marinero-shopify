@@ -1,0 +1,282 @@
+/* MARINERO Brand Identity Stylesheet */
+/* Navy #0B1F3A | Ocean #1B3A5C | Linen #F5F0E8 | Stone #D3CEBE | Charcoal #2C2C2A | Terracotta #C0552A */
+
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+/* ── Root brand tokens ─────────────────────────────────── */
+:root {
+  --marinero-navy:       #0B1F3A;
+  --marinero-ocean:      #1B3A5C;
+  --marinero-linen:      #F5F0E8;
+  --marinero-stone:      #D3CEBE;
+  --marinero-charcoal:   #2C2C2A;
+  --marinero-terracotta: #C0552A;
+  --marinero-white:      #FFFFFF;
+
+  --font-serif: 'EB Garamond', Georgia, 'Times New Roman', serif;
+  --font-sans:  'Inter', Arial, Helvetica, sans-serif;
+}
+
+/* ── Typography ────────────────────────────────────────── */
+body {
+  font-family: var(--font-sans);
+  color: var(--marinero-charcoal);
+  background-color: var(--marinero-linen);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3,
+.h1, .h2, .h3 {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+h4, h5, h6,
+.h4, .h5, .h6 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+}
+
+/* Labels & tags always uppercase, spaced */
+.badge,
+.label,
+[class*="tag"],
+[class*="label"],
+.price__badge,
+.card__badge {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── Buttons — sharp, editorial ────────────────────────── */
+.button,
+button[type="submit"],
+.shopify-payment-button__button {
+  border-radius: 0 !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+
+/* ── Inputs ─────────────────────────────────────────────── */
+input, select, textarea {
+  border-radius: 0 !important;
+  font-family: var(--font-sans);
+  border-color: var(--marinero-stone);
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+.header {
+  border-bottom: 1px solid rgba(11, 31, 58, 0.12);
+}
+
+.header__heading-link,
+.header__menu-item a {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+/* Anchor-style logo wordmark treatment */
+.header__heading {
+  font-family: var(--font-serif);
+  letter-spacing: 0.2em;
+  font-size: 1.4rem;
+}
+
+/* ── Announcement bar ───────────────────────────────────── */
+.announcement-bar {
+  background-color: var(--marinero-navy);
+  color: var(--marinero-linen);
+}
+
+.announcement-bar a,
+.announcement-bar p {
+  color: var(--marinero-linen);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-family: var(--font-sans);
+}
+
+/* ── Hero ───────────────────────────────────────────────── */
+.hero {
+  background-color: var(--marinero-navy);
+}
+
+.hero__content h1,
+.hero__content h2 {
+  font-family: var(--font-serif);
+  color: var(--marinero-linen);
+}
+
+.hero__content p {
+  font-family: var(--font-sans);
+  color: var(--marinero-stone);
+  letter-spacing: 0.04em;
+}
+
+/* ── Product cards ──────────────────────────────────────── */
+.card {
+  border-radius: 0 !important;
+  background: var(--marinero-white);
+  border: 1px solid var(--marinero-stone);
+  transition: box-shadow 250ms ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 24px rgba(11, 31, 58, 0.1);
+}
+
+.card__heading {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+}
+
+/* ── Price ─────────────────────────────────────────────── */
+.price {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  color: var(--marinero-navy);
+}
+
+.price--on-sale .price__regular {
+  color: var(--marinero-stone);
+  text-decoration: line-through;
+}
+
+.price--on-sale .price__sale {
+  color: var(--marinero-terracotta);
+}
+
+/* ── Sale badge ─────────────────────────────────────────── */
+.badge--sale,
+[class*="badge--sale"] {
+  background-color: var(--marinero-terracotta) !important;
+  color: var(--marinero-white) !important;
+  border-radius: 0 !important;
+}
+
+/* ── Footer ─────────────────────────────────────────────── */
+.footer {
+  background-color: var(--marinero-navy);
+  color: var(--marinero-linen);
+}
+
+.footer a {
+  color: var(--marinero-stone);
+  transition: color 150ms ease;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+}
+
+.footer a:hover {
+  color: var(--marinero-linen);
+}
+
+.footer__heading,
+.footer h3,
+.footer h4 {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--marinero-linen);
+  margin-bottom: 1rem;
+}
+
+/* ── Dividers ────────────────────────────────────────────── */
+hr,
+.divider {
+  border-color: var(--marinero-stone);
+  opacity: 0.4;
+}
+
+/* ── Scroll-reveal animation ─────────────────────────────── */
+.m-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.m-reveal.m-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.m-reveal--delay-1 { transition-delay: 0.1s; }
+.m-reveal--delay-2 { transition-delay: 0.2s; }
+.m-reveal--delay-3 { transition-delay: 0.3s; }
+
+/* ── Category nav strip ──────────────────────────────────── */
+.marinero-category-strip {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--marinero-stone);
+  background: var(--marinero-linen);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.marinero-category-strip::-webkit-scrollbar { display: none; }
+
+.marinero-category-strip a {
+  flex-shrink: 0;
+  padding: 0.9rem 1.6rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--marinero-charcoal);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: color 150ms ease, border-color 150ms ease;
+}
+
+.marinero-category-strip a:hover,
+.marinero-category-strip a.active {
+  color: var(--marinero-navy);
+  border-bottom-color: var(--marinero-navy);
+}
+
+/* ── Tagline / brand statement ───────────────────────────── */
+.marinero-tagline {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--marinero-navy);
+  text-align: center;
+  padding: 3rem 1.5rem;
+  letter-spacing: 0.01em;
+}
+
+/* ── Marquee / announcement strip ────────────────────────── */
+.marquee__content {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── Collection section heading ──────────────────────────── */
+.collection-section__heading,
+.featured-collection__heading,
+section > .title-wrapper h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+}

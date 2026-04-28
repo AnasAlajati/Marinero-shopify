@@ -279,6 +279,20 @@
 ></script>
 
 <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('m-visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.m-reveal').forEach(el => io.observe(el));
+  });
+</script>
+
+<script>
   const Theme = {
     translations: {
       placeholder_image: `{{ 'content.placeholder_image' | t }}`,
