@@ -327,7 +327,17 @@
   {{ media_slot_2 }}
 
   {% if media_count == 0 %}
-    {{ 'hero-apparel-1' | placeholder_svg_tag: 'hero__media' }}
+    <div class="marinero-hero-brand" aria-hidden="true">
+      <svg class="marinero-hero-anchor" viewBox="0 0 80 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="22" r="10" stroke="#F5F0E8" stroke-width="2.5" fill="none"/>
+        <line x1="40" y1="32" x2="40" y2="80" stroke="#F5F0E8" stroke-width="2.5"/>
+        <path d="M15 52 Q10 70 40 80 Q70 70 65 52" stroke="#F5F0E8" stroke-width="2.5" fill="none"/>
+        <line x1="20" y1="52" x2="60" y2="52" stroke="#F5F0E8" stroke-width="2.5"/>
+        <circle cx="40" cy="22" r="4" fill="#F5F0E8"/>
+      </svg>
+      <span class="marinero-hero-wordmark">MARINERO</span>
+      <span class="marinero-hero-tagline">Style for the whole family.</span>
+    </div>
   {%- endif -%}
 {% endcapture %}
 
@@ -359,7 +369,7 @@
     }}
   {% endif %}
   {% if media_count == 0 %}
-    {{ 'hero-apparel-1' | placeholder_svg_tag: 'hero__media' }}
+    {%- comment -%} No blurred reflection needed for brand placeholder {%- endcomment -%}
   {% endif %}
 {% endcapture %}
 
@@ -720,6 +730,54 @@
     @media screen and (min-width: 750px) {
       display: none;
     }
+  }
+
+  /* ── MARINERO brand hero (no-image fallback) ── */
+  .marinero-hero-brand {
+    position: absolute;
+    inset: 0;
+    background-color: #0B1F3A;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    z-index: var(--layer-base);
+  }
+
+  .marinero-hero-anchor {
+    width: 72px;
+    height: 82px;
+    opacity: 0.85;
+    animation: marinero-anchor-float 4s ease-in-out infinite;
+  }
+
+  @keyframes marinero-anchor-float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-8px); }
+  }
+
+  .marinero-hero-wordmark {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    color: #F5F0E8;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .marinero-hero-tagline {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-style: italic;
+    font-size: clamp(1rem, 2.2vw, 1.4rem);
+    color: #D3CEBE;
+    letter-spacing: 0.06em;
+  }
+
+  /* Force hero background to Navy when no media is loaded */
+  .hero:has(.marinero-hero-brand) {
+    background-color: #0B1F3A;
   }
 
   .hero__blurred-image img,
