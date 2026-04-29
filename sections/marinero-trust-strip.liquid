@@ -1,0 +1,160 @@
+{% comment %} MARINERO Trust Strip — 4 trust icons, configurable via theme editor {% endcomment %}
+
+<div class="marinero-trust color-{{ section.settings.color_scheme }}">
+  <div class="marinero-trust__inner">
+
+    {%- for block in section.blocks -%}
+      <div class="marinero-trust__item" {{ block.shopify_attributes }}>
+        <div class="marinero-trust__icon" aria-hidden="true">{{ block.settings.icon }}</div>
+        <div class="marinero-trust__text">
+          <span class="marinero-trust__title">{{ block.settings.title }}</span>
+          {%- if block.settings.subtitle != blank -%}
+            <span class="marinero-trust__subtitle">{{ block.settings.subtitle }}</span>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endfor -%}
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .marinero-trust {
+    border-top: 1px solid rgba(245, 240, 232, 0.12);
+    border-bottom: 1px solid rgba(245, 240, 232, 0.12);
+  }
+
+  .marinero-trust__inner {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem;
+    gap: 1.25rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .marinero-trust__inner {
+      grid-template-columns: repeat(4, 1fr);
+      padding: 2rem 2.5rem;
+      gap: 1rem;
+    }
+  }
+
+  .marinero-trust__item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .marinero-trust__icon {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .marinero-trust__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .marinero-trust__title {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: var(--color-foreground-heading);
+  }
+
+  .marinero-trust__subtitle {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 0.68rem;
+    color: var(--color-foreground);
+    opacity: 0.75;
+    letter-spacing: 0.01em;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trust Strip",
+  "tag": "section",
+  "class": "section-wrapper",
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "trust_item",
+      "name": "Trust item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon (emoji)",
+          "default": "🚚"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Free Shipping"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "On orders over 500 EGP"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-3"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust Strip",
+      "blocks": {
+        "shipping": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "🚚",
+            "title": "شحن مجاني",
+            "subtitle": "للطلبات فوق 500 جنيه"
+          }
+        },
+        "returns": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "↩️",
+            "title": "إرجاع سهل",
+            "subtitle": "خلال 14 يوم"
+          }
+        },
+        "payment": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "🔒",
+            "title": "دفع آمن 100%",
+            "subtitle": "Visa · Mastercard · الدفع عند الاستلام"
+          }
+        },
+        "quality": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "⭐",
+            "title": "جودة مضمونة",
+            "subtitle": "قماش متين للأطفال"
+          }
+        }
+      },
+      "block_order": ["shipping", "returns", "payment", "quality"]
+    }
+  ]
+}
+{% endschema %}

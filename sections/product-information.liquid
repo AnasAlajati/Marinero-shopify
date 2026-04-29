@@ -4,6 +4,42 @@
   {{ closest.product | structured_data }}
 </script>
 
+{%- comment -%} MARINERO — Trust icons + scarcity below product details {%- endcomment -%}
+<div class="marinero-product-trust">
+  <div class="marinero-product-trust__items">
+    <span class="marinero-product-trust__item">🚚 شحن مجاني فوق 500 جنيه</span>
+    <span class="marinero-product-trust__item">↩️ إرجاع خلال 14 يوم</span>
+    <span class="marinero-product-trust__item">🔒 دفع آمن · الدفع عند الاستلام</span>
+  </div>
+  {%- render 'marinero-scarcity', product: product -%}
+</div>
+
+<style>
+  .marinero-product-trust {
+    border-top: 1px solid #D3CEBE;
+    border-bottom: 1px solid #D3CEBE;
+    padding: 1rem 0;
+    margin-block: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .marinero-product-trust__items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+  }
+
+  .marinero-product-trust__item {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 0.75rem;
+    color: #2C2C2A;
+    letter-spacing: 0.02em;
+    direction: rtl;
+  }
+</style>
+
 {% capture media_gallery %}
   {%- content_for 'block',
     type: '_product-media-gallery',

@@ -281,6 +281,24 @@ section > .title-wrapper h2 {
   font-size: clamp(1.8rem, 3vw, 2.8rem);
 }
 
+/* ── Age range badge on product cards ───────────────────── */
+.marinero-age-badge {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  background: var(--marinero-navy);
+  color: var(--marinero-linen);
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.5rem;
+  pointer-events: none;
+  z-index: 2;
+  direction: rtl;
+}
+
 /* ── Transparent → solid header on scroll ───────────────── */
 header-component {
   transition:

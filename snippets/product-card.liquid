@@ -81,6 +81,17 @@
       {{ product.title }}
     </span>
   </a>
+
+  {%- comment -%} MARINERO age range badge from product tags (e.g. tag "age:2-4") {%- endcomment -%}
+  {%- unless onboarding -%}
+    {%- for tag in product.tags -%}
+      {%- if tag contains 'age:' -%}
+        {%- assign age_label = tag | remove: 'age:' -%}
+        <span class="marinero-age-badge">{{ age_label }} سنوات</span>
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endunless -%}
   <div
     class="
       product-card__content

@@ -1,0 +1,60 @@
+{% comment %}
+  MARINERO Scarcity Signal.
+  Usage: {% render 'marinero-scarcity', product: product %}
+  Shows a low-stock warning when inventory ≤ 5.
+{% endcomment %}
+
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign inventory = variant.inventory_quantity
+  assign policy = variant.inventory_management
+-%}
+
+{%- if policy == 'shopify' and inventory > 0 and inventory <= 5 -%}
+  <div class="marinero-scarcity" role="alert" aria-live="polite">
+    <span class="marinero-scarcity__dot" aria-hidden="true"></span>
+    <span class="marinero-scarcity__text">
+      {%- if inventory == 1 -%}
+        تبقى قطعة واحدة فقط!
+      {%- else -%}
+        تبقى {{ inventory }} قطع فقط!
+      {%- endif -%}
+    </span>
+  </div>
+{%- endif -%}
+
+<style>
+  .marinero-scarcity {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(192, 85, 42, 0.08);
+    border: 1px solid rgba(192, 85, 42, 0.25);
+    border-radius: 0;
+    padding: 0.45rem 0.8rem;
+    margin-block: 0.5rem;
+  }
+
+  .marinero-scarcity__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #C0552A;
+    flex-shrink: 0;
+    animation: marinero-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes marinero-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .marinero-scarcity__text {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #C0552A;
+    letter-spacing: 0.02em;
+    direction: rtl;
+  }
+</style>

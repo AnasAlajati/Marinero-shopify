@@ -40,6 +40,35 @@
         {%- content_for 'block', id: 'cart-page-title', type: '_cart-title' %}
       </div>
 
+      {%- unless cart.empty? -%}
+        {%- liquid
+          assign free_shipping_threshold = 50000
+          assign cart_total = cart.total_price
+          assign remaining = free_shipping_threshold | minus: cart_total
+          assign progress = cart_total | times: 100 | divided_by: free_shipping_threshold
+          if progress > 100
+            assign progress = 100
+          endif
+        -%}
+        <div class="marinero-shipping-bar">
+          {%- if remaining > 0 -%}
+            <p class="marinero-shipping-bar__msg">أضيفي <strong>{{ remaining | money }}</strong> للحصول على شحن مجاني 🚚</p>
+          {%- else -%}
+            <p class="marinero-shipping-bar__msg marinero-shipping-bar__msg--done">🎉 مبروك! حصلتِ على شحن مجاني</p>
+          {%- endif -%}
+          <div class="marinero-shipping-bar__track">
+            <div class="marinero-shipping-bar__fill" style="width: {{ progress }}%;"></div>
+          </div>
+        </div>
+      {%- else -%}
+        <div class="marinero-empty-cart">
+          <div class="marinero-empty-cart__icon" aria-hidden="true">🛒</div>
+          <h2 class="marinero-empty-cart__heading">سلتك فاضية</h2>
+          <p class="marinero-empty-cart__text">ما زلتِ لم تضيفي أي منتج. تصفحي مجموعتنا وأضيفي ما يعجبك لأطفالك.</p>
+          <a href="/collections/all" class="button button--primary marinero-empty-cart__cta">تسوقي الآن</a>
+        </div>
+      {%- endunless -%}
+
       <div class="cart-page__items">
         {%- content_for 'block', id: 'cart-page-items', type: '_cart-products' %}
       </div>
@@ -128,6 +157,79 @@
     .cart-page {
       grid-template-columns: 1fr var(--sidebar-width);
     }
+  }
+
+  /* ── MARINERO shipping bar ── */
+  .marinero-shipping-bar {
+    background: #F5F0E8;
+    border: 1px solid #D3CEBE;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+    grid-column: 1 / -1;
+  }
+
+  .marinero-shipping-bar__msg {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 0.82rem;
+    color: #2C2C2A;
+    margin-bottom: 0.6rem;
+    direction: rtl;
+    text-align: right;
+  }
+
+  .marinero-shipping-bar__msg--done {
+    color: #0B1F3A;
+    font-weight: 600;
+  }
+
+  .marinero-shipping-bar__track {
+    height: 4px;
+    background: #D3CEBE;
+    border-radius: 0;
+    overflow: hidden;
+  }
+
+  .marinero-shipping-bar__fill {
+    height: 100%;
+    background: #0B1F3A;
+    transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* ── MARINERO empty cart ── */
+  .marinero-empty-cart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 3rem 1.5rem;
+    gap: 1rem;
+    grid-column: 1 / -1;
+  }
+
+  .marinero-empty-cart__icon { font-size: 3rem; }
+
+  .marinero-empty-cart__heading {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #0B1F3A;
+    direction: rtl;
+  }
+
+  .marinero-empty-cart__text {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 0.9rem;
+    color: #2C2C2A;
+    max-width: 36ch;
+    line-height: 1.6;
+    direction: rtl;
+  }
+
+  .marinero-empty-cart__cta {
+    margin-top: 0.5rem;
+    padding: 0.85rem 2.5rem;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
   }
 {% endstylesheet %}
 

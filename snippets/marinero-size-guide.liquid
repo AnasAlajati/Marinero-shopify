@@ -1,0 +1,96 @@
+{% comment %}
+  MARINERO Size Guide — Kids age-to-size table.
+  Render inside an accordion on the product page.
+{% endcomment %}
+
+<div class="marinero-size-guide">
+  <p class="marinero-size-guide__intro">اختاري المقاس بناءً على عمر طفلك. كل الأحجام مناسبة للارتداء المريح.</p>
+
+  <div class="marinero-size-guide__table-wrap">
+    <table class="marinero-size-guide__table">
+      <thead>
+        <tr>
+          <th>المقاس</th>
+          <th>العمر</th>
+          <th>الطول (سم)</th>
+          <th>الوزن (كجم)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>NB</td><td>مواليد</td><td>50–56</td><td>3–4</td></tr>
+        <tr><td>3M</td><td>3 شهور</td><td>56–62</td><td>4–6</td></tr>
+        <tr><td>6M</td><td>6 شهور</td><td>62–68</td><td>6–8</td></tr>
+        <tr><td>9M</td><td>9 شهور</td><td>68–74</td><td>7–9</td></tr>
+        <tr><td>12M</td><td>12 شهر</td><td>74–80</td><td>8–10</td></tr>
+        <tr><td>18M</td><td>18 شهر</td><td>80–86</td><td>9–11</td></tr>
+        <tr><td>2Y</td><td>سنتين</td><td>86–92</td><td>11–13</td></tr>
+        <tr><td>3Y</td><td>3 سنوات</td><td>92–98</td><td>13–15</td></tr>
+        <tr><td>4Y</td><td>4 سنوات</td><td>98–104</td><td>15–17</td></tr>
+        <tr><td>5Y</td><td>5 سنوات</td><td>104–110</td><td>17–19</td></tr>
+        <tr><td>6Y</td><td>6 سنوات</td><td>110–116</td><td>19–22</td></tr>
+        <tr><td>8Y</td><td>8 سنوات</td><td>116–128</td><td>22–27</td></tr>
+        <tr><td>10Y</td><td>10 سنوات</td><td>128–138</td><td>27–33</td></tr>
+        <tr><td>12Y</td><td>12 سنة</td><td>138–150</td><td>33–40</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="marinero-size-guide__note">لو طفلك بين مقاسين، اختاري الأكبر للراحة والنمو.</p>
+</div>
+
+<style>
+  .marinero-size-guide {
+    padding: 1rem 0;
+    direction: rtl;
+  }
+
+  .marinero-size-guide__intro {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 0.85rem;
+    color: #2C2C2A;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .marinero-size-guide__table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .marinero-size-guide__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 0.78rem;
+  }
+
+  .marinero-size-guide__table th {
+    background: #0B1F3A;
+    color: #F5F0E8;
+    padding: 0.6rem 0.75rem;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  .marinero-size-guide__table td {
+    padding: 0.55rem 0.75rem;
+    text-align: center;
+    color: #2C2C2A;
+    border-bottom: 1px solid #D3CEBE;
+  }
+
+  .marinero-size-guide__table tbody tr:nth-child(even) td {
+    background: #F5F0E8;
+  }
+
+  .marinero-size-guide__note {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 0.72rem;
+    color: #2C2C2A;
+    opacity: 0.7;
+    margin-top: 0.75rem;
+    font-style: italic;
+  }
+</style>

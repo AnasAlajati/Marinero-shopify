@@ -19,7 +19,7 @@
 >
 <meta
   name="theme-color"
-  content=""
+  content="#0B1F3A"
 >
 
 {%- liquid
@@ -75,7 +75,20 @@
     property="og:image:height"
     content="{{ page_image.height }}"
   >
+  <meta
+    property="og:image:alt"
+    content="{{ page_image.alt | default: shop.name | escape }}"
+  >
 {%- endif -%}
+
+{%- if current_page > 1 -%}
+  <link rel="prev" href="{{ request.origin }}{{ request.path }}?page={{ current_page | minus: 1 }}">
+{%- endif -%}
+{%- if paginate.next -%}
+  <link rel="next" href="{{ request.origin }}{{ request.path }}?page={{ current_page | plus: 1 }}">
+{%- endif -%}
+
+<meta name="robots" content="index, follow">
 
 {%- if request.page_type == 'product' -%}
   <meta

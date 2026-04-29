@@ -1,0 +1,198 @@
+{% comment %} MARINERO Social Proof — review quote cards {% endcomment %}
+
+<div class="marinero-proof color-{{ section.settings.color_scheme }}">
+  <div class="marinero-proof__inner">
+    {%- if section.settings.heading != blank -%}
+      <div class="marinero-proof__header">
+        <span class="marinero-label">{{ section.settings.label | default: 'آراء الأمهات' }}</span>
+        <h2 class="marinero-proof__heading">{{ section.settings.heading }}</h2>
+      </div>
+    {%- endif -%}
+
+    <div class="marinero-proof__grid">
+      {%- for block in section.blocks -%}
+        <div class="marinero-proof__card m-reveal m-reveal--delay-{{ forloop.index }}" {{ block.shopify_attributes }}>
+          <div class="marinero-proof__stars" aria-label="5 stars">★★★★★</div>
+          <p class="marinero-proof__quote">"{{ block.settings.quote }}"</p>
+          <div class="marinero-proof__author">
+            <span class="marinero-proof__name">{{ block.settings.name }}</span>
+            {%- if block.settings.detail != blank -%}
+              <span class="marinero-proof__detail">{{ block.settings.detail }}</span>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .marinero-proof {
+    padding: var(--section-padding-block, 5rem) var(--section-padding-inline, 2rem);
+    background-color: var(--color-background);
+  }
+
+  .marinero-proof__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .marinero-proof__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .marinero-proof__heading {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 700;
+    color: var(--color-foreground-heading);
+    margin-top: 0.5rem;
+  }
+
+  .marinero-proof__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .marinero-proof__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .marinero-proof__card {
+    background: #ffffff;
+    border: 1px solid #D3CEBE;
+    padding: 2rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .marinero-proof__stars {
+    color: #C0552A;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+  }
+
+  .marinero-proof__quote {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 1.05rem;
+    font-style: italic;
+    line-height: 1.65;
+    color: #2C2C2A;
+    flex: 1;
+  }
+
+  .marinero-proof__author {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #D3CEBE;
+  }
+
+  .marinero-proof__name {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #0B1F3A;
+    letter-spacing: 0.02em;
+  }
+
+  .marinero-proof__detail {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 0.7rem;
+    color: #2C2C2A;
+    opacity: 0.6;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Social Proof",
+  "tag": "section",
+  "class": "section-wrapper",
+  "max_blocks": 6,
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Review text",
+          "default": "جودة الخامة ممتازة جداً وألوانها بتدوم بعد الغسيل. ابني لبسها كتير وهي زي ما هي."
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Customer name",
+          "default": "منى أحمد"
+        },
+        {
+          "type": "text",
+          "id": "detail",
+          "label": "Detail (e.g. Cairo, mother of 2)",
+          "default": "القاهرة · أم لطفلين"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Eyebrow label",
+      "default": "آراء الأمهات"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "اختارها الآلاف من الأمهات"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Social Proof",
+      "blocks": {
+        "r1": {
+          "type": "review",
+          "settings": {
+            "quote": "جودة الخامة ممتازة جداً وألوانها بتدوم بعد الغسيل. ابني لبسها كتير وهي زي ما هي.",
+            "name": "منى أحمد",
+            "detail": "القاهرة · أم لطفلين"
+          }
+        },
+        "r2": {
+          "type": "review",
+          "settings": {
+            "quote": "المقاسات دقيقة جداً وجاءت بسرعة. بنتي بتحب ألوانها والقماش ناعم على بشرتها الحساسة.",
+            "name": "سارة محمود",
+            "detail": "الإسكندرية · أم لبنت"
+          }
+        },
+        "r3": {
+          "type": "review",
+          "settings": {
+            "quote": "أفضل متجر أطفال جربته. السعر كويس والجودة أحسن من اللي توقعته بكتير.",
+            "name": "هبة علي",
+            "detail": "الجيزة · أم لثلاثة أطفال"
+          }
+        }
+      },
+      "block_order": ["r1", "r2", "r3"]
+    }
+  ]
+}
+{% endschema %}
