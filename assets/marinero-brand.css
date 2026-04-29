@@ -281,6 +281,28 @@ section > .title-wrapper h2 {
   font-size: clamp(1.8rem, 3vw, 2.8rem);
 }
 
+/* ── Page slide transition (View Transitions API) ────────── */
+@keyframes m-slide-in-from-right {
+  from { transform: translateX(6%); opacity: 0; }
+  to   { transform: translateX(0);  opacity: 1; }
+}
+
+@keyframes m-slide-out-to-left {
+  from { transform: translateX(0);  opacity: 1; }
+  to   { transform: translateX(-4%); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:active-view-transition-type(slide) {
+    &::view-transition-old(root) {
+      animation: m-slide-out-to-left 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    &::view-transition-new(root) {
+      animation: m-slide-in-from-right 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+  }
+}
+
 /* ── Age range badge on product cards ───────────────────── */
 .marinero-age-badge {
   position: absolute;

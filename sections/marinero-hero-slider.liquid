@@ -1,0 +1,567 @@
+{% comment %}
+  MARINERO Hero Slider — full-screen, multi-image, auto-advancing.
+  Each slide has its own image, heading, subtext and CTA.
+  Touch/swipe supported via CSS scroll-snap.
+{% endcomment %}
+
+{%- liquid
+  assign slide_count = section.blocks.size
+  assign has_slides = false
+  if slide_count > 0
+    assign has_slides = true
+  endif
+-%}
+
+<div
+  id="MarineroHero-{{ section.id }}"
+  class="m-hero-slider color-{{ section.settings.color_scheme }}"
+  style="--m-hero-height: {{ section.settings.height }}svh;"
+  aria-roledescription="carousel"
+  aria-label="MARINERO hero"
+>
+  {%- if has_slides -%}
+
+    {%- comment -%} Slides track {%- endcomment -%}
+    <div class="m-hero-slider__track" ref="track" id="m-slider-track-{{ section.id }}">
+      {%- for block in section.blocks -%}
+        <div
+          class="m-hero-slider__slide"
+          id="m-slide-{{ section.id }}-{{ forloop.index0 }}"
+          aria-roledescription="slide"
+          aria-label="{{ forloop.index }} / {{ slide_count }}"
+          role="group"
+          {{ block.shopify_attributes }}
+        >
+          {%- comment -%} Background image {%- endcomment -%}
+          {%- if block.settings.image != blank -%}
+            {{
+              block.settings.image
+              | image_url: width: 2400
+              | image_tag:
+                widths: '750, 1100, 1500, 1800, 2400',
+                sizes: '100vw',
+                alt: block.settings.image.alt | default: block.settings.heading,
+                class: 'm-hero-slider__img',
+                fetchpriority: forloop.first | default: 'auto',
+                loading: forloop.first | default: 'lazy'
+            }}
+          {%- else -%}
+            <div class="m-hero-slider__img-fallback"></div>
+          {%- endif -%}
+
+          {%- comment -%} Overlay gradient {%- endcomment -%}
+          <div class="m-hero-slider__overlay" style="--overlay-opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+
+          {%- comment -%} Slide content {%- endcomment -%}
+          <div class="m-hero-slider__content">
+            {%- if block.settings.eyebrow != blank -%}
+              <span class="m-hero-slider__eyebrow">{{ block.settings.eyebrow }}</span>
+            {%- endif -%}
+
+            {%- if block.settings.heading != blank -%}
+              <h2 class="m-hero-slider__heading">{{ block.settings.heading }}</h2>
+            {%- endif -%}
+
+            {%- if block.settings.subtext != blank -%}
+              <p class="m-hero-slider__subtext">{{ block.settings.subtext }}</p>
+            {%- endif -%}
+
+            {%- if block.settings.cta_label != blank -%}
+              <a
+                href="{{ block.settings.cta_link | default: '/collections/all' }}"
+                class="m-hero-slider__cta button button--primary marinero-slide-link"
+                data-view-transition-type="slide"
+              >
+                <span class="m-hero-slider__cta-text">{{ block.settings.cta_label }}</span>
+                <span class="m-hero-slider__cta-arrow" aria-hidden="true">→</span>
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- comment -%} Dot navigation {%- endcomment -%}
+    {%- if slide_count > 1 -%}
+      <div class="m-hero-slider__dots" role="tablist" aria-label="Slides">
+        {%- for block in section.blocks -%}
+          <button
+            class="m-hero-slider__dot{% if forloop.first %} m-hero-slider__dot--active{% endif %}"
+            role="tab"
+            aria-selected="{{ forloop.first }}"
+            aria-controls="m-slide-{{ section.id }}-{{ forloop.index0 }}"
+            data-slide="{{ forloop.index0 }}"
+            data-slider="{{ section.id }}"
+          ></button>
+        {%- endfor -%}
+      </div>
+
+      {%- comment -%} Prev / Next arrows {%- endcomment -%}
+      <button class="m-hero-slider__arrow m-hero-slider__arrow--prev" data-dir="-1" data-slider="{{ section.id }}" aria-label="Previous slide">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <button class="m-hero-slider__arrow m-hero-slider__arrow--next" data-dir="1" data-slider="{{ section.id }}" aria-label="Next slide">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    {%- endif -%}
+
+  {%- else -%}
+
+    {%- comment -%} Branded Navy fallback when no slides configured {%- endcomment -%}
+    <div class="m-hero-slider__brand-fallback">
+      <svg class="marinero-hero-anchor" viewBox="0 0 80 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="22" r="10" stroke="#F5F0E8" stroke-width="2.5" fill="none"/>
+        <line x1="40" y1="32" x2="40" y2="80" stroke="#F5F0E8" stroke-width="2.5"/>
+        <path d="M15 52 Q10 70 40 80 Q70 70 65 52" stroke="#F5F0E8" stroke-width="2.5" fill="none"/>
+        <line x1="20" y1="52" x2="60" y2="52" stroke="#F5F0E8" stroke-width="2.5"/>
+        <circle cx="40" cy="22" r="4" fill="#F5F0E8"/>
+      </svg>
+      <span class="marinero-hero-wordmark">MARINERO</span>
+      <span class="marinero-hero-tagline">Style for the whole family.</span>
+    </div>
+
+  {%- endif -%}
+</div>
+
+{%- comment -%} Slider JS {%- endcomment -%}
+<script>
+(function() {
+  function initSlider(sectionId) {
+    const root    = document.getElementById('MarineroHero-' + sectionId);
+    if (!root) return;
+
+    const track   = root.querySelector('.m-hero-slider__track');
+    const dots    = root.querySelectorAll('.m-hero-slider__dot');
+    const arrows  = root.querySelectorAll('.m-hero-slider__arrow');
+    const slides  = root.querySelectorAll('.m-hero-slider__slide');
+    const total   = slides.length;
+    if (total < 2) return;
+
+    let current  = 0;
+    let timer    = null;
+    const SPEED  = {{ section.settings.autoplay_speed | default: 5 }}000;
+    const AUTO   = {{ section.settings.autoplay | default: true }};
+
+    function goTo(index) {
+      current = (index + total) % total;
+      track.style.transform = 'translateX(-' + (current * 100) + '%)';
+      dots.forEach((d, i) => {
+        d.classList.toggle('m-hero-slider__dot--active', i === current);
+        d.setAttribute('aria-selected', i === current);
+      });
+    }
+
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        goTo(parseInt(dot.dataset.slide));
+        resetTimer();
+      });
+    });
+
+    arrows.forEach(arrow => {
+      arrow.addEventListener('click', () => {
+        goTo(current + parseInt(arrow.dataset.dir));
+        resetTimer();
+      });
+    });
+
+    function startTimer() {
+      if (!AUTO) return;
+      timer = setInterval(() => goTo(current + 1), SPEED);
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      startTimer();
+    }
+
+    // Pause on hover
+    root.addEventListener('mouseenter', () => clearInterval(timer));
+    root.addEventListener('mouseleave', startTimer);
+
+    // Touch swipe
+    let touchX = 0;
+    track.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', e => {
+      const diff = touchX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        goTo(current + (diff > 0 ? 1 : -1));
+        resetTimer();
+      }
+    }, { passive: true });
+
+    // Slide CTA transition
+    root.querySelectorAll('.marinero-slide-link').forEach(link => {
+      link.addEventListener('click', () => {
+        link.setAttribute('data-view-transition-triggered', '');
+      });
+    });
+
+    startTimer();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initSlider('{{ section.id }}');
+  });
+})();
+</script>
+
+{% stylesheet %}
+  .m-hero-slider {
+    position: relative;
+    width: 100%;
+    min-height: var(--m-hero-height, 85svh);
+    overflow: hidden;
+    background: #0B1F3A;
+  }
+
+  /* Track */
+  .m-hero-slider__track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    min-height: var(--m-hero-height, 85svh);
+    transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+  }
+
+  /* Individual slide */
+  .m-hero-slider__slide {
+    position: relative;
+    flex: 0 0 100%;
+    width: 100%;
+    min-height: var(--m-hero-height, 85svh);
+    overflow: hidden;
+  }
+
+  /* Image */
+  .m-hero-slider__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 8s ease;
+  }
+
+  .m-hero-slider__slide:is(.m-hero-slider__slide--active) .m-hero-slider__img {
+    transform: scale(1.04);
+  }
+
+  .m-hero-slider__img-fallback {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(145deg, #0B1F3A 0%, #1B3A5C 100%);
+  }
+
+  /* Overlay */
+  .m-hero-slider__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(11, 31, 58, var(--overlay-opacity, 0.45));
+    pointer-events: none;
+  }
+
+  /* Content */
+  .m-hero-slider__content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 3rem 2rem 5rem;
+    max-width: 700px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .m-hero-slider__content {
+      padding: 4rem 5rem 6rem;
+    }
+  }
+
+  .m-hero-slider__eyebrow {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #D3CEBE;
+    margin-bottom: 0.75rem;
+    display: block;
+    animation: hero-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+  }
+
+  .m-hero-slider__heading {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    font-weight: 700;
+    color: #F5F0E8;
+    line-height: 1.05;
+    margin-bottom: 1rem;
+    animation: hero-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+  }
+
+  .m-hero-slider__subtext {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 1rem;
+    color: rgba(245, 240, 232, 0.8);
+    line-height: 1.6;
+    margin-bottom: 1.75rem;
+    max-width: 44ch;
+    animation: hero-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+  }
+
+  /* CTA button */
+  .m-hero-slider__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.9rem 2rem;
+    background: #F5F0E8;
+    color: #0B1F3A;
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 2px solid #F5F0E8;
+    position: relative;
+    overflow: hidden;
+    align-self: flex-start;
+    animation: hero-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both;
+    transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+  }
+
+  /* Fill sweep on hover */
+  .m-hero-slider__cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #0B1F3A;
+    transform: translateX(-101%);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 0;
+  }
+
+  .m-hero-slider__cta:hover::before { transform: translateX(0); }
+  .m-hero-slider__cta:hover { color: #F5F0E8; border-color: #0B1F3A; }
+
+  .m-hero-slider__cta-text,
+  .m-hero-slider__cta-arrow {
+    position: relative;
+    z-index: 1;
+  }
+
+  .m-hero-slider__cta-arrow {
+    display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .m-hero-slider__cta:hover .m-hero-slider__cta-arrow {
+    transform: translateX(4px);
+  }
+
+  /* Dots */
+  .m-hero-slider__dots {
+    position: absolute;
+    bottom: 1.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    z-index: 10;
+  }
+
+  .m-hero-slider__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(245, 240, 232, 0.4);
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.3s ease, width 0.3s ease, border-radius 0.3s ease;
+  }
+
+  .m-hero-slider__dot--active {
+    background: #F5F0E8;
+    width: 24px;
+    border-radius: 4px;
+  }
+
+  /* Arrows */
+  .m-hero-slider__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: rgba(245, 240, 232, 0.12);
+    border: 1px solid rgba(245, 240, 232, 0.25);
+    color: #F5F0E8;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+    backdrop-filter: blur(4px);
+  }
+
+  .m-hero-slider__arrow:hover {
+    background: rgba(245, 240, 232, 0.22);
+    border-color: rgba(245, 240, 232, 0.5);
+  }
+
+  .m-hero-slider__arrow--prev { left: 1rem; }
+  .m-hero-slider__arrow--next { right: 1rem; }
+
+  @media screen and (min-width: 750px) {
+    .m-hero-slider__arrow--prev { left: 2rem; }
+    .m-hero-slider__arrow--next { right: 2rem; }
+  }
+
+  /* Brand fallback */
+  .m-hero-slider__brand-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background: #0B1F3A;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Hero Slider",
+  "tag": "section",
+  "class": "hero-wrapper section-wrapper",
+  "max_blocks": 5,
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow text",
+          "placeholder": "NEW COLLECTION"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Style for the whole family."
+        },
+        {
+          "type": "text",
+          "id": "subtext",
+          "label": "Subtext",
+          "default": "Quality kids clothing at honest prices."
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "Button label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "cta_link",
+          "label": "Button link"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "Image overlay opacity",
+          "min": 0,
+          "max": 80,
+          "step": 5,
+          "default": 45,
+          "unit": "%"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "range",
+      "id": "height",
+      "label": "Height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "default": 85,
+      "unit": "svh"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-advance slides",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "Seconds per slide",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "default": 5,
+      "unit": "s"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-3"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Slider",
+      "blocks": {
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "NEW COLLECTION",
+            "heading": "Style for the whole family.",
+            "subtext": "Quality kids clothing at honest prices.",
+            "cta_label": "Shop Now",
+            "cta_link": "/collections/all",
+            "overlay_opacity": 45
+          }
+        },
+        "slide_2": {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "KIDS · SS25",
+            "heading": "From first steps to every step after.",
+            "subtext": "Durable, comfortable, loved by kids across Egypt.",
+            "cta_label": "Browse Catalog",
+            "cta_link": "/collections/all",
+            "overlay_opacity": 45
+          }
+        }
+      },
+      "block_order": ["slide_1", "slide_2"],
+      "settings": {
+        "height": 85,
+        "autoplay": true,
+        "autoplay_speed": 5
+      }
+    }
+  ]
+}
+{% endschema %}

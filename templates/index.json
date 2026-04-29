@@ -1,94 +1,49 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "hero_jVaWmY": {
-      "type": "hero",
+    "marinero_hero_slider": {
+      "type": "marinero-hero-slider",
       "blocks": {
-        "text_YLPk4p": {
-          "type": "text",
-          "name": "t:names.heading",
+        "slide_1": {
+          "type": "slide",
           "settings": {
-            "text": "<p>Browse our latest products</p>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h2",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "var(--color-foreground-heading)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "image": "shopify://shop_images/hf_20260428_150152_6f222373-262e-4c4d-9a0b-36ca29eafbb8.png",
+            "eyebrow": "NEW COLLECTION · SS25",
+            "heading": "Style for the whole family.",
+            "subtext": "Quality kids clothing at honest prices — from newborns to age 12.",
+            "cta_label": "Shop Now",
+            "cta_link": "shopify://collections/all",
+            "overlay_opacity": 40
+          }
         },
-        "button_H9gpTf": {
-          "type": "button",
-          "name": "t:names.button",
+        "slide_2": {
+          "type": "slide",
           "settings": {
-            "label": "Shop all",
-            "link": "shopify://collections/all",
-            "open_in_new_tab": false,
-            "style_class": "button-secondary",
-            "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fit-content",
-            "custom_width_mobile": 100
-          },
-          "blocks": {}
+            "eyebrow": "KIDS · BOYS · GIRLS",
+            "heading": "From first steps to every step after.",
+            "subtext": "Durable, comfortable, loved by families across Egypt.",
+            "cta_label": "Browse Catalog",
+            "cta_link": "shopify://collections/all",
+            "overlay_opacity": 50
+          }
+        },
+        "slide_3": {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "QUALITY GUARANTEED",
+            "heading": "Made to last. Priced to make sense.",
+            "subtext": "Every piece is built for active kids and easy washing.",
+            "cta_label": "Explore Collection",
+            "cta_link": "shopify://collections/all",
+            "overlay_opacity": 45
+          }
         }
       },
-      "block_order": [
-        "text_YLPk4p",
-        "button_H9gpTf"
-      ],
-      "name": "t:names.hero",
+      "block_order": ["slide_1", "slide_2", "slide_3"],
       "settings": {
-        "media_type_1": "image",
-        "image_1": "shopify://shop_images/hf_20260428_150152_6f222373-262e-4c4d-9a0b-36ca29eafbb8.png",
-        "media_type_2": "image",
-        "stack_media_on_mobile": false,
-        "custom_mobile_media": false,
-        "media_type_1_mobile": "image",
-        "media_type_2_mobile": "image",
-        "link": "",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "space-between",
-        "vertical_alignment": "flex-end",
-        "align_baseline": true,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "flex-end",
-        "gap": 24,
-        "section_width": "page-width",
-        "section_height": "medium",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-6",
-        "toggle_overlay": true,
-        "overlay_color": "#12121266",
-        "overlay_style": "solid",
-        "gradient_direction": "to bottom",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 100,
-        "padding-block-end": 72
+        "height": 85,
+        "autoplay": true,
+        "autoplay_speed": 5,
+        "color_scheme": "scheme-3"
       }
     },
     "product_list_fa6P9H": {
@@ -287,7 +242,7 @@
     }
   },
   "order": [
-    "hero_jVaWmY",
+    "marinero_hero_slider",
     "product_list_fa6P9H"
   ]
 }
