@@ -16,9 +16,9 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/WhatsApp_Image_2026-04-30_at_2.04.37_PM.jpg",
-            "eyebrow": "NEW COLLECTION · SS25",
-            "heading": "Style for the whole family.",
-            "subtext": "Quality kids clothing at honest prices — from newborns to age 12.",
+            "eyebrow": "",
+            "heading": "",
+            "subtext": "",
             "cta_label": "Shop Now",
             "cta_link": "shopify://collections/all",
             "overlay_opacity": 40
