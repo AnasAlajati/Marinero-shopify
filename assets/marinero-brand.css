@@ -321,22 +321,42 @@ section > .title-wrapper h2 {
   direction: rtl;
 }
 
-/* ── Transparent → solid header on scroll ───────────────── */
+/* ── FLOW-style transparent → white header ───────────────── */
 header-component {
   transition:
     background-color var(--duration-normal, 320ms) cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow       var(--duration-normal, 320ms) cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow       var(--duration-normal, 320ms) cubic-bezier(0.22, 1, 0.36, 1),
+    color            var(--duration-normal, 320ms) cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-header-component.marinero-header--scrolled {
-  background-color: var(--marinero-navy) !important;
-  box-shadow: 0 4px 24px rgba(11, 31, 58, 0.18);
+/* Transparent overlay on homepage when at the top */
+body.template-index header-component:not(.marinero-header--scrolled):not(.marinero-header--hovered) {
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
+body.template-index header-component:not(.marinero-header--scrolled):not(.marinero-header--hovered) a,
+body.template-index header-component:not(.marinero-header--scrolled):not(.marinero-header--hovered) .header__heading-link,
+body.template-index header-component:not(.marinero-header--scrolled):not(.marinero-header--hovered) .header__menu-item a,
+body.template-index header-component:not(.marinero-header--scrolled):not(.marinero-header--hovered) svg {
+  color: var(--marinero-linen) !important;
+  fill: var(--marinero-linen);
+}
+
+/* White on scroll or hover */
+header-component.marinero-header--scrolled,
+header-component.marinero-header--hovered {
+  background-color: #FFFFFF !important;
+  box-shadow: 0 1px 8px rgba(11, 31, 58, 0.08);
+}
+
+header-component.marinero-header--scrolled a,
 header-component.marinero-header--scrolled .header__heading-link,
 header-component.marinero-header--scrolled .header__menu-item a,
-header-component.marinero-header--scrolled a {
-  color: var(--marinero-linen) !important;
+header-component.marinero-header--hovered a,
+header-component.marinero-header--hovered .header__heading-link,
+header-component.marinero-header--hovered .header__menu-item a {
+  color: var(--marinero-navy) !important;
 }
 
 /* ── Product card: image crossfade on hover ─────────────── */
