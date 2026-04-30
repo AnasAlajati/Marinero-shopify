@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "marinero_hero_slider": {
@@ -6,7 +15,7 @@
         "slide_1": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/hf_20260428_150152_6f222373-262e-4c4d-9a0b-36ca29eafbb8.png",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-04-30_at_2.04.37_PM.jpg",
             "eyebrow": "NEW COLLECTION · SS25",
             "heading": "Style for the whole family.",
             "subtext": "Quality kids clothing at honest prices — from newborns to age 12.",
@@ -38,7 +47,11 @@
           }
         }
       },
-      "block_order": ["slide_1", "slide_2", "slide_3"],
+      "block_order": [
+        "slide_1",
+        "slide_2",
+        "slide_3"
+      ],
       "settings": {
         "height": 85,
         "autoplay": true,
