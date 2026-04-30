@@ -1,26 +1,18 @@
 /**
- * Marinero — Transparent header that turns white on scroll OR hover.
- * Matches the FLOW-style: overlaid on hero, reveals white on interaction.
+ * Marinero — FLOW-style header.
+ * Transparent + linen text over hero. Turns white on scroll or hover.
  */
 (function () {
-  const sentinel = document.getElementById('marinero-scroll-sentinel');
-  const header   = document.getElementById('header-component');
-
+  const header = document.getElementById('header-component');
   if (!header) return;
 
-  let isPastHero = false;
-
   // ── Scroll detection ──────────────────────────────────────
-  if (sentinel) {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        isPastHero = !entry.isIntersecting;
-        update();
-      },
-      { threshold: 0 }
-    );
-    observer.observe(sentinel);
+  function onScroll() {
+    header.classList.toggle('marinero-header--scrolled', window.scrollY > 10);
   }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll(); // run once on load
 
   // ── Hover detection ───────────────────────────────────────
   header.addEventListener('mouseenter', () => {
@@ -30,8 +22,4 @@
   header.addEventListener('mouseleave', () => {
     header.classList.remove('marinero-header--hovered');
   });
-
-  function update() {
-    header.classList.toggle('marinero-header--scrolled', isPastHero);
-  }
 })();
