@@ -1,0 +1,415 @@
+{%- doc -%}
+  Block-free hero/scroller section. All configuration lives in section settings:
+  - Banner: image_desktop / image_mobile / image_overlay / heading / text / text_banner
+  - Primary scroller: products (product_list) + cards_scroll_direction
+  - Secondary list: products_additionaly (product_list) + heading_additional / subheading_additional / link_additional(_label)
+  - Spacing: offset_top_desktop / offset_bottom_desktop / offset_top_mobile / offset_bottom_mobile
+{%- enddoc -%}
+
+{% liquid
+  assign scroll_direction = section.settings.cards_scroll_direction
+  assign has_secondary = false
+  if section.settings.products_additionaly.size > 0
+    assign has_secondary = true
+  endif
+%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="architecture-section color-{{ section.settings.color_scheme }} section"
+  style="
+    padding-top: {{ section.settings.offset_top_desktop }}px;
+    padding-bottom: {{ section.settings.offset_bottom_desktop }}px;
+    --architecture-offset-top-mobile: {{ section.settings.offset_top_mobile }}px;
+    --architecture-offset-bottom-mobile: {{ section.settings.offset_bottom_mobile }}px;
+  "
+>
+  {%- if section.settings.image_desktop != blank or section.settings.image_mobile != blank or section.settings.heading != blank or section.settings.text != blank -%}
+    <div class="architecture-banner">
+      <div class="architecture-banner__media">
+        {%- if section.settings.image_desktop != blank -%}
+          {% render 'image',
+            image: section.settings.image_desktop,
+            class: 'architecture-banner__image architecture-banner__image--desktop'
+          %}
+        {%- endif -%}
+
+        {%- if section.settings.image_mobile != blank -%}
+          {% render 'image',
+            image: section.settings.image_mobile,
+            class: 'architecture-banner__image architecture-banner__image--mobile'
+          %}
+        {%- elsif section.settings.image_desktop != blank -%}
+          {% render 'image',
+            image: section.settings.image_desktop,
+            class: 'architecture-banner__image architecture-banner__image--mobile'
+          %}
+        {%- endif -%}
+
+        <div class="architecture-banner__overlay" style="background: {{ section.settings.image_overlay }};"></div>
+      </div>
+
+      {%- if section.settings.heading != blank or section.settings.text != blank -%}
+        <div class="architecture-banner__content" style="color: {{ section.settings.text_banner }};">
+          {%- if section.settings.heading != blank -%}
+            <h2 class="architecture-banner__heading">{{ section.settings.heading }}</h2>
+          {%- endif -%}
+          {%- if section.settings.text != blank -%}
+            <div class="architecture-banner__text">{{ section.settings.text }}</div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  {%- if section.settings.products.size > 0 -%}
+    <div class="architecture-scroller architecture-scroller--{{ scroll_direction }}">
+      {%- for product in section.settings.products -%}
+        {% render 'architecture-product-card', product: product, scroll_direction: scroll_direction %}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  {%- if has_secondary -%}
+    <div class="architecture-secondary">
+      {%- if section.settings.heading_additional != blank or section.settings.subheading_additional != blank or section.settings.link_additional != blank -%}
+        <div class="architecture-secondary__header">
+          <div class="architecture-secondary__heading-group">
+            {%- if section.settings.heading_additional != blank -%}
+              <h3 class="architecture-secondary__heading">{{ section.settings.heading_additional }}</h3>
+            {%- endif -%}
+            {%- if section.settings.subheading_additional != blank -%}
+              <p class="architecture-secondary__subheading">{{ section.settings.subheading_additional }}</p>
+            {%- endif -%}
+          </div>
+          {%- if section.settings.link_additional != blank -%}
+            <a href="{{ section.settings.link_additional }}" class="architecture-secondary__link">
+              {{ section.settings.link_additional_label | default: section.settings.link_additional }}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="architecture-scroller architecture-scroller--horizonta">
+        {%- for product in section.settings.products_additionaly -%}
+          {% render 'architecture-product-card', product: product, scroll_direction: 'horizonta' %}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .architecture-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding-xl, 48px);
+  }
+
+  .architecture-banner {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    min-height: 420px;
+    border-radius: var(--corner-radius, 0);
+  }
+
+  .architecture-banner__media {
+    position: absolute;
+    inset: 0;
+  }
+
+  .architecture-banner__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .architecture-banner__image--mobile {
+    display: none;
+  }
+
+  .architecture-banner__overlay {
+    position: absolute;
+    inset: 0;
+  }
+
+  .architecture-banner__content {
+    position: relative;
+    z-index: 1;
+    padding: var(--padding-xl, 48px);
+    max-width: 40em;
+  }
+
+  .architecture-banner__heading {
+    margin: 0 0 var(--padding-sm, 12px);
+  }
+
+  .architecture-banner__text {
+    margin: 0;
+  }
+
+  .architecture-scroller {
+    display: flex;
+    gap: var(--padding-md, 16px);
+  }
+
+  .architecture-scroller--horizonta {
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-direction: row;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .architecture-scroller--horizonta .architecture-card {
+    flex: 0 0 auto;
+    width: 44cqw;
+    max-width: 280px;
+    scroll-snap-align: start;
+  }
+
+  .architecture-scroller--vertical {
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex-direction: column;
+    max-height: 640px;
+  }
+
+  .architecture-scroller--vertical .architecture-card {
+    width: 100%;
+  }
+
+  .architecture-card__link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding-2xs, 4px);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .architecture-card__media {
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+  }
+
+  .architecture-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .architecture-card__title,
+  .architecture-card__price {
+    margin: 0;
+  }
+
+  .architecture-secondary {
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding-md, 16px);
+  }
+
+  .architecture-secondary__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--padding-md, 16px);
+  }
+
+  .architecture-secondary__heading,
+  .architecture-secondary__subheading {
+    margin: 0;
+  }
+
+  @media screen and (max-width: 749px) {
+    .architecture-section {
+      padding-top: var(--architecture-offset-top-mobile) !important;
+      padding-bottom: var(--architecture-offset-bottom-mobile) !important;
+    }
+
+    .architecture-banner__image--desktop {
+      display: none;
+    }
+
+    .architecture-banner__image--mobile {
+      display: block;
+    }
+
+    .architecture-scroller--horizonta .architecture-card {
+      width: 60cqw;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Architecture",
+  "class": "ui-test-architecture",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Banner"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Desktop image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile image"
+    },
+    {
+      "type": "color_background",
+      "id": "image_overlay",
+      "label": "Image overlay",
+      "default": "rgba(0, 0, 0, 0.4)"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop the collection"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "color",
+      "id": "text_banner",
+      "label": "Banner text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Primary product scroller"
+    },
+    {
+      "type": "product_list",
+      "id": "products",
+      "label": "Products"
+    },
+    {
+      "type": "select",
+      "id": "cards_scroll_direction",
+      "label": "Scroll direction",
+      "options": [
+        {
+          "value": "horizonta",
+          "label": "Horizontal"
+        },
+        {
+          "value": "vertical",
+          "label": "Vertical"
+        }
+      ],
+      "default": "horizonta"
+    },
+    {
+      "type": "header",
+      "content": "Secondary product list"
+    },
+    {
+      "type": "product_list",
+      "id": "products_additionaly",
+      "label": "Additional products"
+    },
+    {
+      "type": "text",
+      "id": "heading_additional",
+      "label": "Additional heading"
+    },
+    {
+      "type": "text",
+      "id": "subheading_additional",
+      "label": "Additional subheading"
+    },
+    {
+      "type": "text",
+      "id": "link_additional_label",
+      "label": "Additional link label"
+    },
+    {
+      "type": "url",
+      "id": "link_additional",
+      "label": "Additional link"
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "offset_top_desktop",
+      "label": "Top offset (desktop)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "offset_bottom_desktop",
+      "label": "Bottom offset (desktop)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "offset_top_mobile",
+      "label": "Top offset (mobile)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "offset_bottom_mobile",
+      "label": "Bottom offset (mobile)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    }
+  ],
+  "presets": [
+    {
+      "name": "Architecture",
+      "settings": {
+        "heading": "Shop the collection",
+        "cards_scroll_direction": "horizonta",
+        "color_scheme": "scheme-1",
+        "offset_top_desktop": 48,
+        "offset_bottom_desktop": 48,
+        "offset_top_mobile": 24,
+        "offset_bottom_mobile": 24
+      }
+    }
+  ]
+}
+{% endschema %}

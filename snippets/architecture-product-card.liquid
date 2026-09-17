@@ -1,0 +1,31 @@
+{%- doc -%}
+  Renders a simple product card for the architecture section's scrollers.
+  Self-contained (no block dependency) since the parent section renders products
+  directly from a product_list setting rather than from section.blocks.
+
+  @param {object} product - The product object
+  @param {string} [scroll_direction] - 'horizonta' or 'vertical', used to size the card
+
+  @example
+  {% render 'architecture-product-card', product: product, scroll_direction: section.settings.cards_scroll_direction %}
+{%- enddoc -%}
+
+<div class="architecture-card">
+  <a href="{{ product.url }}" class="architecture-card__link">
+    <div class="architecture-card__media">
+      {%- if product.featured_image -%}
+        {% render 'image',
+          image: product.featured_image,
+          class: 'architecture-card__image',
+          alt_text_fallback: product.title
+        %}
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'architecture-card__image placeholder-svg' }}
+      {%- endif -%}
+    </div>
+    <div class="architecture-card__info">
+      <p class="architecture-card__title">{{ product.title }}</p>
+      <p class="architecture-card__price">{% render 'format-price', price: product.price %}</p>
+    </div>
+  </a>
+</div>
