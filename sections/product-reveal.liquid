@@ -1,0 +1,471 @@
+{%- comment -%}
+  Product cards emerge from behind a backdrop image on scroll.
+
+  The illusion: cards are clipped to zero height (clip-path: inset(100% 0 0 0))
+  and pushed down, then wipe upward into place while rising. Because the card
+  row is pulled up to overlap the image's lower edge, they read as sliding out
+  from behind the photo. Reverses when scrolled out of view.
+
+  Works with no merchant setup: falls back to Shopify placeholder SVGs for both
+  the backdrop and the cards.
+{%- endcomment -%}
+
+{% liquid
+  assign products = section.settings.products
+  assign has_products = false
+  if products.size > 0
+    assign has_products = true
+  endif
+%}
+
+{% javascript %}
+  class RevealOnScroll extends HTMLElement {
+    connectedCallback() {
+      const threshold = parseFloat(this.dataset.threshold || '0.3');
+      const exitPoint = parseFloat(this.dataset.exitPoint || '30');
+      this.replay = this.dataset.replay !== 'false';
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        this.classList.add('is-visible');
+        return;
+      }
+
+      /*
+        Watch the card row, not the whole section. The section also contains the
+        tall backdrop image, so observing it means "out of view" only happens
+        once that image has scrolled away too — long after the cards have gone.
+      */
+      this.target = this.querySelector('.product-reveal__cards') || this;
+
+      this.observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              this.classList.add('is-visible');
+              if (!this.replay) this.observer.unobserve(entry.target);
+            } else if (this.replay) {
+              this.classList.remove('is-visible');
+            }
+          }
+        },
+        {
+          threshold,
+          /*
+            Pull the detection band down from the top of the screen so the cards
+            begin hiding as they leave the upper area, instead of lingering until
+            they are fully gone.
+          */
+          rootMargin: `-${exitPoint}% 0px 0px 0px`,
+        }
+      );
+
+      this.observer.observe(this.target);
+    }
+
+    disconnectedCallback() {
+      this.observer?.disconnect();
+    }
+  }
+
+  if (!customElements.get('reveal-on-scroll')) {
+    customElements.define('reveal-on-scroll', RevealOnScroll);
+  }
+{% endjavascript %}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="product-reveal section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
+  style="
+    --reveal-overlap: {{ section.settings.card_overlap }}%;
+    --reveal-columns: {{ section.settings.columns }};
+    padding-block-start: {{ section.settings.padding-block-start }}px;
+    padding-block-end: {{ section.settings.padding-block-end }}px;
+  "
+>
+  {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+    <div class="product-reveal__header">
+      {%- if section.settings.subheading != blank -%}
+        <p class="product-reveal__eyebrow">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="product-reveal__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <reveal-on-scroll
+    class="product-reveal__stage"
+    data-threshold="{{ section.settings.reveal_threshold }}"
+    data-exit-point="{{ section.settings.reveal_exit_point }}"
+    data-replay="{{ section.settings.reveal_replay }}"
+  >
+    <div class="product-reveal__media">
+      {%- if section.settings.image != blank -%}
+        {{
+          section.settings.image
+          | image_url: width: 2400
+          | image_tag: class: 'product-reveal__image', loading: 'lazy', sizes: '100vw'
+        }}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'product-reveal__image product-reveal__image--placeholder' }}
+      {%- endif -%}
+
+      {%- if section.settings.image_overlay != blank -%}
+        <div class="product-reveal__overlay" style="background: {{ section.settings.image_overlay }};"></div>
+      {%- endif -%}
+    </div>
+
+    <div class="product-reveal__cards">
+      {%- if has_products -%}
+        {%- for product in products limit: section.settings.columns -%}
+          <article class="product-reveal__card" style="--reveal-index: {{ forloop.index0 }};">
+            <a href="{{ product.url }}" class="product-reveal__card-link">
+              <div class="product-reveal__card-media">
+                {%- if product.featured_image -%}
+                  {{
+                    product.featured_image
+                    | image_url: width: 800
+                    | image_tag: class: 'product-reveal__card-image', loading: 'lazy', alt: product.title
+                  }}
+                {%- else -%}
+                  {%- cycle 'product-1', 'product-2', 'product-3', 'product-4' -%}
+                {%- endif -%}
+              </div>
+              <p class="product-reveal__card-title">{{ product.title }}</p>
+              <p class="product-reveal__card-price">{% render 'format-price', price: product.price %}</p>
+            </a>
+          </article>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..section.settings.columns) -%}
+          <article class="product-reveal__card" style="--reveal-index: {{ forloop.index0 }};">
+            <div class="product-reveal__card-link">
+              <div class="product-reveal__card-media">
+                {%- capture placeholder_name -%}product-{% cycle 1, 2, 3, 4 %}{%- endcapture -%}
+                {{ placeholder_name | placeholder_svg_tag: 'product-reveal__card-image' }}
+              </div>
+              <p class="product-reveal__card-title">{{ 'placeholders.product_title' | t }}</p>
+              <p class="product-reveal__card-price">{% render 'format-price', price: 1990 %}</p>
+            </div>
+          </article>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </reveal-on-scroll>
+</div>
+
+{% stylesheet %}
+  /*
+    Do NOT set `display` here. `.section` is a 3-column grid
+    (margin | content | margin) and children are auto-placed into the centre
+    column. Overriding display collapses that and content bleeds to the
+    viewport edges.
+  */
+  .product-reveal {
+    row-gap: var(--space-md, 2rem);
+    align-content: start;
+  }
+
+  .product-reveal__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs, 0.5rem);
+    text-align: center;
+    align-items: center;
+  }
+
+  .product-reveal__eyebrow {
+    margin: 0;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.75;
+  }
+
+  .product-reveal__heading {
+    margin: 0;
+  }
+
+  /*
+    The image is the backdrop and fills the whole stage. Cards sit on top of its
+    upper area, so when they animate out the image is what's left on screen.
+    --reveal-overlap controls how much bare image shows below the cards.
+  */
+  .product-reveal__stage {
+    display: block;
+    position: relative;
+    padding-block-end: var(--reveal-overlap, 18%);
+    isolation: isolate;
+  }
+
+  .product-reveal__media {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: var(--corner-radius, 0);
+    z-index: 0;
+  }
+
+  .product-reveal__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-reveal__image--placeholder {
+    background: color-mix(in srgb, var(--color-foreground, #2c2c2a) 8%, transparent);
+    opacity: 0.55;
+  }
+
+  .product-reveal__overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  /* Cards ride on top of the backdrop; as they fade the image is revealed. */
+  .product-reveal__cards {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(var(--reveal-columns, 4), minmax(0, 1fr));
+    gap: var(--space-sm, 1rem);
+    padding: var(--space-md, 2rem) var(--space-sm, 1rem);
+  }
+
+  /*
+    Hidden state. clip-path wipes the card in from its bottom edge while it
+    rises, which is what sells the "coming out from behind the image" read.
+  */
+  .product-reveal__card {
+    opacity: 0;
+    transform: translateY(60px);
+    clip-path: inset(100% 0 0 0);
+    transition:
+      opacity var(--duration-slow, 600ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+      transform var(--duration-slow, 600ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+      clip-path var(--duration-slow, 600ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+    transition-delay: calc(var(--reveal-index, 0) * 90ms);
+    will-change: transform, opacity, clip-path;
+  }
+
+  .product-reveal__stage.is-visible .product-reveal__card {
+    opacity: 1;
+    transform: translateY(0);
+    clip-path: inset(0 0 0 0);
+  }
+
+  .product-reveal__card-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    text-decoration: none;
+    color: inherit;
+    background: var(--color-background, #fff);
+    padding: 0.75rem;
+    box-shadow: var(--shadow-card, 0 2px 16px rgba(11, 31, 58, 0.08));
+    transition: box-shadow var(--duration-normal, 320ms) var(--ease-out, ease);
+  }
+
+  .product-reveal__card-link:hover {
+    box-shadow: var(--shadow-card-hover, 0 8px 32px rgba(11, 31, 58, 0.16));
+  }
+
+  .product-reveal__card-media {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+  }
+
+  .product-reveal__card-media :is(img, svg) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .product-reveal__card-title,
+  .product-reveal__card-price {
+    margin: 0;
+    font-size: 0.85rem;
+  }
+
+  .product-reveal__card-price {
+    opacity: 0.7;
+  }
+
+  @media screen and (max-width: 749px) {
+    .product-reveal__cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .product-reveal__card {
+      opacity: 1;
+      transform: none;
+      clip-path: none;
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product reveal",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Eyebrow",
+      "default": "New in"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Emerging from the collection"
+    },
+    {
+      "type": "header",
+      "content": "Backdrop image"
+    },
+    {
+      "type": "paragraph",
+      "content": "Leave empty to use a Shopify placeholder image."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "color_background",
+      "id": "image_overlay",
+      "label": "Image overlay",
+      "default": "rgba(11, 31, 58, 0.15)"
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "paragraph",
+      "content": "Leave empty to show placeholder product cards."
+    },
+    {
+      "type": "product_list",
+      "id": "products",
+      "label": "Products"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Cards shown",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "card_overlap",
+      "label": "Image shown below products",
+      "info": "How much of the backdrop image is visible beneath the product cards.",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "%",
+      "default": 22
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "range",
+      "id": "reveal_threshold",
+      "label": "Trigger point",
+      "info": "How much of the section must be visible before the cards appear.",
+      "min": 0.1,
+      "max": 0.9,
+      "step": 0.1,
+      "default": 0.3
+    },
+    {
+      "type": "range",
+      "id": "reveal_exit_point",
+      "label": "Hide point",
+      "info": "How far up the screen the cards get before they start hiding again. Higher = they disappear sooner.",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "%",
+      "default": 35
+    },
+    {
+      "type": "checkbox",
+      "id": "reveal_replay",
+      "label": "Hide again when scrolled out of view",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product reveal",
+      "category": "Products"
+    }
+  ]
+}
+{% endschema %}

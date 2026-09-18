@@ -16,17 +16,6 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/2_1.png",
-            "eyebrow": "",
-            "heading": "",
-            "subtext": "",
-            "cta_label": "Shop Now",
-            "cta_link": "shopify://collections/all",
-            "overlay_opacity": 0
-          }
-        },
-        "slide_2": {
-          "type": "slide",
-          "settings": {
             "eyebrow": "KIDS · BOYS · GIRLS",
             "heading": "From first steps to every step after.",
             "subtext": "Durable, comfortable, loved by families across Egypt.",
@@ -37,21 +26,28 @@
         }
       },
       "block_order": [
-        "slide_1",
-        "slide_2"
+        "slide_1"
       ],
       "settings": {
         "height": 75,
-        "autoplay": true,
+        "autoplay": false,
         "autoplay_speed": 5,
         "color_scheme": "scheme-3"
       }
     },
-
     "architecture_1": {
       "type": "architecture",
       "settings": {
-        "heading": "Shop the collection",
+        "heading": "Winter Collection",
+        "text": "New-season warmth for every adventure.",
+        "image_overlay": "rgba(0,0,0,0)",
+        "text_banner": "#0B1F3A",
+        "products": [
+          "ss222",
+          "ss230",
+          "ss224",
+          "ss229"
+        ],
         "cards_scroll_direction": "horizonta",
         "color_scheme": "scheme-1",
         "offset_top_desktop": 48,
@@ -165,7 +161,7 @@
               "type": "_product-card-gallery",
               "name": "t:names.product_card_media",
               "settings": {
-                "image_ratio": "adapt",
+                "image_ratio": "portrait",
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
@@ -253,11 +249,28 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "product_reveal_1": {
+      "type": "product-reveal",
+      "settings": {
+        "subheading": "New in",
+        "heading": "Winter, revealed",
+        "image_overlay": "rgba(11, 31, 58, 0.15)",
+        "columns": 4,
+        "card_overlap": 18,
+        "reveal_threshold": 0.3,
+        "reveal_replay": true,
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "padding-block-start": 64,
+        "padding-block-end": 64
+      }
     }
   },
   "order": [
     "marinero_hero_slider",
     "architecture_1",
+    "product_reveal_1",
     "product_list_fa6P9H"
   ]
 }

@@ -1,10 +1,10 @@
-{%- doc -%}
+{%- comment -%}
   Block-free hero/scroller section. All configuration lives in section settings:
   - Banner: image_desktop / image_mobile / image_overlay / heading / text / text_banner
   - Primary scroller: products (product_list) + cards_scroll_direction
   - Secondary list: products_additionaly (product_list) + heading_additional / subheading_additional / link_additional(_label)
   - Spacing: offset_top_desktop / offset_bottom_desktop / offset_top_mobile / offset_bottom_mobile
-{%- enddoc -%}
+{%- endcomment -%}
 
 {% liquid
   assign scroll_direction = section.settings.cards_scroll_direction
@@ -49,7 +49,15 @@
     }
 
     measure() {
-      this.enabled = !this.reducedMotionQuery.matches && !this.mobileQuery.matches;
+      const allowed = !this.reducedMotionQuery.matches && !this.mobileQuery.matches;
+
+      this.maxTranslate = allowed
+        ? Math.max(0, this.track.scrollWidth - this.viewport.clientWidth)
+        : 0;
+
+      // Only pin when the track actually overflows. Pinning with zero travel
+      // would steal a full viewport height of scrolling and move nothing.
+      this.enabled = allowed && this.maxTranslate > 0;
 
       if (!this.enabled) {
         this.removeAttribute('data-pinned');
@@ -59,7 +67,6 @@
       }
 
       this.setAttribute('data-pinned', '');
-      this.maxTranslate = Math.max(0, this.track.scrollWidth - this.viewport.clientWidth);
       this.style.height = `${this.viewport.offsetHeight + this.maxTranslate}px`;
       this.update();
     }
@@ -100,7 +107,19 @@
     --architecture-offset-bottom-mobile: {{ section.settings.offset_bottom_mobile }}px;
   "
 >
-  {%- if section.settings.image_desktop != blank or section.settings.image_mobile != blank or section.settings.heading != blank or section.settings.text != blank -%}
+  {%- liquid
+    assign has_banner_image = false
+    if section.settings.image_desktop != blank or section.settings.image_mobile != blank
+      assign has_banner_image = true
+    endif
+  -%}
+
+  {%- if has_banner_image -%}
+    {%- comment -%}
+      Full hero treatment: reserves min-height for the photo. Only rendered
+      when an image is actually set, so an unconfigured banner never shows as
+      a tall block of dead space.
+    {%- endcomment -%}
     <div class="architecture-banner">
       <div class="architecture-banner__media">
         {%- if section.settings.image_desktop != blank -%}
@@ -136,13 +155,60 @@
         </div>
       {%- endif -%}
     </div>
+  {%- elsif section.settings.heading != blank or section.settings.text != blank -%}
+    {%- comment -%}
+      No image set: a compact text-only header with no reserved height,
+      instead of an empty 420px hero box.
+    {%- endcomment -%}
+    <div class="architecture-header">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="architecture-header__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <p class="architecture-header__text">{{ section.settings.text }}</p>
+      {%- endif -%}
+    </div>
   {%- endif -%}
+
+  {%- liquid
+    assign has_teaser = false
+    if section.settings.teaser_heading != blank or section.settings.teaser_image != blank
+      assign has_teaser = true
+    endif
+  -%}
+
+  {%- capture teaser_card -%}
+    {%- if has_teaser -%}
+      <article class="architecture-card architecture-teaser-card">
+        {%- if section.settings.teaser_link != blank -%}
+          <a href="{{ section.settings.teaser_link }}" class="architecture-teaser-card__link">
+        {%- else -%}
+          <div class="architecture-teaser-card__link">
+        {%- endif -%}
+          <div class="architecture-teaser-card__media">
+            {%- if section.settings.teaser_image != blank -%}
+              {% render 'image', image: section.settings.teaser_image, class: 'architecture-teaser-card__image' %}
+            {%- else -%}
+              {{ 'lifestyle-1' | placeholder_svg_tag: 'architecture-teaser-card__image' }}
+            {%- endif -%}
+            <div class="architecture-teaser-card__overlay"></div>
+          </div>
+          <p class="architecture-teaser-card__heading">{{ section.settings.teaser_heading }}</p>
+        {%- if section.settings.teaser_link != blank -%}
+          </a>
+        {%- else -%}
+          </div>
+        {%- endif -%}
+      </article>
+    {%- endif -%}
+  {%- endcapture -%}
 
   {%- if section.settings.products.size > 0 -%}
     {%- if scroll_direction == 'vertical' -%}
       <div class="architecture-scroller architecture-scroller--vertical">
+        {{ teaser_card }}
         {%- for product in section.settings.products -%}
-          {% render 'architecture-product-card', product: product, scroll_direction: scroll_direction %}
+          {% render 'architecture-product-card', product: product %}
         {%- endfor -%}
       </div>
     {%- else -%}
@@ -154,8 +220,9 @@
       <architecture-scroll-pin class="architecture-scroll-pin">
         <div class="architecture-pin-viewport" data-architecture-viewport>
           <div class="architecture-scroller architecture-scroller--horizonta" data-architecture-track>
+            {{ teaser_card }}
             {%- for product in section.settings.products -%}
-              {% render 'architecture-product-card', product: product, scroll_direction: 'horizonta' %}
+              {% render 'architecture-product-card', product: product %}
             {%- endfor -%}
           </div>
         </div>
@@ -185,7 +252,7 @@
 
       <div class="architecture-scroller architecture-scroller--horizonta">
         {%- for product in section.settings.products_additionaly -%}
-          {% render 'architecture-product-card', product: product, scroll_direction: 'horizonta' %}
+          {% render 'architecture-product-card', product: product %}
         {%- endfor -%}
       </div>
     </div>
@@ -193,10 +260,14 @@
 </div>
 
 {% stylesheet %}
+  /*
+    `.section` is a 3-column grid (margin | content | margin) and auto-places
+    children into the centre column. Setting `display` here would collapse that
+    and push content to the viewport edges.
+  */
   .architecture-section {
-    display: flex;
-    flex-direction: column;
-    gap: var(--padding-xl, 48px);
+    row-gap: var(--padding-xl, 48px);
+    align-content: start;
   }
 
   .architecture-banner {
@@ -243,6 +314,22 @@
     margin: 0;
   }
 
+  /* Compact fallback used when no banner image is set — see comment above. */
+  .architecture-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding-2xs, 4px);
+  }
+
+  .architecture-header__heading {
+    margin: 0;
+  }
+
+  .architecture-header__text {
+    margin: 0;
+    opacity: 0.75;
+  }
+
   .architecture-scroller {
     display: flex;
     gap: var(--padding-md, 16px);
@@ -256,10 +343,16 @@
     -webkit-overflow-scrolling: touch;
   }
 
+  /*
+    Card width is deliberately identical pinned and unpinned. The JS measures
+    the track to decide whether to pin, so if pinning changed card widths the
+    measurement would flip-flop and the ResizeObserver would oscillate.
+    These also need to be wide enough that a handful of products overflow the
+    container — otherwise there is no horizontal distance to travel.
+  */
   .architecture-scroller--horizonta .architecture-card {
     flex: 0 0 auto;
-    width: 44cqw;
-    max-width: 280px;
+    width: clamp(260px, 32vw, 460px);
     scroll-snap-align: start;
   }
 
@@ -331,6 +424,60 @@
     margin: 0;
   }
 
+  /*
+    Teaser card: same footprint as .architecture-card (it lives in the same
+    flex row and is sized by that rule), but renders as a single clickable
+    image with a heading overlaid on top, rather than an image + title + price
+    stack.
+  */
+  .architecture-teaser-card {
+    /* Don't stretch to match the taller image+title+price product cards. */
+    align-self: flex-start;
+  }
+
+  .architecture-teaser-card__link {
+    display: block;
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .architecture-teaser-card__media {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+  }
+
+  .architecture-teaser-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow, 600ms) var(--ease-out, ease);
+  }
+
+  .architecture-teaser-card__link:hover .architecture-teaser-card__image {
+    transform: scale(1.04);
+  }
+
+  .architecture-teaser-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0) 55%);
+    pointer-events: none;
+  }
+
+  .architecture-teaser-card__heading {
+    position: absolute;
+    z-index: 1;
+    left: var(--padding-sm, 12px);
+    right: var(--padding-sm, 12px);
+    bottom: var(--padding-sm, 12px);
+    margin: 0;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
   .architecture-secondary {
     display: flex;
     flex-direction: column;
@@ -364,7 +511,7 @@
     }
 
     .architecture-scroller--horizonta .architecture-card {
-      width: 60cqw;
+      width: 72vw;
     }
   }
 {% endstylesheet %}
@@ -417,6 +564,26 @@
     {
       "type": "header",
       "content": "Primary product scroller"
+    },
+    {
+      "type": "paragraph",
+      "content": "The teaser card below appears first in the scroller, sized to match a product card."
+    },
+    {
+      "type": "image_picker",
+      "id": "teaser_image",
+      "label": "Teaser image"
+    },
+    {
+      "type": "text",
+      "id": "teaser_heading",
+      "label": "Teaser heading",
+      "default": "4-8 Years Collection"
+    },
+    {
+      "type": "url",
+      "id": "teaser_link",
+      "label": "Teaser link"
     },
     {
       "type": "product_list",
@@ -528,6 +695,7 @@
       "name": "Architecture",
       "settings": {
         "heading": "Shop the collection",
+        "teaser_heading": "4-8 Years Collection",
         "cards_scroll_direction": "horizonta",
         "color_scheme": "scheme-1",
         "offset_top_desktop": 48,
