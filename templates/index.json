@@ -38,10 +38,11 @@
     "architecture_1": {
       "type": "architecture",
       "settings": {
+        "image_desktop": "shopify://shop_images/WhatsApp_Image_2026-06-29_at_11.04.46_AM.jpg",
+        "image_overlay": "rgba(0, 0, 0, 0.4)",
         "heading": "Winter Collection",
         "text": "New-season warmth for every adventure.",
-        "image_overlay": "rgba(0,0,0,0)",
-        "text_banner": "#0B1F3A",
+        "text_banner": "#ffffff",
         "products": [
           "ss222",
           "ss230",
@@ -49,6 +50,14 @@
           "ss229"
         ],
         "cards_scroll_direction": "horizonta",
+        "products_additionaly": [
+          "ss224",
+          "ss230"
+        ],
+        "heading_additional": "",
+        "subheading_additional": "",
+        "link_additional_label": "",
+        "link_additional": "",
         "color_scheme": "scheme-1",
         "offset_top_desktop": 48,
         "offset_bottom_desktop": 48,
