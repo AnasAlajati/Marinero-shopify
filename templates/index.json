@@ -170,8 +170,7 @@
       "settings": {
         "subheading": "New in",
         "heading": "Winter, revealed",
-        "image": "shopify://shop_images/WhatsApp_Image_2026-09-19_at_4.33.27_PM.jpg",
-        "image_overlay": "rgba(11, 31, 58, 0.15)",
+        "image_overlay": "rgba(0,0,0,0)",
         "products": [
           "ss230",
           "ss224",
@@ -183,7 +182,7 @@
         "reveal_threshold": 0.3,
         "reveal_exit_point": 35,
         "reveal_replay": true,
-        "section_width": "page-width",
+        "section_width": "full-width",
         "color_scheme": "scheme-1",
         "padding-block-start": 64,
         "padding-block-end": 64
