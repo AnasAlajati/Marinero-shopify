@@ -425,6 +425,33 @@
   }
 
   /*
+    Swatch hit area follows Baymard's mobile guidance: minimum 7mm x 7mm with
+    2mm spacing, so they stay tappable rather than decorative.
+  */
+  .architecture-card__swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2mm;
+    margin: 0.4rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .architecture-card__swatch {
+    width: 7mm;
+    height: 7mm;
+    border-radius: 50%;
+    background: var(--swatch, #ccc);
+    border: 1px solid color-mix(in srgb, var(--color-foreground, #2c2c2a) 25%, transparent);
+  }
+
+  .architecture-card__swatch-more {
+    font-size: 0.7rem;
+    line-height: 7mm;
+    opacity: 0.65;
+  }
+
+  /*
     Teaser card: same footprint as .architecture-card (it lives in the same
     flex row and is sized by that rule), but renders as a single clickable
     image with a heading overlaid on top, rather than an image + title + price

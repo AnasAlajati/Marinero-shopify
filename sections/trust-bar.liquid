@@ -1,0 +1,247 @@
+{%- comment -%}
+  Trust signals row.
+
+  Targets the top documented causes of cart abandonment: unexpected extra costs
+  (48%), distrust of payment security (18%), and total cost not shown upfront
+  (17%). Stating delivery cost/time, returns and payment method before checkout
+  removes the surprise that causes most abandonment.
+
+  MOCK DATA: replace every item with your real policy. Do not promise a
+  delivery window or return policy you can't honour.
+{%- endcomment -%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="trust-bar section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
+  style="
+    --trust-columns: {{ section.blocks.size | at_most: 4 }};
+    padding-block-start: {{ section.settings.padding-block-start }}px;
+    padding-block-end: {{ section.settings.padding-block-end }}px;
+  "
+>
+  {%- comment -%}
+    The item set is rendered twice so the track can loop seamlessly by
+    translating -50%. Only the first set is exposed to assistive tech; the
+    duplicate is aria-hidden so delivery/returns info isn't announced twice.
+  {%- endcomment -%}
+  <div class="trust-bar__marquee">
+    <div class="trust-bar__track" style="--trust-speed: {{ section.settings.speed }}s;">
+      {%- for pass in (1..2) -%}
+        <div class="trust-bar__set"{% if pass == 2 %} aria-hidden="true"{% endif %}>
+          {%- for block in section.blocks -%}
+            <div class="trust-item"{% if pass == 1 %} {{ block.shopify_attributes }}{% endif %}>
+              <span class="trust-item__icon" aria-hidden="true">
+                {%- case block.settings.icon -%}
+            {%- when 'truck' -%}
+              <svg viewBox="0 0 24 24" width="22" height="22"><path d="M3 6h11v9H3zM14 9h4l3 3v3h-7z" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="7" cy="17" r="1.8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="17" r="1.8" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+            {%- when 'cash' -%}
+              <svg viewBox="0 0 24 24" width="22" height="22"><rect x="2.5" y="6" width="19" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="2.6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+            {%- when 'return' -%}
+              <svg viewBox="0 0 24 24" width="22" height="22"><path d="M4 12a8 8 0 1 1 2.6 5.9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4 7v5h5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+            {%- when 'ruler' -%}
+              <svg viewBox="0 0 24 24" width="22" height="22"><rect x="2.5" y="8.5" width="19" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7 8.5v3M12 8.5v4M17 8.5v3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+            {%- else -%}
+              <svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 3l7 3v5c0 4.2-2.9 7.8-7 9-4.1-1.2-7-4.8-7-9V6z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+                {%- endcase -%}
+              </span>
+              <div class="trust-item__copy">
+                <p class="trust-item__title">{{ block.settings.title }}</p>
+                {%- if block.settings.text != blank -%}
+                  <p class="trust-item__text">{{ block.settings.text }}</p>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .trust-bar {
+    align-content: start;
+  }
+
+  .trust-bar__marquee {
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .trust-bar__track {
+    display: flex;
+    width: max-content;
+    animation: trust-marquee var(--trust-speed, 36s) linear infinite;
+  }
+
+  /* Pause on hover so people can actually read an item they care about. */
+  .trust-bar__marquee:hover .trust-bar__track {
+    animation-play-state: paused;
+  }
+
+  @keyframes trust-marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .trust-bar__set {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+  }
+
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    flex: 0 0 auto;
+    padding-inline: clamp(1.5rem, 4vw, 3.5rem);
+    white-space: nowrap;
+  }
+
+  .trust-item__icon {
+    flex: 0 0 auto;
+    opacity: 0.85;
+    line-height: 0;
+  }
+
+  .trust-item__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .trust-item__title {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .trust-item__text {
+    margin: 0;
+    font-size: 0.78rem;
+    opacity: 0.7;
+    line-height: 1.45;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .trust-bar__track {
+      animation: none;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .trust-item {
+      padding-inline: 1.25rem;
+    }
+
+    .trust-item__title {
+      font-size: 0.8rem;
+    }
+
+    .trust-item__text {
+      font-size: 0.72rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trust bar",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "METADATA: replace with your real delivery times, costs, payment methods and returns policy. Unexpected costs at checkout cause 48% of cart abandonment — stating them here is the cheapest fix available."
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Scroll duration",
+      "info": "Seconds for one full loop. Higher = slower. Hovering pauses it.",
+      "min": 10,
+      "max": 90,
+      "step": 2,
+      "unit": "s",
+      "default": 40
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        { "value": "page-width", "label": "Page" },
+        { "value": "full-width", "label": "Full" }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-3"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 28
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Trust item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "truck", "label": "Delivery" },
+            { "value": "cash", "label": "Cash / payment" },
+            { "value": "return", "label": "Returns" },
+            { "value": "ruler", "label": "Sizing" },
+            { "value": "shield", "label": "Secure" }
+          ],
+          "default": "truck"
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Title" },
+        { "type": "text", "id": "text", "label": "Text", "default": "MOCK COPY — replace" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust bar",
+      "blocks": [
+        { "type": "item", "settings": { "icon": "truck", "title": "Delivery across Egypt", "text": "MOCK — state your real delivery time and cost" } },
+        { "type": "item", "settings": { "icon": "cash", "title": "Cash on delivery", "text": "MOCK — state accepted payment methods" } },
+        { "type": "item", "settings": { "icon": "ruler", "title": "Size help", "text": "MOCK — height charts on every product" } },
+        { "type": "item", "settings": { "icon": "return", "title": "Easy exchanges", "text": "MOCK — state your real returns window" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

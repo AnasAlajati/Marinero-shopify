@@ -41,31 +41,62 @@
       </div>
 
       {%- unless cart.empty? -%}
-        {%- liquid
-          assign free_shipping_threshold = 50000
-          assign cart_total = cart.total_price
-          assign remaining = free_shipping_threshold | minus: cart_total
-          assign progress = cart_total | times: 100 | divided_by: free_shipping_threshold
-          if progress > 100
-            assign progress = 100
-          endif
-        -%}
-        <div class="marinero-shipping-bar">
-          {%- if remaining > 0 -%}
-            <p class="marinero-shipping-bar__msg">أضيفي <strong>{{ remaining | money }}</strong> للحصول على شحن مجاني 🚚</p>
-          {%- else -%}
-            <p class="marinero-shipping-bar__msg marinero-shipping-bar__msg--done">🎉 مبروك! حصلتِ على شحن مجاني</p>
-          {%- endif -%}
-          <div class="marinero-shipping-bar__track">
-            <div class="marinero-shipping-bar__fill" style="width: {{ progress }}%;"></div>
+        {%- comment -%}
+          Free-shipping progress bar. This was previously hardcoded to a 500
+          threshold and always on, which committed the store to a free-delivery
+          promise. It is now opt-in and configurable, and off by default.
+        {%- endcomment -%}
+        {%- if section.settings.show_shipping_bar and section.settings.shipping_threshold > 0 -%}
+          {%- liquid
+            assign free_shipping_threshold = section.settings.shipping_threshold | times: 100
+            assign cart_total = cart.total_price
+            assign remaining = free_shipping_threshold | minus: cart_total
+            assign progress = cart_total | times: 100 | divided_by: free_shipping_threshold
+            if progress > 100
+              assign progress = 100
+            endif
+          -%}
+          <div class="marinero-shipping-bar">
+            {%- if remaining > 0 -%}
+              {%- assign remaining_money = remaining | money -%}
+              <p class="marinero-shipping-bar__msg">
+                {{ section.settings.shipping_bar_remaining | replace: '[amount]', remaining_money }}
+              </p>
+            {%- else -%}
+              <p class="marinero-shipping-bar__msg marinero-shipping-bar__msg--done">
+                {{ section.settings.shipping_bar_reached }}
+              </p>
+            {%- endif -%}
+            <div class="marinero-shipping-bar__track">
+              <div class="marinero-shipping-bar__fill" style="width: {{ progress }}%;"></div>
+            </div>
           </div>
-        </div>
+        {%- endif -%}
+
+        {%- comment -%}
+          Cost transparency. 23% of shoppers abandon solely because they weren't
+          given an upfront estimate of total cost, and "extra costs" is the
+          single largest abandonment cause (48%). This states the delivery
+          position without promising a date or a free-delivery threshold.
+        {%- endcomment -%}
+        {%- if section.settings.delivery_note != blank -%}
+          <p class="marinero-cart-note">
+            <span class="marinero-cart-note__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16">
+                <path d="M3 6h11v9H3zM14 9h4l3 3v3h-7z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="7" cy="17" r="1.7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="17.5" cy="17" r="1.7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            </span>
+            {{ section.settings.delivery_note }}
+          </p>
+        {%- endif -%}
       {%- else -%}
         <div class="marinero-empty-cart">
           <div class="marinero-empty-cart__icon" aria-hidden="true">🛒</div>
           <h2 class="marinero-empty-cart__heading">سلتك فاضية</h2>
           <p class="marinero-empty-cart__text">ما زلتِ لم تضيفي أي منتج. تصفحي مجموعتنا وأضيفي ما يعجبك لأطفالك.</p>
-          <a href="/collections/all" class="button button--primary marinero-empty-cart__cta">تسوقي الآن</a>
+          <a href="{{ routes.all_products_collection_url }}" class="button button--primary marinero-empty-cart__cta">تسوقي الآن</a>
         </div>
       {%- endunless -%}
 
@@ -166,6 +197,22 @@
     padding: 1rem 1.25rem;
     margin-bottom: 1.5rem;
     grid-column: 1 / -1;
+  }
+
+  /* Delivery cost line — states the cost, promises no date. */
+  .marinero-cart-note {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.82rem;
+    opacity: 0.85;
+  }
+
+  .marinero-cart-note__icon {
+    line-height: 0;
+    flex: 0 0 auto;
   }
 
   .marinero-shipping-bar__msg {
@@ -269,6 +316,52 @@
     }
   ],
   "settings": [
+    {
+      "type": "header",
+      "content": "Delivery & cost transparency"
+    },
+    {
+      "type": "paragraph",
+      "content": "23% of shoppers abandon an order solely because they weren't shown an upfront estimate of total cost, and unexpected extra costs are the single biggest cause of cart abandonment (48%). Stating your delivery cost here removes that surprise. MOCK COPY — replace."
+    },
+    {
+      "type": "text",
+      "id": "delivery_note",
+      "label": "Delivery note",
+      "info": "Shown above the cart items. Leave empty to hide. Avoid promising dates you can't guarantee.",
+      "default": "MOCK COPY — replace with your delivery cost"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shipping_bar",
+      "label": "Show free-delivery progress bar",
+      "info": "Off by default. Only turn this on if you are committed to offering free delivery above the threshold.",
+      "default": false
+    },
+    {
+      "type": "number",
+      "id": "shipping_threshold",
+      "label": "Free delivery threshold",
+      "info": "In store currency, e.g. 500.",
+      "default": 500
+    },
+    {
+      "type": "text",
+      "id": "shipping_bar_remaining",
+      "label": "Message below threshold",
+      "info": "Use [amount] for the remaining amount.",
+      "default": "أضيفي [amount] للحصول على شحن مجاني"
+    },
+    {
+      "type": "text",
+      "id": "shipping_bar_reached",
+      "label": "Message at threshold",
+      "default": "مبروك! حصلتِ على شحن مجاني"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
     {
       "type": "select",
       "id": "section_width",

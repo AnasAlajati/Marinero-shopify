@@ -1,0 +1,277 @@
+{%- comment -%}
+  Size & fit confidence block.
+
+  Why this exists: 46% of shoppers abandon fashion purchases over sizing
+  uncertainty, and ~67% of apparel returns are fit/size related. In a
+  cash-on-delivery market a wrong size is a refused delivery, so this is the
+  highest-value block on the page.
+
+  MOCK DATA: the rows below are sample measurements. Replace them with your
+  real garment measurements in the theme editor.
+{%- endcomment -%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="size-fit section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
+  style="
+    padding-block-start: {{ section.settings.padding-block-start }}px;
+    padding-block-end: {{ section.settings.padding-block-end }}px;
+  "
+>
+  <div class="size-fit__header">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="size-fit__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h2 class="size-fit__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <p class="size-fit__text">{{ section.settings.text }}</p>
+    {%- endif -%}
+  </div>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="size-fit__table-wrap">
+      <table class="size-fit__table">
+        <thead>
+          <tr>
+            <th scope="col">{{ section.settings.col_age }}</th>
+            <th scope="col">{{ section.settings.col_height }}</th>
+            <th scope="col">{{ section.settings.col_chest }}</th>
+            <th scope="col">{{ section.settings.col_waist }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- for block in section.blocks -%}
+            <tr {{ block.shopify_attributes }}>
+              <th scope="row">{{ block.settings.age }}</th>
+              <td>{{ block.settings.height }}</td>
+              <td>{{ block.settings.chest }}</td>
+              <td>{{ block.settings.waist }}</td>
+            </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+  {%- endif -%}
+
+  {%- if section.settings.note != blank or section.settings.cta_label != blank -%}
+    <div class="size-fit__footer">
+      {%- if section.settings.note != blank -%}
+        <p class="size-fit__note">{{ section.settings.note }}</p>
+      {%- endif -%}
+      {%- if section.settings.cta_label != blank and section.settings.cta_link != blank -%}
+        <a href="{{ section.settings.cta_link }}" class="size-fit__cta">{{ section.settings.cta_label }}</a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .size-fit {
+    row-gap: var(--space-md, 2rem);
+    align-content: start;
+  }
+
+  .size-fit__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs, 0.5rem);
+    align-items: center;
+    text-align: center;
+  }
+
+  .size-fit__eyebrow {
+    margin: 0;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .size-fit__heading {
+    margin: 0;
+  }
+
+  .size-fit__text {
+    margin: 0;
+    opacity: 0.75;
+    max-width: 52ch;
+  }
+
+  .size-fit__table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .size-fit__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    min-width: 32rem;
+  }
+
+  .size-fit__table :is(th, td) {
+    padding: 0.85rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-foreground, #2c2c2a) 12%, transparent);
+  }
+
+  .size-fit__table thead th {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .size-fit__table tbody th {
+    font-weight: 600;
+  }
+
+  .size-fit__table tbody tr:last-child :is(th, td) {
+    border-bottom: 0;
+  }
+
+  .size-fit__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm, 1rem);
+  }
+
+  .size-fit__note {
+    margin: 0;
+    font-size: 0.85rem;
+    opacity: 0.7;
+    max-width: 60ch;
+  }
+
+  .size-fit__cta {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Size & fit",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "METADATA: replace the sample measurements with your real garment measurements. Sizing uncertainty causes ~46% of fashion cart abandonment, so accuracy here directly affects revenue."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Sizing"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Find the right fit first time"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Intro text",
+      "default": "MOCK COPY — replace. Measure your child and match to the chart below. If they're between sizes, we recommend sizing up."
+    },
+    {
+      "type": "header",
+      "content": "Table column labels"
+    },
+    { "type": "text", "id": "col_age", "label": "Column 1", "default": "Age" },
+    { "type": "text", "id": "col_height", "label": "Column 2", "default": "Height (cm)" },
+    { "type": "text", "id": "col_chest", "label": "Column 3", "default": "Chest (cm)" },
+    { "type": "text", "id": "col_waist", "label": "Column 4", "default": "Waist (cm)" },
+    {
+      "type": "header",
+      "content": "Footer"
+    },
+    {
+      "type": "textarea",
+      "id": "note",
+      "label": "Note",
+      "default": "MOCK COPY — replace. Measurements are of the child, not the garment. Need help? Message us and we'll recommend a size."
+    },
+    { "type": "text", "id": "cta_label", "label": "Link label", "default": "Full size guide" },
+    { "type": "url", "id": "cta_link", "label": "Link" },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        { "value": "page-width", "label": "Page" },
+        { "value": "full-width", "label": "Full" }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "blocks": [
+    {
+      "type": "size_row",
+      "name": "Size row",
+      "settings": [
+        { "type": "text", "id": "age", "label": "Age", "default": "4-5 Years" },
+        { "type": "text", "id": "height", "label": "Height", "default": "104-110" },
+        { "type": "text", "id": "chest", "label": "Chest", "default": "55-57" },
+        { "type": "text", "id": "waist", "label": "Waist", "default": "52-54" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Size & fit",
+      "blocks": [
+        { "type": "size_row", "settings": { "age": "4-5 Years", "height": "104-110", "chest": "55-57", "waist": "52-54" } },
+        { "type": "size_row", "settings": { "age": "6-7 Years", "height": "116-122", "chest": "59-61", "waist": "55-57" } },
+        { "type": "size_row", "settings": { "age": "8 Years", "height": "128-134", "chest": "63-65", "waist": "58-60" } },
+        { "type": "size_row", "settings": { "age": "10-12 Years", "height": "140-152", "chest": "67-71", "waist": "61-64" } },
+        { "type": "size_row", "settings": { "age": "14 Years", "height": "158-164", "chest": "75-79", "waist": "65-68" } },
+        { "type": "size_row", "settings": { "age": "16-18 Years", "height": "170-182", "chest": "83-89", "waist": "70-75" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

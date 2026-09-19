@@ -25,6 +25,31 @@
     <div class="architecture-card__info">
       <p class="architecture-card__title">{{ product.title }}</p>
       <p class="architecture-card__price">{% render 'format-price', price: product.price %}</p>
+
+      {%- comment -%}
+        Colour swatches in the list item. Baymard found 57% of sites omit these,
+        forcing users onto the product page just to see what colours exist.
+        Renders only when the product actually has a colour-style option.
+      {%- endcomment -%}
+      {%- for option in product.options_with_values -%}
+        {%- assign option_name = option.name | downcase -%}
+        {%- if option_name contains 'color' or option_name contains 'colour' -%}
+          <ul class="architecture-card__swatches" aria-label="{{ option.name }}">
+            {%- for value in option.values limit: 5 -%}
+              <li
+                class="architecture-card__swatch"
+                style="--swatch: {{ value | handleize }};"
+                title="{{ value }}"
+              >
+                <span class="visually-hidden">{{ value }}</span>
+              </li>
+            {%- endfor -%}
+            {%- if option.values.size > 5 -%}
+              <li class="architecture-card__swatch-more">+{{ option.values.size | minus: 5 }}</li>
+            {%- endif -%}
+          </ul>
+        {%- endif -%}
+      {%- endfor -%}
     </div>
   </a>
 </div>

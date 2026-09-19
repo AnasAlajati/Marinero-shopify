@@ -1,0 +1,326 @@
+{%- comment -%}
+  Age / category routing grid.
+
+  This is the primary navigation element for a kids' store: the first question
+  a parent has is "what fits my child's age?". Baymard's product-list research
+  is clear that routing should be visual and immediate rather than buried in a
+  menu. Configured via blocks so you can run 3 age tiles, 6 (age x gender), or
+  any mix, without code changes.
+
+  MOCK DATA: every tile falls back to a Shopify placeholder image and sample
+  copy until you set a real image and link in the theme editor.
+{%- endcomment -%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="age-collections section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
+  style="
+    --age-columns: {{ section.settings.columns }};
+    --age-ratio: {{ section.settings.image_ratio }};
+    padding-block-start: {{ section.settings.padding-block-start }}px;
+    padding-block-end: {{ section.settings.padding-block-end }}px;
+  "
+>
+  {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+    <div class="age-collections__header">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="age-collections__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <p class="age-collections__subheading">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="age-collections__grid">
+    {%- for block in section.blocks -%}
+      <article class="age-tile" {{ block.shopify_attributes }}>
+        {%- if block.settings.link != blank -%}
+          <a href="{{ block.settings.link }}" class="age-tile__link">
+        {%- else -%}
+          <div class="age-tile__link age-tile__link--inert">
+        {%- endif -%}
+          <div class="age-tile__media">
+            {%- if block.settings.image != blank -%}
+              {{
+                block.settings.image
+                | image_url: width: 900
+                | image_tag: class: 'age-tile__image', loading: 'lazy', alt: block.settings.label
+              }}
+            {%- else -%}
+              {%- capture ph -%}lifestyle-{% cycle 1, 2 %}{%- endcapture -%}
+              {{ ph | placeholder_svg_tag: 'age-tile__image age-tile__image--placeholder' }}
+            {%- endif -%}
+            <div class="age-tile__scrim"></div>
+          </div>
+
+          <div class="age-tile__content">
+            {%- if block.settings.eyebrow != blank -%}
+              <p class="age-tile__eyebrow">{{ block.settings.eyebrow }}</p>
+            {%- endif -%}
+            <p class="age-tile__label">{{ block.settings.label }}</p>
+            {%- if block.settings.sublabel != blank -%}
+              <p class="age-tile__sublabel">{{ block.settings.sublabel }}</p>
+            {%- endif -%}
+          </div>
+        {%- if block.settings.link != blank -%}
+          </a>
+        {%- else -%}
+          </div>
+        {%- endif -%}
+      </article>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  /* `.section` is a 3-col grid; never override its `display` here. */
+  .age-collections {
+    row-gap: var(--space-md, 2rem);
+    align-content: start;
+  }
+
+  .age-collections__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs, 0.5rem);
+    text-align: center;
+    align-items: center;
+  }
+
+  .age-collections__heading {
+    margin: 0;
+  }
+
+  .age-collections__subheading {
+    margin: 0;
+    opacity: 0.75;
+    max-width: 46ch;
+  }
+
+  .age-collections__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--age-columns, 3), minmax(0, 1fr));
+    gap: var(--space-sm, 1rem);
+  }
+
+  .age-tile__link {
+    display: block;
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+    border-radius: var(--corner-radius, 0);
+  }
+
+  .age-tile__link--inert {
+    cursor: default;
+  }
+
+  .age-tile__media {
+    position: relative;
+    aspect-ratio: var(--age-ratio, 3 / 4);
+    overflow: hidden;
+  }
+
+  .age-tile__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow, 600ms) var(--ease-out, ease);
+  }
+
+  .age-tile__image--placeholder {
+    background: color-mix(in srgb, var(--color-foreground, #2c2c2a) 8%, transparent);
+  }
+
+  .age-tile__link:not(.age-tile__link--inert):hover .age-tile__image {
+    transform: scale(1.04);
+  }
+
+  .age-tile__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0) 60%);
+    pointer-events: none;
+  }
+
+  .age-tile__content {
+    position: absolute;
+    z-index: 1;
+    inset-inline: var(--space-sm, 1rem);
+    bottom: var(--space-sm, 1rem);
+    color: #fff;
+  }
+
+  .age-tile__eyebrow {
+    margin: 0 0 0.25rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+
+  .age-tile__label {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  .age-tile__sublabel {
+    margin: 0.25rem 0 0;
+    font-size: 0.85rem;
+    opacity: 0.85;
+  }
+
+  @media screen and (max-width: 749px) {
+    .age-collections__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.6rem;
+    }
+
+    .age-tile__label {
+      font-size: 1.05rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Age collections",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Primary routing for a kids' store. Add one block per age group (and per gender if you split them). Replace each tile's image and link once your collections exist."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by age"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "MOCK COPY — replace with your own. Every piece is sized to fit, with height guidance on each product."
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns (desktop)",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Tile shape",
+      "options": [
+        { "value": "3 / 4", "label": "Portrait" },
+        { "value": "1 / 1", "label": "Square" },
+        { "value": "4 / 3", "label": "Landscape" }
+      ],
+      "default": "3 / 4"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        { "value": "page-width", "label": "Page" },
+        { "value": "full-width", "label": "Full" }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Collection tile",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "METADATA: set Image + Link once the collection exists in Shopify."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow",
+          "info": "Small label above the title, e.g. BOYS or GIRLS."
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Title",
+          "default": "4-8 Years"
+        },
+        {
+          "type": "text",
+          "id": "sublabel",
+          "label": "Subtitle",
+          "info": "Use this for height guidance, e.g. 104-130cm. Sizing clarity is the single biggest conversion lever in kids' apparel."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Age collections",
+      "blocks": [
+        { "type": "tile", "settings": { "label": "4-8 Years", "sublabel": "104-130cm", "link": "shopify://collections/all" } },
+        { "type": "tile", "settings": { "label": "10-14 Years", "sublabel": "140-164cm", "link": "shopify://collections/all" } },
+        { "type": "tile", "settings": { "label": "16-18 Years", "sublabel": "170-182cm", "link": "shopify://collections/all" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

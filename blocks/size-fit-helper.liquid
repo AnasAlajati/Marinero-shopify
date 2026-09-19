@@ -1,0 +1,223 @@
+{%- doc -%}
+  Sizing helper for the product page, shown at the point of size selection.
+
+  Baymard's apparel research found 82% of sites fail to provide adequate sizing
+  information, and 90% of apparel sites fail to let users assess size or fit —
+  it's the most common cause of product abandonment in clothing. Sizing shown
+  next to the selector (rather than hidden in a modal) is the fix.
+
+  Rows are configured here rather than read from the product because Shopify
+  option values are usually bare numbers ("6", "8"). This maps each of those to
+  an age range and body measurements without renaming variants.
+
+  MOCK DATA: every row below is a sample. Replace with your real measurements.
+{%- enddoc -%}
+
+{%- comment -%}
+  Split on newlines via newline_to_br: a literal newline inside a quoted string
+  can't be used here, because each line of a {% liquid %} tag is parsed as its
+  own statement.
+{%- endcomment -%}
+{%- assign row_list = block.settings.size_rows | strip | newline_to_br | split: '<br />' -%}
+
+<div class="size-fit-helper" {{ block.shopify_attributes }}>
+  <details class="size-fit-helper__details"{% if block.settings.open_by_default %} open{% endif %}>
+    <summary class="size-fit-helper__summary">
+      <span class="size-fit-helper__summary-label">
+        {%- if block.settings.icon -%}
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+            <rect x="2.5" y="8.5" width="19" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M7 8.5v3M12 8.5v4M17 8.5v3" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        {%- endif -%}
+        {{ block.settings.heading }}
+      </span>
+      <span class="size-fit-helper__chevron" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="14" height="14">
+          <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        </svg>
+      </span>
+    </summary>
+
+    <div class="size-fit-helper__body">
+      {%- if block.settings.intro != blank -%}
+        <p class="size-fit-helper__intro">{{ block.settings.intro }}</p>
+      {%- endif -%}
+
+      {%- if row_list.size > 0 -%}
+        <table class="size-fit-helper__table">
+          <thead>
+            <tr>
+              <th scope="col">{{ block.settings.col_1 }}</th>
+              <th scope="col">{{ block.settings.col_2 }}</th>
+              <th scope="col">{{ block.settings.col_3 }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- for row in row_list -%}
+              {%- assign cells = row | split: '|' -%}
+              {%- if cells.size > 1 -%}
+                <tr>
+                  <th scope="row">{{ cells[0] | strip }}</th>
+                  <td>{{ cells[1] | strip }}</td>
+                  <td>{{ cells[2] | strip }}</td>
+                </tr>
+              {%- endif -%}
+            {%- endfor -%}
+          </tbody>
+        </table>
+      {%- endif -%}
+
+      {%- if block.settings.note != blank -%}
+        <p class="size-fit-helper__note">{{ block.settings.note }}</p>
+      {%- endif -%}
+    </div>
+  </details>
+</div>
+
+{% stylesheet %}
+  .size-fit-helper {
+    width: 100%;
+  }
+
+  .size-fit-helper__details {
+    border-block: 1px solid color-mix(in srgb, var(--color-foreground, #2c2c2a) 15%, transparent);
+  }
+
+  .size-fit-helper__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-block: 0.8rem;
+    cursor: pointer;
+    list-style: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .size-fit-helper__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .size-fit-helper__summary-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .size-fit-helper__chevron {
+    line-height: 0;
+    transition: transform var(--duration-normal, 320ms) var(--ease-out, ease);
+  }
+
+  .size-fit-helper__details[open] .size-fit-helper__chevron {
+    transform: rotate(180deg);
+  }
+
+  .size-fit-helper__body {
+    padding-block-end: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .size-fit-helper__intro,
+  .size-fit-helper__note {
+    margin: 0;
+    font-size: 0.8rem;
+    opacity: 0.75;
+    line-height: 1.5;
+  }
+
+  .size-fit-helper__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+
+  .size-fit-helper__table :is(th, td) {
+    text-align: left;
+    padding: 0.5rem 0.6rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-foreground, #2c2c2a) 10%, transparent);
+  }
+
+  .size-fit-helper__table thead th {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.65;
+  }
+
+  .size-fit-helper__table tbody tr:last-child :is(th, td) {
+    border-bottom: 0;
+  }
+
+  .size-fit-helper__table tbody th {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Size & fit helper",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "MOCK DATA — replace the rows with your real measurements. 82% of apparel sites fail to give adequate sizing info, and sizing uncertainty is the most common cause of clothing abandonment, so accuracy here directly affects revenue and refused COD deliveries."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Size guide — find the right age"
+    },
+    {
+      "type": "checkbox",
+      "id": "icon",
+      "label": "Show ruler icon",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "open_by_default",
+      "label": "Open by default",
+      "info": "Open is better for conversion (sizing info is visible without a click), closed keeps the page shorter.",
+      "default": false
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro",
+      "default": "MOCK COPY — replace. Sizes are based on the child's body measurements, not the garment. Between sizes? Size up."
+    },
+    {
+      "type": "header",
+      "content": "Table"
+    },
+    { "type": "text", "id": "col_1", "label": "Column 1 heading", "default": "Size" },
+    { "type": "text", "id": "col_2", "label": "Column 2 heading", "default": "Age" },
+    { "type": "text", "id": "col_3", "label": "Column 3 heading", "default": "Height (cm)" },
+    {
+      "type": "textarea",
+      "id": "size_rows",
+      "label": "Rows",
+      "info": "One row per line, columns separated by | . Example:  6 | 6-7 Years | 116-122",
+      "default": "4 | 4-5 Years | 104-110\n6 | 6-7 Years | 116-122\n8 | 8-9 Years | 128-134\n10 | 10-11 Years | 140-146\n12 | 12-13 Years | 152-158\n14 | 14-15 Years | 158-164\n16 | 16-18 Years | 170-182"
+    },
+    {
+      "type": "textarea",
+      "id": "note",
+      "label": "Note",
+      "default": "MOCK COPY — replace. Not sure which size? Message us with your child's height and we'll recommend one."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Size & fit helper"
+    }
+  ]
+}
+{% endschema %}
+

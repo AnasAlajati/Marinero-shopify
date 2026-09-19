@@ -102,22 +102,220 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "newsletter_form": {
+              "type": "email-signup",
+              "settings": {
+                "width": "fill",
+                "inherit_color_scheme": true
+              }
+            },
+            "newsletter_social": {
+              "type": "social-links",
+              "settings": {
+                "facebook_url": "https://www.facebook.com/",
+                "instagram_url": "https://www.instagram.com/",
+                "youtube_url": "",
+                "tiktok_url": "https://www.tiktok.com/",
+                "twitter_url": "https://x.com/",
+                "threads_url": "",
+                "linkedin_url": "",
+                "bluesky_url": "",
+                "snapchat_url": "",
+                "pinterest_url": "",
+                "tumblr_url": "",
+                "vimeo_url": "",
+                "custom_url": ""
+              }
             }
           },
           "block_order": [
             "text_LWt8Pz",
-            "text_f9CFLH"
+            "text_f9CFLH",
+            "newsletter_form",
+            "newsletter_social"
+          ]
+        },
+        "group_brand": {
+          "type": "group",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "flex-start",
+            "gap": 10,
+            "width": "fill",
+            "inherit_color_scheme": true
+          },
+          "blocks": {
+            "brand_heading": {
+              "type": "text",
+              "settings": {
+                "text": "<h3>We Are Marinero</h3>",
+                "width": "100%",
+                "alignment": "left",
+                "type_preset": "h4"
+              }
+            },
+            "brand_text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>MOCK COPY — replace. Comfortable, durable kids clothing for every adventure, from first steps to the teenage years.</p>",
+                "width": "100%",
+                "alignment": "left",
+                "type_preset": "rte"
+              }
+            }
+          },
+          "block_order": [
+            "brand_heading",
+            "brand_text"
+          ]
+        },
+        "group_discover": {
+          "type": "group",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "flex-start",
+            "gap": 10,
+            "width": "fill",
+            "inherit_color_scheme": true
+          },
+          "blocks": {
+            "discover_heading": {
+              "type": "text",
+              "settings": {
+                "text": "<h4>Discover</h4>",
+                "width": "100%",
+                "alignment": "left",
+                "type_preset": "h4"
+              }
+            },
+            "discover_all": {
+              "type": "button",
+              "settings": {
+                "label": "All Products",
+                "link": "shopify://collections/all",
+                "style_class": "link",
+                "width": "fit-content"
+              }
+            },
+            "discover_boys": {
+              "type": "button",
+              "settings": {
+                "label": "Boys",
+                "link": "shopify://collections/boys",
+                "style_class": "link",
+                "width": "fit-content"
+              }
+            },
+            "discover_girls": {
+              "type": "button",
+              "settings": {
+                "label": "Girls",
+                "link": "shopify://collections/girls",
+                "style_class": "link",
+                "width": "fit-content"
+              }
+            },
+            "discover_winter": {
+              "type": "button",
+              "settings": {
+                "label": "Winter Collection",
+                "link": "shopify://collections/2026-winter-collection",
+                "style_class": "link",
+                "width": "fit-content"
+              }
+            }
+          },
+          "block_order": [
+            "discover_heading",
+            "discover_all",
+            "discover_boys",
+            "discover_girls",
+            "discover_winter"
+          ]
+        },
+        "group_support": {
+          "type": "group",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "flex-start",
+            "gap": 10,
+            "width": "fill",
+            "inherit_color_scheme": true
+          },
+          "blocks": {
+            "support_heading": {
+              "type": "text",
+              "settings": {
+                "text": "<h4>Support</h4>",
+                "width": "100%",
+                "alignment": "left",
+                "type_preset": "h4"
+              }
+            },
+            "support_contact": {
+              "type": "button",
+              "settings": {
+                "label": "Contact Us",
+                "link": "shopify://pages/contact",
+                "style_class": "link",
+                "width": "fit-content"
+              }
+            },
+            "support_size": {
+              "type": "button",
+              "settings": {
+                "label": "Size Guide (MOCK — add page)",
+                "link": "#",
+                "style_class": "link",
+                "width": "fit-content"
+              }
+            },
+            "support_delivery": {
+              "type": "button",
+              "settings": {
+                "label": "Delivery & Returns (MOCK — add page)",
+                "link": "#",
+                "style_class": "link",
+                "width": "fit-content"
+              }
+            },
+            "support_privacy": {
+              "type": "button",
+              "settings": {
+                "label": "Privacy Policy",
+                "link": "shopify://policies/privacy-policy",
+                "style_class": "link",
+                "width": "fit-content"
+              }
+            }
+          },
+          "block_order": [
+            "support_heading",
+            "support_contact",
+            "support_size",
+            "support_delivery",
+            "support_privacy"
           ]
         }
       },
       "block_order": [
+        "group_brand",
+        "group_discover",
+        "group_support",
         "group_H6VpwJ"
       ],
       "name": "t:names.footer",
       "settings": {
         "section_width": "page-width",
         "gap": 20,
-        "color_scheme": "scheme-3",
+        "color_scheme": "scheme-4",
         "padding-block-start": 30,
         "padding-block-end": 30
       }

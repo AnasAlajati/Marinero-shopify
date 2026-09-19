@@ -52,6 +52,52 @@
         {{ 'actions.continue_shopping' | t }}
       </span>
     </a>
+
+    {%- comment -%}
+      Empty-cart suggestions. Shoppers use the cart as a holding area rather
+      than a checkout queue, so an empty cart should be a re-entry point.
+      Falls back to all products when no collection is configured, so this
+      still renders something useful out of the box.
+    {%- endcomment -%}
+    {%- liquid
+      assign suggest_count = settings.empty_cart_products_count | default: 4
+      assign suggest_collection = settings.empty_cart_collection
+      if suggest_collection == blank or suggest_collection.products_count == 0
+        assign suggest_collection = collections.all
+      endif
+    -%}
+
+    {%- if suggest_count > 0 and suggest_collection.products.size > 0 -%}
+      <div class="cart-items__suggestions">
+        {%- if settings.empty_cart_products_heading != blank -%}
+          <p class="cart-items__suggestions-heading">{{ settings.empty_cart_products_heading }}</p>
+        {%- endif -%}
+
+        <ul class="cart-items__suggestions-list" role="list">
+          {%- for suggested in suggest_collection.products limit: suggest_count -%}
+            <li class="cart-suggestion">
+              <a href="{{ suggested.url }}" class="cart-suggestion__link">
+                <span class="cart-suggestion__media">
+                  {%- if suggested.featured_image -%}
+                    {{
+                      suggested.featured_image
+                      | image_url: width: 300
+                      | image_tag: class: 'cart-suggestion__image', loading: 'lazy', alt: suggested.title
+                    }}
+                  {%- else -%}
+                    {{ 'product-1' | placeholder_svg_tag: 'cart-suggestion__image' }}
+                  {%- endif -%}
+                </span>
+                <span class="cart-suggestion__title">{{ suggested.title }}</span>
+                <span class="cart-suggestion__price">
+                  {% render 'format-price', price: suggested.price %}
+                </span>
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
   {%- else -%}
     <span
       class="visually-hidden"
@@ -649,6 +695,102 @@
     margin-top: var(--margin-md);
     padding-inline: var(--padding-4xl);
     padding-block: var(--padding-lg);
+  }
+
+  /*
+    Empty-cart suggestions. Two columns so this works inside the narrow cart
+    drawer; widens on the full cart page.
+  */
+  .cart-items__suggestions {
+    width: 100%;
+    margin-top: var(--margin-2xl, 2rem);
+    text-align: start;
+  }
+
+  .cart-items__suggestions-heading {
+    margin: 0 0 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  /*
+    Horizontal strip rather than a grid: keeps the empty drawer short enough
+    that "Continue shopping" stays reachable without scrolling the drawer.
+  */
+  .cart-items__suggestions-list {
+    display: flex;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0 0 0.5rem;
+    list-style: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .cart-items__suggestions-list::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .cart-items__suggestions-list::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--color-foreground, #2c2c2a) 25%, transparent);
+    border-radius: 2px;
+  }
+
+  .cart-suggestion {
+    flex: 0 0 auto;
+    width: 104px;
+    scroll-snap-align: start;
+  }
+
+  .cart-suggestion__link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .cart-suggestion__media {
+    display: block;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--color-foreground, #2c2c2a) 5%, transparent);
+  }
+
+  .cart-suggestion__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cart-suggestion__title {
+    font-size: 0.68rem;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .cart-suggestion__price {
+    font-size: 0.68rem;
+    opacity: 0.7;
+  }
+
+  /* More room on the full cart page than in the drawer. */
+  .cart-page--empty .cart-items__suggestions {
+    max-width: 46rem;
+  }
+
+  .cart-page--empty .cart-suggestion {
+    width: 130px;
   }
 
   /* Error message */
