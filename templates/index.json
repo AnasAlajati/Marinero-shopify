@@ -41,6 +41,7 @@
         "t1": {
           "type": "tile",
           "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-09-19_at_11.16.38_AM.jpg",
             "eyebrow": "",
             "label": "4-8 Years",
             "sublabel": "104-130cm",
@@ -50,6 +51,7 @@
         "t2": {
           "type": "tile",
           "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-09-19_at_11.17.38_AM.jpg",
             "eyebrow": "",
             "label": "10-14 Years",
             "sublabel": "140-164cm",
@@ -59,6 +61,7 @@
         "t3": {
           "type": "tile",
           "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-09-19_at_11.16.55_AM.jpg",
             "eyebrow": "",
             "label": "16-18 Years",
             "sublabel": "170-182cm",
@@ -137,13 +140,70 @@
       "settings": {
         "subheading": "New in",
         "heading": "Winter, revealed",
+        "image": "shopify://shop_images/2_1.png",
         "image_overlay": "rgba(11, 31, 58, 0.15)",
-        "products": [],
+        "products": [
+          "ss230",
+          "ss224",
+          "ss229",
+          "ss221"
+        ],
         "columns": 4,
         "card_overlap": 18,
         "reveal_threshold": 0.3,
         "reveal_exit_point": 35,
         "reveal_replay": true,
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "padding-block-start": 64,
+        "padding-block-end": 64
+      }
+    },
+    "reviews_1": {
+      "type": "reviews",
+      "blocks": {
+        "v1": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "MOCK REVIEW — replace. Quality is much better than expected for the price, and the sizing chart was accurate for my son.",
+            "author": "Customer name",
+            "context": "Bought 6-7 Years",
+            "verified": true
+          }
+        },
+        "v2": {
+          "type": "review",
+          "settings": {
+            "rating": 4,
+            "text": "MOCK REVIEW — replace. Lovely fabric and washed well. Slightly long on the sleeves but she grew into it quickly.",
+            "author": "Customer name",
+            "context": "Bought 10-12 Years",
+            "verified": true
+          }
+        },
+        "v3": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "MOCK REVIEW — replace. Delivery was quick and paying on delivery made it easy. Ordering again for my other son.",
+            "author": "Customer name",
+            "context": "Bought 4-5 Years",
+            "verified": true
+          }
+        }
+      },
+      "block_order": [
+        "v1",
+        "v2",
+        "v3"
+      ],
+      "settings": {
+        "heading": "What parents say",
+        "show_summary": true,
+        "count_label": "based on [count] reviews",
+        "verified_label": "Verified buyer",
+        "columns": 3,
         "section_width": "page-width",
         "color_scheme": "scheme-1",
         "padding-block-start": 64,
@@ -229,57 +289,6 @@
         "cta_link": "",
         "section_width": "page-width",
         "color_scheme": "scheme-2",
-        "padding-block-start": 64,
-        "padding-block-end": 64
-      }
-    },
-    "reviews_1": {
-      "type": "reviews",
-      "blocks": {
-        "v1": {
-          "type": "review",
-          "settings": {
-            "rating": 5,
-            "text": "MOCK REVIEW — replace. Quality is much better than expected for the price, and the sizing chart was accurate for my son.",
-            "author": "Customer name",
-            "context": "Bought 6-7 Years",
-            "verified": true
-          }
-        },
-        "v2": {
-          "type": "review",
-          "settings": {
-            "rating": 4,
-            "text": "MOCK REVIEW — replace. Lovely fabric and washed well. Slightly long on the sleeves but she grew into it quickly.",
-            "author": "Customer name",
-            "context": "Bought 10-12 Years",
-            "verified": true
-          }
-        },
-        "v3": {
-          "type": "review",
-          "settings": {
-            "rating": 5,
-            "text": "MOCK REVIEW — replace. Delivery was quick and paying on delivery made it easy. Ordering again for my other son.",
-            "author": "Customer name",
-            "context": "Bought 4-5 Years",
-            "verified": true
-          }
-        }
-      },
-      "block_order": [
-        "v1",
-        "v2",
-        "v3"
-      ],
-      "settings": {
-        "heading": "What parents say",
-        "show_summary": true,
-        "count_label": "based on [count] reviews",
-        "verified_label": "Verified buyer",
-        "columns": 3,
-        "section_width": "page-width",
-        "color_scheme": "scheme-1",
         "padding-block-start": 64,
         "padding-block-end": 64
       }
