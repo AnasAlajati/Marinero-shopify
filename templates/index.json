@@ -15,9 +15,9 @@
         "slide_1": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/2_1.png",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-09-19_at_4.29.09_PM.jpg",
             "eyebrow": "KIDS · BOYS · GIRLS",
-            "heading": "From first steps to every step after.",
+            "heading": "Marinero",
             "subtext": "Durable, comfortable, loved by families across Egypt.",
             "cta_label": "Browse Catalog",
             "cta_link": "shopify://collections/all",
@@ -32,7 +32,9 @@
         "height": 75,
         "autoplay": false,
         "autoplay_speed": 5,
-        "color_scheme": "scheme-3"
+        "color_scheme": "scheme-3",
+        "show_wave_divider": true,
+        "wave_divider_color_scheme": ""
       }
     },
     "age_collections_1": {
@@ -133,6 +135,34 @@
         "color_scheme": "scheme-3",
         "padding-block-start": 20,
         "padding-block-end": 20
+      }
+    },
+    "architecture_scroll_1": {
+      "type": "architecture",
+      "settings": {
+        "image_overlay": "rgba(0, 0, 0, 0.4)",
+        "heading": "",
+        "text": "",
+        "text_banner": "#ffffff",
+        "teaser_heading": "",
+        "teaser_link": "",
+        "products": [
+          "ss222",
+          "ss230",
+          "ss224",
+          "ss229"
+        ],
+        "cards_scroll_direction": "horizonta",
+        "products_additionaly": [],
+        "heading_additional": "",
+        "subheading_additional": "",
+        "link_additional_label": "",
+        "link_additional": "",
+        "color_scheme": "scheme-1",
+        "offset_top_desktop": 24,
+        "offset_bottom_desktop": 24,
+        "offset_top_mobile": 16,
+        "offset_bottom_mobile": 16
       }
     },
     "product_reveal_1": {
@@ -486,25 +516,6 @@
         "color_scheme": "scheme-1",
         "padding-block-start": 48,
         "padding-block-end": 48
-      }
-    },
-    "architecture_scroll_1": {
-      "type": "architecture",
-      "settings": {
-        "cards_scroll_direction": "horizonta",
-        "products": [
-          "ss222",
-          "ss230",
-          "ss224",
-          "ss229"
-        ],
-        "color_scheme": "scheme-1",
-        "offset_top_desktop": 24,
-        "offset_bottom_desktop": 24,
-        "offset_top_mobile": 16,
-        "offset_bottom_mobile": 16,
-        "teaser_heading": "",
-        "heading": ""
       }
     }
   },
