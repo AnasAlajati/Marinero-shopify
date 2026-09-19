@@ -106,12 +106,25 @@
           | image_url: width: 2400
           | image_tag: class: 'product-reveal__image', loading: 'lazy', sizes: '100vw'
         }}
-      {%- else -%}
-        {{ 'lifestyle-1' | placeholder_svg_tag: 'product-reveal__image product-reveal__image--placeholder' }}
-      {%- endif -%}
 
-      {%- if section.settings.image_overlay != blank -%}
-        <div class="product-reveal__overlay" style="background: {{ section.settings.image_overlay }};"></div>
+        {%- comment -%}
+          Overlay only makes sense on top of a real photo — skip it on the
+          plain white placeholder below so that stays clean white, not
+          white-with-a-faint-tint.
+        {%- endcomment -%}
+        {%- if section.settings.image_overlay != blank -%}
+          <div class="product-reveal__overlay" style="background: {{ section.settings.image_overlay }};"></div>
+        {%- endif -%}
+      {%- else -%}
+        {%- comment -%}
+          Plain white staging placeholder — used until a real backdrop image
+          is set. Deliberately not the Shopify placeholder illustration used
+          elsewhere in the theme: this section's whole design is a photo
+          partially hidden behind product cards, and the illustration reads
+          as a broken/unfinished image rather than an intentional blank
+          state. Swap the image setting in the theme editor when ready.
+        {%- endcomment -%}
+        <div class="product-reveal__image product-reveal__image--blank"></div>
       {%- endif -%}
     </div>
 
@@ -214,9 +227,8 @@
     object-fit: cover;
   }
 
-  .product-reveal__image--placeholder {
-    background: color-mix(in srgb, var(--color-foreground, #2c2c2a) 8%, transparent);
-    opacity: 0.55;
+  .product-reveal__image--blank {
+    background: #ffffff;
   }
 
   .product-reveal__overlay {

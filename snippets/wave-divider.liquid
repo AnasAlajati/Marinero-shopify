@@ -69,14 +69,18 @@
       showing up as a straight line along the trough/bottom boundary. The
       line-only path repeats just the curve itself with no closing edges, so
       the stroke only ever traces the actual wave.
+
+      Wavelength: 2 full cycles across the 1440-wide viewBox (peaks at x=0,
+      720, 1440; troughs at x=360, 1080) — half the frequency of an earlier
+      4-peak version, for fewer, wider, gentler undulations.
     {%- endcomment -%}
     <path
       class="wave-divider__fill"
-      d="M0,0 C120,0 120,100 240,100 C360,100 360,0 480,0 C600,0 600,100 720,100 C840,100 840,0 960,0 C1080,0 1080,100 1200,100 C1320,100 1320,0 1440,0 L1440,100 L0,100 Z"
+      d="M0,0 C180,0 180,100 360,100 C540,100 540,0 720,0 C900,0 900,100 1080,100 C1260,100 1260,0 1440,0 L1440,100 L0,100 Z"
     />
     <path
       class="wave-divider__line"
-      d="M0,0 C120,0 120,100 240,100 C360,100 360,0 480,0 C600,0 600,100 720,100 C840,100 840,0 960,0 C1080,0 1080,100 1200,100 C1320,100 1320,0 1440,0"
+      d="M0,0 C180,0 180,100 360,100 C540,100 540,0 720,0 C900,0 900,100 1080,100 C1260,100 1260,0 1440,0"
     />
   </svg>
   </span>

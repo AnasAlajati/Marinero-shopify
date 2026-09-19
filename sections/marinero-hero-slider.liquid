@@ -238,8 +238,46 @@
     overflow: hidden;
   }
 
-  /* Image */
-  .m-hero-slider__img {
+  /*
+    The height setting is a single svh value shared by every breakpoint. A
+    percentage of viewport height reads as appropriately full-bleed on a
+    tall, narrow phone screen, but the same percentage on a wide desktop
+    viewport produces a noticeably taller, more overwhelming band. Capping
+    the rendered height on wider screens keeps mobile exactly as configured
+    while reining in desktop, without needing a second setting.
+  */
+  @media screen and (min-width: 990px) {
+    .m-hero-slider,
+    .m-hero-slider__track,
+    .m-hero-slider__slide {
+      /*
+        A fixed height, not min/max-height. min-height is still set to the
+        svh value above, and per the CSS spec min-height wins whenever it
+        conflicts with max-height — so max-height alone would have had no
+        visible effect on a tall viewport. The image is position:absolute
+        and contributes no natural content height, so simply clearing
+        min-height without a replacement would collapse these to 0.
+      */
+      height: 640px;
+      min-height: 0;
+    }
+  }
+
+  /*
+    Image. Targets any direct-child <img> of a slide, not just the
+    .m-hero-slider__img class — the class is set via the image_tag filter's
+    class: param in the Liquid above, but on at least one image with a saved
+    focal point it was not present in the rendered markup (Shopify's
+    image_tag filter appears to drop it in that case; cause unconfirmed). A
+    class-independent selector fixes it regardless of why the class was
+    missing: without an explicit height here, the theme's global
+    `img { height: auto }` rule takes over, so the image renders at its own
+    natural aspect ratio instead of filling the slide — shorter than the
+    slide's svh-based height on any viewport where that ratio doesn't
+    happen to match, most visibly on mobile's taller portrait viewport, and
+    the slide's own background color shows through the gap left underneath.
+  */
+  .m-hero-slider__slide > img {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -249,7 +287,7 @@
     transition: transform 8s ease;
   }
 
-  .m-hero-slider__slide:is(.m-hero-slider__slide--active) .m-hero-slider__img {
+  .m-hero-slider__slide:is(.m-hero-slider__slide--active) > img {
     transform: scale(1.04);
   }
 
