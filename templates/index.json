@@ -15,9 +15,9 @@
         "slide_1": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/2_1.png",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-09-19_at_4.29.09_PM.jpg",
             "eyebrow": "KIDS · BOYS · GIRLS",
-            "heading": "From first steps to every step after.",
+            "heading": "Marinero",
             "subtext": "Durable, comfortable, loved by families across Egypt.",
             "cta_label": "Browse Catalog",
             "cta_link": "shopify://collections/all",
@@ -32,7 +32,9 @@
         "height": 75,
         "autoplay": false,
         "autoplay_speed": 5,
-        "color_scheme": "scheme-3"
+        "color_scheme": "scheme-3",
+        "show_wave_divider": true,
+        "wave_divider_color_scheme": ""
       }
     },
     "age_collections_1": {
@@ -41,7 +43,7 @@
         "t1": {
           "type": "tile",
           "settings": {
-            "image": "shopify://shop_images/WhatsApp_Image_2026-09-19_at_11.16.38_AM.jpg",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-09-19_at_4.33.58_PM.jpg",
             "eyebrow": "",
             "label": "4-8 Years",
             "sublabel": "104-130cm",
@@ -51,7 +53,7 @@
         "t2": {
           "type": "tile",
           "settings": {
-            "image": "shopify://shop_images/WhatsApp_Image_2026-09-19_at_11.17.38_AM.jpg",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-09-19_at_4.33.58_PM.jpg",
             "eyebrow": "",
             "label": "10-14 Years",
             "sublabel": "140-164cm",
@@ -61,7 +63,7 @@
         "t3": {
           "type": "tile",
           "settings": {
-            "image": "shopify://shop_images/WhatsApp_Image_2026-09-19_at_11.16.55_AM.jpg",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-09-19_at_4.33.58_PM.jpg",
             "eyebrow": "",
             "label": "16-18 Years",
             "sublabel": "170-182cm",
@@ -135,13 +137,40 @@
         "padding-block-end": 20
       }
     },
+    "architecture_scroll_1": {
+      "type": "architecture",
+      "settings": {
+        "image_overlay": "rgba(0, 0, 0, 0.4)",
+        "heading": "",
+        "text": "",
+        "text_banner": "#ffffff",
+        "teaser_heading": "",
+        "teaser_link": "",
+        "products": [
+          "ss222",
+          "ss230",
+          "ss224",
+          "ss229"
+        ],
+        "cards_scroll_direction": "horizonta",
+        "products_additionaly": [],
+        "heading_additional": "",
+        "subheading_additional": "",
+        "link_additional_label": "",
+        "link_additional": "",
+        "color_scheme": "scheme-1",
+        "offset_top_desktop": 24,
+        "offset_bottom_desktop": 24,
+        "offset_top_mobile": 16,
+        "offset_bottom_mobile": 16
+      }
+    },
     "product_reveal_1": {
       "type": "product-reveal",
       "settings": {
         "subheading": "New in",
         "heading": "Winter, revealed",
-        "image": "",
-        "image_overlay": "rgba(11, 31, 58, 0.15)",
+        "image_overlay": "rgba(0,0,0,0)",
         "products": [
           "ss230",
           "ss224",
@@ -153,7 +182,7 @@
         "reveal_threshold": 0.3,
         "reveal_exit_point": 35,
         "reveal_replay": true,
-        "section_width": "page-width",
+        "section_width": "full-width",
         "color_scheme": "scheme-1",
         "padding-block-start": 64,
         "padding-block-end": 64
@@ -486,25 +515,6 @@
         "color_scheme": "scheme-1",
         "padding-block-start": 48,
         "padding-block-end": 48
-      }
-    },
-    "architecture_scroll_1": {
-      "type": "architecture",
-      "settings": {
-        "cards_scroll_direction": "horizonta",
-        "products": [
-          "ss222",
-          "ss230",
-          "ss224",
-          "ss229"
-        ],
-        "color_scheme": "scheme-1",
-        "offset_top_desktop": 24,
-        "offset_bottom_desktop": 24,
-        "offset_top_mobile": 16,
-        "offset_bottom_mobile": 16,
-        "teaser_heading": "",
-        "heading": ""
       }
     }
   },
