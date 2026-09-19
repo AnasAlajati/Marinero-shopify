@@ -185,7 +185,11 @@
         "section_width": "full-width",
         "color_scheme": "scheme-3",
         "padding-block-start": 64,
-        "padding-block-end": 64
+        "padding-block-end": 64,
+        "show_wave_divider_top": true,
+        "wave_divider_top_reveal_scheme": "scheme-1",
+        "show_wave_divider_bottom": true,
+        "wave_divider_bottom_color_scheme": "scheme-1"
       }
     },
     "reviews_1": {

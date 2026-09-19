@@ -80,8 +80,13 @@
     --reveal-columns: {{ section.settings.columns }};
     padding-block-start: {{ section.settings.padding-block-start }}px;
     padding-block-end: {{ section.settings.padding-block-end }}px;
+    position: relative;
   "
 >
+  {%- if section.settings.show_wave_divider_top -%}
+    {% render 'wave-divider', color_scheme: section.settings.color_scheme, position: 'top', reveal_color_scheme: section.settings.wave_divider_top_reveal_scheme %}
+  {%- endif -%}
+
   {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
     <div class="product-reveal__header">
       {%- if section.settings.subheading != blank -%}
@@ -165,6 +170,10 @@
       {%- endif -%}
     </div>
   </reveal-on-scroll>
+
+  {%- if section.settings.show_wave_divider_bottom -%}
+    {% render 'wave-divider', color_scheme: section.settings.wave_divider_bottom_color_scheme, position: 'bottom' %}
+  {%- endif -%}
 </div>
 
 {% stylesheet %}
@@ -464,6 +473,36 @@
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Wave dividers"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wave_divider_top",
+      "label": "Show wave divider at top edge",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "wave_divider_top_reveal_scheme",
+      "label": "Top wave: color of the section above",
+      "info": "Match this to the color scheme of whatever section sits directly above.",
+      "default": "scheme-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wave_divider_bottom",
+      "label": "Show wave divider at bottom edge",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "wave_divider_bottom_color_scheme",
+      "label": "Bottom wave: color of the section below",
+      "info": "Match this to the color scheme of whatever section sits directly below.",
       "default": "scheme-1"
     },
     {
