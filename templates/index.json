@@ -35,34 +35,262 @@
         "color_scheme": "scheme-3"
       }
     },
-    "architecture_1": {
-      "type": "architecture",
+    "age_collections_1": {
+      "type": "age-collections",
+      "blocks": {
+        "t1": {
+          "type": "tile",
+          "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-09-19_at_11.16.38_AM.jpg",
+            "eyebrow": "",
+            "label": "4-8 Years",
+            "sublabel": "104-130cm",
+            "link": "shopify://collections/all"
+          }
+        },
+        "t2": {
+          "type": "tile",
+          "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-09-19_at_11.17.38_AM.jpg",
+            "eyebrow": "",
+            "label": "10-14 Years",
+            "sublabel": "140-164cm",
+            "link": "shopify://collections/all"
+          }
+        },
+        "t3": {
+          "type": "tile",
+          "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-09-19_at_11.16.55_AM.jpg",
+            "eyebrow": "",
+            "label": "16-18 Years",
+            "sublabel": "170-182cm",
+            "link": "shopify://collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "t2",
+        "t3"
+      ],
       "settings": {
-        "image_desktop": "shopify://shop_images/WhatsApp_Image_2026-06-29_at_11.04.46_AM.jpg",
-        "image_overlay": "rgba(0, 0, 0, 0.4)",
-        "heading": "Winter Collection",
-        "text": "New-season warmth for every adventure.",
-        "text_banner": "#ffffff",
+        "heading": "Shop by age",
+        "subheading": "MOCK COPY — replace. Every piece sized to fit, with height guidance on each product.",
+        "columns": 3,
+        "image_ratio": "3 / 4",
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "padding-block-start": 64,
+        "padding-block-end": 48
+      }
+    },
+    "trust_bar_1": {
+      "type": "trust-bar",
+      "blocks": {
+        "i1": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "title": "Delivery across Egypt",
+            "text": "MOCK — your real delivery time & cost"
+          }
+        },
+        "i2": {
+          "type": "item",
+          "settings": {
+            "icon": "cash",
+            "title": "Cash on delivery",
+            "text": "MOCK — accepted payment methods"
+          }
+        },
+        "i3": {
+          "type": "item",
+          "settings": {
+            "icon": "ruler",
+            "title": "Size help",
+            "text": "MOCK — height charts on every product"
+          }
+        },
+        "i4": {
+          "type": "item",
+          "settings": {
+            "icon": "return",
+            "title": "Easy exchanges",
+            "text": "MOCK — your real returns window"
+          }
+        }
+      },
+      "block_order": [
+        "i1",
+        "i2",
+        "i3",
+        "i4"
+      ],
+      "settings": {
+        "speed": 40,
+        "section_width": "full-width",
+        "color_scheme": "scheme-3",
+        "padding-block-start": 20,
+        "padding-block-end": 20
+      }
+    },
+    "product_reveal_1": {
+      "type": "product-reveal",
+      "settings": {
+        "subheading": "New in",
+        "heading": "Winter, revealed",
+        "image": "shopify://shop_images/2_1.png",
+        "image_overlay": "rgba(11, 31, 58, 0.15)",
         "products": [
-          "ss222",
           "ss230",
           "ss224",
-          "ss229"
+          "ss229",
+          "ss221"
         ],
-        "cards_scroll_direction": "horizonta",
-        "products_additionaly": [
-          "ss224",
-          "ss230"
-        ],
-        "heading_additional": "",
-        "subheading_additional": "",
-        "link_additional_label": "",
-        "link_additional": "",
+        "columns": 4,
+        "card_overlap": 18,
+        "reveal_threshold": 0.3,
+        "reveal_exit_point": 35,
+        "reveal_replay": true,
+        "section_width": "page-width",
         "color_scheme": "scheme-1",
-        "offset_top_desktop": 48,
-        "offset_bottom_desktop": 48,
-        "offset_top_mobile": 24,
-        "offset_bottom_mobile": 24
+        "padding-block-start": 64,
+        "padding-block-end": 64
+      }
+    },
+    "reviews_1": {
+      "type": "reviews",
+      "blocks": {
+        "v1": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "MOCK REVIEW — replace. Quality is much better than expected for the price, and the sizing chart was accurate for my son.",
+            "author": "Customer name",
+            "context": "Bought 6-7 Years",
+            "verified": true
+          }
+        },
+        "v2": {
+          "type": "review",
+          "settings": {
+            "rating": 4,
+            "text": "MOCK REVIEW — replace. Lovely fabric and washed well. Slightly long on the sleeves but she grew into it quickly.",
+            "author": "Customer name",
+            "context": "Bought 10-12 Years",
+            "verified": true
+          }
+        },
+        "v3": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "MOCK REVIEW — replace. Delivery was quick and paying on delivery made it easy. Ordering again for my other son.",
+            "author": "Customer name",
+            "context": "Bought 4-5 Years",
+            "verified": true
+          }
+        }
+      },
+      "block_order": [
+        "v1",
+        "v2",
+        "v3"
+      ],
+      "settings": {
+        "heading": "What parents say",
+        "show_summary": true,
+        "count_label": "based on [count] reviews",
+        "verified_label": "Verified buyer",
+        "columns": 3,
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "padding-block-start": 64,
+        "padding-block-end": 64
+      }
+    },
+    "size_fit_1": {
+      "type": "size-fit",
+      "blocks": {
+        "r1": {
+          "type": "size_row",
+          "settings": {
+            "age": "4-5 Years",
+            "height": "104-110",
+            "chest": "55-57",
+            "waist": "52-54"
+          }
+        },
+        "r2": {
+          "type": "size_row",
+          "settings": {
+            "age": "6-7 Years",
+            "height": "116-122",
+            "chest": "59-61",
+            "waist": "55-57"
+          }
+        },
+        "r3": {
+          "type": "size_row",
+          "settings": {
+            "age": "8 Years",
+            "height": "128-134",
+            "chest": "63-65",
+            "waist": "58-60"
+          }
+        },
+        "r4": {
+          "type": "size_row",
+          "settings": {
+            "age": "10-12 Years",
+            "height": "140-152",
+            "chest": "67-71",
+            "waist": "61-64"
+          }
+        },
+        "r5": {
+          "type": "size_row",
+          "settings": {
+            "age": "14 Years",
+            "height": "158-164",
+            "chest": "75-79",
+            "waist": "65-68"
+          }
+        },
+        "r6": {
+          "type": "size_row",
+          "settings": {
+            "age": "16-18 Years",
+            "height": "170-182",
+            "chest": "83-89",
+            "waist": "70-75"
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5",
+        "r6"
+      ],
+      "settings": {
+        "eyebrow": "Sizing",
+        "heading": "Find the right fit first time",
+        "text": "MOCK COPY — replace. Measure your child and match to the chart below. If they are between sizes, we recommend sizing up.",
+        "col_age": "Age",
+        "col_height": "Height (cm)",
+        "col_chest": "Chest (cm)",
+        "col_waist": "Waist (cm)",
+        "note": "MOCK COPY — replace. Measurements are of the child, not the garment.",
+        "cta_label": "Full size guide",
+        "cta_link": "",
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "padding-block-start": 64,
+        "padding-block-end": 64
       }
     },
     "product_list_fa6P9H": {
@@ -258,262 +486,15 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
-    },
-    "product_reveal_1": {
-      "type": "product-reveal",
-      "settings": {
-        "subheading": "New in",
-        "heading": "Winter, revealed",
-        "image_overlay": "rgba(11, 31, 58, 0.15)",
-        "columns": 4,
-        "card_overlap": 18,
-        "reveal_threshold": 0.3,
-        "reveal_replay": true,
-        "section_width": "page-width",
-        "color_scheme": "scheme-1",
-        "padding-block-start": 64,
-        "padding-block-end": 64
-      }
-    },
-    "age_collections_1": {
-      "type": "age-collections",
-      "blocks": {
-        "t1": {
-          "type": "tile",
-          "settings": {
-            "label": "4-8 Years",
-            "sublabel": "104-130cm",
-            "eyebrow": "",
-            "link": "shopify://collections/all"
-          }
-        },
-        "t2": {
-          "type": "tile",
-          "settings": {
-            "label": "10-14 Years",
-            "sublabel": "140-164cm",
-            "eyebrow": "",
-            "link": "shopify://collections/all"
-          }
-        },
-        "t3": {
-          "type": "tile",
-          "settings": {
-            "label": "16-18 Years",
-            "sublabel": "170-182cm",
-            "eyebrow": "",
-            "link": "shopify://collections/all"
-          }
-        }
-      },
-      "block_order": [
-        "t1",
-        "t2",
-        "t3"
-      ],
-      "settings": {
-        "heading": "Shop by age",
-        "subheading": "MOCK COPY — replace. Every piece sized to fit, with height guidance on each product.",
-        "columns": 3,
-        "image_ratio": "3 / 4",
-        "section_width": "page-width",
-        "color_scheme": "scheme-1",
-        "padding-block-start": 64,
-        "padding-block-end": 48
-      }
-    },
-    "trust_bar_1": {
-      "type": "trust-bar",
-      "blocks": {
-        "i1": {
-          "type": "item",
-          "settings": {
-            "icon": "truck",
-            "title": "Delivery across Egypt",
-            "text": "MOCK — your real delivery time & cost"
-          }
-        },
-        "i2": {
-          "type": "item",
-          "settings": {
-            "icon": "cash",
-            "title": "Cash on delivery",
-            "text": "MOCK — accepted payment methods"
-          }
-        },
-        "i3": {
-          "type": "item",
-          "settings": {
-            "icon": "ruler",
-            "title": "Size help",
-            "text": "MOCK — height charts on every product"
-          }
-        },
-        "i4": {
-          "type": "item",
-          "settings": {
-            "icon": "return",
-            "title": "Easy exchanges",
-            "text": "MOCK — your real returns window"
-          }
-        }
-      },
-      "block_order": [
-        "i1",
-        "i2",
-        "i3",
-        "i4"
-      ],
-      "settings": {
-        "section_width": "full-width",
-        "color_scheme": "scheme-3",
-        "padding-block-start": 20,
-        "padding-block-end": 20,
-        "speed": 40
-      }
-    },
-    "size_fit_1": {
-      "type": "size-fit",
-      "blocks": {
-        "r1": {
-          "type": "size_row",
-          "settings": {
-            "age": "4-5 Years",
-            "height": "104-110",
-            "chest": "55-57",
-            "waist": "52-54"
-          }
-        },
-        "r2": {
-          "type": "size_row",
-          "settings": {
-            "age": "6-7 Years",
-            "height": "116-122",
-            "chest": "59-61",
-            "waist": "55-57"
-          }
-        },
-        "r3": {
-          "type": "size_row",
-          "settings": {
-            "age": "8 Years",
-            "height": "128-134",
-            "chest": "63-65",
-            "waist": "58-60"
-          }
-        },
-        "r4": {
-          "type": "size_row",
-          "settings": {
-            "age": "10-12 Years",
-            "height": "140-152",
-            "chest": "67-71",
-            "waist": "61-64"
-          }
-        },
-        "r5": {
-          "type": "size_row",
-          "settings": {
-            "age": "14 Years",
-            "height": "158-164",
-            "chest": "75-79",
-            "waist": "65-68"
-          }
-        },
-        "r6": {
-          "type": "size_row",
-          "settings": {
-            "age": "16-18 Years",
-            "height": "170-182",
-            "chest": "83-89",
-            "waist": "70-75"
-          }
-        }
-      },
-      "block_order": [
-        "r1",
-        "r2",
-        "r3",
-        "r4",
-        "r5",
-        "r6"
-      ],
-      "settings": {
-        "eyebrow": "Sizing",
-        "heading": "Find the right fit first time",
-        "text": "MOCK COPY — replace. Measure your child and match to the chart below. If they are between sizes, we recommend sizing up.",
-        "col_age": "Age",
-        "col_height": "Height (cm)",
-        "col_chest": "Chest (cm)",
-        "col_waist": "Waist (cm)",
-        "note": "MOCK COPY — replace. Measurements are of the child, not the garment.",
-        "cta_label": "Full size guide",
-        "section_width": "page-width",
-        "color_scheme": "scheme-2",
-        "padding-block-start": 64,
-        "padding-block-end": 64
-      }
-    },
-    "reviews_1": {
-      "type": "reviews",
-      "blocks": {
-        "v1": {
-          "type": "review",
-          "settings": {
-            "rating": 5,
-            "text": "MOCK REVIEW — replace. Quality is much better than expected for the price, and the sizing chart was accurate for my son.",
-            "author": "Customer name",
-            "context": "Bought 6-7 Years",
-            "verified": true
-          }
-        },
-        "v2": {
-          "type": "review",
-          "settings": {
-            "rating": 4,
-            "text": "MOCK REVIEW — replace. Lovely fabric and washed well. Slightly long on the sleeves but she grew into it quickly.",
-            "author": "Customer name",
-            "context": "Bought 10-12 Years",
-            "verified": true
-          }
-        },
-        "v3": {
-          "type": "review",
-          "settings": {
-            "rating": 5,
-            "text": "MOCK REVIEW — replace. Delivery was quick and paying on delivery made it easy. Ordering again for my other son.",
-            "author": "Customer name",
-            "context": "Bought 4-5 Years",
-            "verified": true
-          }
-        }
-      },
-      "block_order": [
-        "v1",
-        "v2",
-        "v3"
-      ],
-      "settings": {
-        "heading": "What parents say",
-        "show_summary": true,
-        "count_label": "based on [count] reviews",
-        "verified_label": "Verified buyer",
-        "columns": 3,
-        "section_width": "page-width",
-        "color_scheme": "scheme-1",
-        "padding-block-start": 64,
-        "padding-block-end": 64
-      }
     }
   },
   "order": [
     "marinero_hero_slider",
     "age_collections_1",
     "trust_bar_1",
-    "architecture_1",
     "product_reveal_1",
-    "size_fit_1",
     "reviews_1",
+    "size_fit_1",
     "product_list_fa6P9H"
   ]
 }
