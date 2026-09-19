@@ -43,7 +43,7 @@
         "t1": {
           "type": "tile",
           "settings": {
-            "image": "shopify://shop_images/Changing_background_to_navy_2K_20260919173720.jpg",
+            "image": "shopify://shop_images/image.png_2K_20260919175502.jpg",
             "eyebrow": "",
             "label": "4-8 Years",
             "sublabel": "104-130cm",
@@ -53,7 +53,7 @@
         "t2": {
           "type": "tile",
           "settings": {
-            "image": "shopify://shop_images/Changing_background_to_navy_2K_20260919173720.jpg",
+            "image": "shopify://shop_images/image.png_2K_20260919175502.jpg",
             "eyebrow": "",
             "label": "10-14 Years",
             "sublabel": "140-164cm",
@@ -63,7 +63,7 @@
         "t3": {
           "type": "tile",
           "settings": {
-            "image": "shopify://shop_images/Changing_background_to_navy_2K_20260919173720.jpg",
+            "image": "shopify://shop_images/image.png_2K_20260919175502.jpg",
             "eyebrow": "",
             "label": "16-18 Years",
             "sublabel": "170-182cm",
@@ -186,12 +186,12 @@
         "reveal_replay": true,
         "section_width": "full-width",
         "color_scheme": "scheme-3",
-        "padding-block-start": 64,
-        "padding-block-end": 64,
         "show_wave_divider_top": true,
         "wave_divider_top_reveal_scheme": "scheme-1",
         "show_wave_divider_bottom": true,
-        "wave_divider_bottom_color_scheme": "scheme-1"
+        "wave_divider_bottom_color_scheme": "scheme-1",
+        "padding-block-start": 64,
+        "padding-block-end": 64
       }
     },
     "reviews_1": {
