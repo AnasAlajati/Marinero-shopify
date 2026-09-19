@@ -227,8 +227,13 @@
     object-fit: cover;
   }
 
+  /*
+    Follows the section's own color scheme rather than a hardcoded white, so
+    switching the "Color scheme" setting (e.g. to navy) recolors this
+    automatically instead of needing a code change every time.
+  */
   .product-reveal__image--blank {
-    background: #ffffff;
+    background: var(--color-background);
   }
 
   .product-reveal__overlay {
@@ -269,13 +274,21 @@
     clip-path: inset(0 0 0 0);
   }
 
+  /*
+    Pinned to a literal white/charcoal, not var(--color-background) /
+    var(--color-foreground) — these sit on top of product photography, which
+    is always shot on a white background, regardless of whatever color
+    scheme the section itself is set to. If this inherited the section's
+    scheme, setting the section to a dark scheme would turn the cards dark
+    too, or worse, leave title/price text the same color as the card
+    background.
+  */
   .product-reveal__card-link {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
     text-decoration: none;
-    color: inherit;
-    background: var(--color-background, #fff);
+    background: #ffffff;
     padding: 0.75rem;
     box-shadow: var(--shadow-card, 0 2px 16px rgba(11, 31, 58, 0.08));
     transition: box-shadow var(--duration-normal, 320ms) var(--ease-out, ease);
@@ -301,6 +314,7 @@
   .product-reveal__card-price {
     margin: 0;
     font-size: 0.85rem;
+    color: #2c2c2a;
   }
 
   .product-reveal__card-price {

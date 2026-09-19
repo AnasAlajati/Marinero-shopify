@@ -188,13 +188,26 @@
     }
 
     /*
-      Full-width at the section's normal 3:4 portrait ratio would make each
-      tile quite tall — three of them stacked becomes a lot of scrolling for
-      what's meant to be a quick, scannable routing decision. A shorter
-      landscape ratio keeps all three within a reasonable scroll length.
+      Was forced to a short 16:9 landscape ratio here to limit mobile scroll
+      length, but that meant object-fit: cover cropped hard into whatever the
+      source photo's actual framing was — cutting heads and any text/graphics
+      positioned near the top of the shot. Different photos are framed
+      differently, so any fixed crop ratio risks cutting something off some
+      of the time.
+
+      object-fit: contain shows the whole photo, at whatever ratio it
+      actually is, every time — no cropping regardless of framing, and no
+      need to prepare a separate mobile-cropped version of each image. The
+      tradeoff is a possible thin matte strip on the sides or top/bottom if a
+      given photo's ratio doesn't exactly fill the tile; the background color
+      behind it keeps that intentional-looking rather than an empty gap.
     */
     .age-tile__media {
-      aspect-ratio: 16 / 9;
+      background: var(--color-background);
+    }
+
+    .age-tile__image {
+      object-fit: contain;
     }
 
     .age-tile__label {
