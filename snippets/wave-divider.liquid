@@ -34,14 +34,52 @@
     <div class="wave-divider__reveal color-{{ reveal_color_scheme }}"></div>
   {%- endif -%}
 
+  {%- comment -%}
+    The theme's own global rule is `body, .color-scheme-1, ..., .color-scheme-6
+    { background-color: var(--color-background); }` — it applies to ANY element
+    carrying a color-N class, not just section wrappers. Putting that class
+    directly on the <svg> (to source --color-background for fill/stroke) would
+    also paint an opaque background over the whole SVG canvas, hiding the
+    transparent gaps at the wave's peaks. This wrapper carries the class
+    instead, with display:contents so it has no box of its own — the CSS
+    variable still inherits down to the SVG, but the background rule never
+    matches the SVG element itself.
+  {%- endcomment -%}
+  <span class="color-{{ color_scheme }}" style="display: contents;">
   <svg
-    class="wave-divider__svg color-{{ color_scheme }}"
+    class="wave-divider__svg"
     viewBox="0 0 1440 100"
     preserveAspectRatio="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <path d="M0,55 C120,10 240,10 360,55 C480,100 600,100 720,55 C840,10 960,10 1080,55 C1200,100 1320,100 1440,55 L1440,100 L0,100 Z" />
+    {%- comment -%}
+      Peaks and troughs are real anchor points at y=0 and y=100, not control
+      points the curve merely gets pulled toward. A control point only
+      influences the curve's shape — it's never guaranteed to be touched — so
+      approximating a peak that way (as an earlier version of this path did)
+      left a flat, un-reached band of solid color sitting above the visible
+      curve everywhere across the width. Anchoring directly at the extremes
+      removes that band: the crest genuinely reaches full "reveal" color and
+      the trough genuinely reaches full "wave" color.
+
+      Two paths, same curve, different jobs. The fill path adds a straight
+      line down each side and across the bottom (L1440,100 L0,100 Z) purely
+      to close the shape so it can be filled — those synthetic edges were
+      never meant to be seen, but stroking this single path drew them too,
+      showing up as a straight line along the trough/bottom boundary. The
+      line-only path repeats just the curve itself with no closing edges, so
+      the stroke only ever traces the actual wave.
+    {%- endcomment -%}
+    <path
+      class="wave-divider__fill"
+      d="M0,0 C120,0 120,100 240,100 C360,100 360,0 480,0 C600,0 600,100 720,100 C840,100 840,0 960,0 C1080,0 1080,100 1200,100 C1320,100 1320,0 1440,0 L1440,100 L0,100 Z"
+    />
+    <path
+      class="wave-divider__line"
+      d="M0,0 C120,0 120,100 240,100 C360,100 360,0 480,0 C600,0 600,100 720,100 C840,100 840,0 960,0 C1080,0 1080,100 1200,100 C1320,100 1320,0 1440,0"
+    />
   </svg>
+  </span>
 </div>
 
 {% stylesheet %}
@@ -60,7 +98,15 @@
     line-height: 0;
     z-index: 2;
     pointer-events: none;
-    overflow: hidden;
+    /*
+      Deliberately NOT overflow:hidden. Some themes leave a gap of a few tens
+      of pixels between a section's outer wrapper (which its own flat
+      background fills) and the inner box this component is anchored to. If
+      the reveal cap were clipped to exactly this box, that gap shows through
+      as an uncovered sliver of the wave's own color — a thin flat line sitting
+      above the curve. The reveal cap below is intentionally taller than this
+      box and needs to be free to extend past it.
+    */
   }
 
   /*
@@ -87,10 +133,30 @@
     bottom: 100%;
   }
 
+  /*
+    Extends a little past its own box on the side facing away from the curve
+    — not just inset:0 — as a safety margin against the wrapper/inner-box gap
+    described above (measured at ~12px in this theme's footer). Kept modest
+    on purpose: this cap sits in front of whatever precedes the section, and
+    if that's real content (product images, text) rather than open flat
+    background, an oversized margin would start covering it up. 48px gives a
+    4x buffer over the measured gap without reaching into unrelated content.
+  */
   .wave-divider__reveal {
     position: absolute;
-    inset: 0;
+    left: 0;
+    right: 0;
     background: var(--color-background);
+  }
+
+  .wave-divider--top .wave-divider__reveal {
+    top: -48px;
+    bottom: 0;
+  }
+
+  .wave-divider--bottom .wave-divider__reveal {
+    top: 0;
+    bottom: -48px;
   }
 
   .wave-divider__svg {
@@ -100,8 +166,13 @@
     height: 100%;
   }
 
-  .wave-divider__svg path {
+  .wave-divider__fill {
     fill: var(--color-background);
+    stroke: none;
+  }
+
+  .wave-divider__line {
+    fill: none;
     stroke: color-mix(in srgb, var(--color-background) 78%, black 22%);
     stroke-width: 3;
     /* Keeps the stroke a consistent weight despite preserveAspectRatio="none" stretching the two axes unevenly. */

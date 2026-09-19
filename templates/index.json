@@ -486,12 +486,32 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "architecture_scroll_1": {
+      "type": "architecture",
+      "settings": {
+        "cards_scroll_direction": "horizonta",
+        "products": [
+          "ss222",
+          "ss230",
+          "ss224",
+          "ss229"
+        ],
+        "color_scheme": "scheme-1",
+        "offset_top_desktop": 24,
+        "offset_bottom_desktop": 24,
+        "offset_top_mobile": 16,
+        "offset_bottom_mobile": 16,
+        "teaser_heading": "",
+        "heading": ""
+      }
     }
   },
   "order": [
     "marinero_hero_slider",
     "age_collections_1",
     "trust_bar_1",
+    "architecture_scroll_1",
     "product_reveal_1",
     "reviews_1",
     "size_fit_1",
