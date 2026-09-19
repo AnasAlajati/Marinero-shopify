@@ -121,6 +121,10 @@
     </div>
 
   {%- endif -%}
+
+  {%- if section.settings.show_wave_divider -%}
+    {% render 'wave-divider', color_scheme: section.settings.wave_divider_color_scheme, position: 'bottom' %}
+  {%- endif -%}
 </div>
 
 {%- comment -%} Slider JS {%- endcomment -%}
@@ -526,6 +530,23 @@
       "id": "color_scheme",
       "label": "Color scheme",
       "default": "scheme-3"
+    },
+    {
+      "type": "header",
+      "content": "Wave divider"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wave_divider",
+      "label": "Show wave divider at bottom edge",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "wave_divider_color_scheme",
+      "label": "Wave color",
+      "info": "Match this to the color scheme of the section directly below.",
+      "default": "scheme-1"
     }
   ],
   "presets": [

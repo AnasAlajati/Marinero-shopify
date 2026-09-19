@@ -3,7 +3,11 @@
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div
   class="section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
+  style="position: relative;"
 >
+  {%- if section.settings.show_wave_divider -%}
+    {% render 'wave-divider', color_scheme: section.settings.color_scheme, position: 'top', reveal_color_scheme: section.settings.wave_divider_reveal_scheme %}
+  {%- endif -%}
   {% liquid
     assign total_blocks = section.blocks.size
 
@@ -191,6 +195,19 @@
     "groups": ["footer"]
   },
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_wave_divider",
+      "label": "Show wave divider at top edge",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "wave_divider_reveal_scheme",
+      "label": "Wave divider: color of the section above",
+      "info": "The area above the wave's crest is filled with this color, so it reads cleanly regardless of what's actually behind it. Match this to whatever section sits directly above the footer.",
+      "default": "scheme-1"
+    },
     {
       "type": "select",
       "id": "section_width",

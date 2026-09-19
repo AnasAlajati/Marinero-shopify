@@ -1,0 +1,116 @@
+{%- doc -%}
+  Renders a full-width ocean-wave edge treatment, absolutely positioned at the
+  top or bottom edge of its (already position: relative) parent. The wave's
+  fill reuses the theme's own --color-background variable for the given color
+  scheme, so it always matches whatever section it's revealing — no hardcoded
+  colors to keep in sync.
+
+  @param {string} color_scheme - Scheme id whose background the wave itself is filled with, e.g. 'scheme-4'
+  @param {string} [position] - 'top' or 'bottom'. Default 'bottom'.
+  @param {number} [height] - Wave box height in px (desktop). Default 100.
+  @param {string} [reveal_color_scheme] - Scheme id for the flat color the wave dips into. Optional —
+    omit when the wave sits over an image (e.g. a hero photo) that should show through instead.
+
+  @example
+  {% render 'wave-divider', color_scheme: 'scheme-4', position: 'top', reveal_color_scheme: 'scheme-1' %}
+{%- enddoc -%}
+
+{%- liquid
+  assign wave_position = position | default: 'bottom'
+  assign wave_height = height | default: 100
+-%}
+
+<div
+  class="wave-divider wave-divider--{{ wave_position }}"
+  style="--wave-height: {{ wave_height }}px;"
+  aria-hidden="true"
+>
+  {%- if reveal_color_scheme != blank -%}
+    {%- comment -%}
+      Guarantees the area above the crest is a clean, known color rather than
+      whatever happens to be layered behind the wave in the real page (which
+      can look muddy if another element's background or shadow bleeds through).
+    {%- endcomment -%}
+    <div class="wave-divider__reveal color-{{ reveal_color_scheme }}"></div>
+  {%- endif -%}
+
+  <svg
+    class="wave-divider__svg color-{{ color_scheme }}"
+    viewBox="0 0 1440 100"
+    preserveAspectRatio="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M0,55 C120,10 240,10 360,55 C480,100 600,100 720,55 C840,10 960,10 1080,55 C1200,100 1320,100 1440,55 L1440,100 L0,100 Z" />
+  </svg>
+</div>
+
+{% stylesheet %}
+  .wave-divider {
+    /*
+      `.section` is a 3-col grid (margin | content | margin) and auto-places
+      direct children into the centre column. Overriding that here makes the
+      wave span the full section width edge-to-edge, not just the content
+      column.
+    */
+    grid-column: 1 / -1;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: var(--wave-height, 100px);
+    line-height: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  /*
+    Both placements use the exact same unflipped path — three crests rising
+    toward y=0, solid fill down to y=100. The only difference is which edge of
+    the host they're anchored to and whose color they carry:
+
+    --bottom: anchored to the host's own bottom edge (bottom: -1px), so the
+    wave sits INSIDE the host, poking up into it. Colored with the NEXT
+    section's background — used e.g. at the bottom of the hero, revealing the
+    section below cresting up into it.
+
+    --top: anchored via bottom: 100%, which places the div OUTSIDE the host,
+    flush against its top edge, extending upward into whatever precedes it.
+    Colored with the HOST's own background — used e.g. at the top of the
+    footer, so the footer's own color appears to rise up into the section
+    above it.
+  */
+  .wave-divider--bottom {
+    bottom: -1px;
+  }
+
+  .wave-divider--top {
+    bottom: 100%;
+  }
+
+  .wave-divider__reveal {
+    position: absolute;
+    inset: 0;
+    background: var(--color-background);
+  }
+
+  .wave-divider__svg {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .wave-divider__svg path {
+    fill: var(--color-background);
+    stroke: color-mix(in srgb, var(--color-background) 78%, black 22%);
+    stroke-width: 3;
+    /* Keeps the stroke a consistent weight despite preserveAspectRatio="none" stretching the two axes unevenly. */
+    vector-effect: non-scaling-stroke;
+  }
+
+  @media screen and (max-width: 749px) {
+    .wave-divider {
+      height: calc(var(--wave-height, 100px) * 0.55);
+    }
+  }
+{% endstylesheet %}
