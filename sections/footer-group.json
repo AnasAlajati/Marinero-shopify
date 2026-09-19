@@ -14,6 +14,359 @@
     "footer_m9NzUG": {
       "type": "footer",
       "blocks": {
+        "group_brand": {
+          "type": "group",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "flex-start",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 10,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "custom_height": 100,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "background_media": "none",
+            "video_position": "cover",
+            "background_image_position": "cover",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "link": "",
+            "open_in_new_tab": false,
+            "placeholder": "",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "brand_heading": {
+              "type": "text",
+              "settings": {
+                "text": "<h3>Marinero</h3>",
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "h4",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "brand_text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>MOCK COPY — replace. Comfortable, durable kids clothing for every adventure, from first steps to the teenage years.</p>",
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "brand_heading",
+            "brand_text"
+          ]
+        },
+        "group_discover": {
+          "type": "group",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "flex-start",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 10,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "custom_height": 100,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "background_media": "none",
+            "video_position": "cover",
+            "background_image_position": "cover",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "link": "",
+            "open_in_new_tab": false,
+            "placeholder": "",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "discover_heading": {
+              "type": "text",
+              "settings": {
+                "text": "<h4>Discover</h4>",
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "h4",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "discover_all": {
+              "type": "button",
+              "settings": {
+                "label": "All Products",
+                "link": "shopify://collections/all",
+                "open_in_new_tab": false,
+                "style_class": "link",
+                "width": "fit-content",
+                "custom_width": 100,
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100
+              },
+              "blocks": {}
+            },
+            "discover_boys": {
+              "type": "button",
+              "settings": {
+                "label": "Boys",
+                "link": "shopify://collections/boys",
+                "open_in_new_tab": false,
+                "style_class": "link",
+                "width": "fit-content",
+                "custom_width": 100,
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100
+              },
+              "blocks": {}
+            },
+            "discover_girls": {
+              "type": "button",
+              "settings": {
+                "label": "Girls",
+                "link": "shopify://collections/girls",
+                "open_in_new_tab": false,
+                "style_class": "link",
+                "width": "fit-content",
+                "custom_width": 100,
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100
+              },
+              "blocks": {}
+            },
+            "discover_winter": {
+              "type": "button",
+              "settings": {
+                "label": "Winter Collection",
+                "link": "shopify://collections/2026-winter-collection",
+                "open_in_new_tab": false,
+                "style_class": "link",
+                "width": "fit-content",
+                "custom_width": 100,
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "discover_heading",
+            "discover_all",
+            "discover_boys",
+            "discover_girls",
+            "discover_winter"
+          ]
+        },
+        "group_support": {
+          "type": "group",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "flex-start",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 10,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "custom_height": 100,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "background_media": "none",
+            "video_position": "cover",
+            "background_image_position": "cover",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "link": "",
+            "open_in_new_tab": false,
+            "placeholder": "",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "support_heading": {
+              "type": "text",
+              "settings": {
+                "text": "<h4>Support</h4>",
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "h4",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "support_contact": {
+              "type": "button",
+              "settings": {
+                "label": "Contact Us",
+                "link": "shopify://pages/contact",
+                "open_in_new_tab": false,
+                "style_class": "link",
+                "width": "fit-content",
+                "custom_width": 100,
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100
+              },
+              "blocks": {}
+            },
+            "support_size": {
+              "type": "button",
+              "settings": {
+                "label": "Size Guide (MOCK — add page)",
+                "link": "#",
+                "open_in_new_tab": false,
+                "style_class": "link",
+                "width": "fit-content",
+                "custom_width": 100,
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100
+              },
+              "blocks": {}
+            },
+            "support_delivery": {
+              "type": "button",
+              "settings": {
+                "label": "Delivery & Returns (MOCK — add page)",
+                "link": "#",
+                "open_in_new_tab": false,
+                "style_class": "link",
+                "width": "fit-content",
+                "custom_width": 100,
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100
+              },
+              "blocks": {}
+            },
+            "support_privacy": {
+              "type": "button",
+              "settings": {
+                "label": "Privacy Policy",
+                "link": "shopify://policies/privacy-policy",
+                "open_in_new_tab": false,
+                "style_class": "link",
+                "width": "fit-content",
+                "custom_width": 100,
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "support_heading",
+            "support_contact",
+            "support_size",
+            "support_delivery",
+            "support_privacy"
+          ]
+        },
         "group_H6VpwJ": {
           "type": "group",
           "settings": {
@@ -107,8 +460,26 @@
               "type": "email-signup",
               "settings": {
                 "width": "fill",
-                "inherit_color_scheme": true
-              }
+                "custom_width": 100,
+                "inherit_color_scheme": true,
+                "color_scheme": "",
+                "heading": "",
+                "heading_preset": "h3",
+                "border_style": "all",
+                "border_width": 1,
+                "border_radius": 100,
+                "input_type_preset": "paragraph",
+                "style_class": "button",
+                "display_type": "text",
+                "label": "Sign up",
+                "integrated_button": false,
+                "button_type_preset": "paragraph",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
             },
             "newsletter_social": {
               "type": "social-links",
@@ -126,7 +497,8 @@
                 "tumblr_url": "",
                 "vimeo_url": "",
                 "custom_url": ""
-              }
+              },
+              "blocks": {}
             }
           },
           "block_order": [
@@ -134,174 +506,6 @@
             "text_f9CFLH",
             "newsletter_form",
             "newsletter_social"
-          ]
-        },
-        "group_brand": {
-          "type": "group",
-          "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "flex-start",
-            "gap": 10,
-            "width": "fill",
-            "inherit_color_scheme": true
-          },
-          "blocks": {
-            "brand_heading": {
-              "type": "text",
-              "settings": {
-                "text": "<h3>We Are Marinero</h3>",
-                "width": "100%",
-                "alignment": "left",
-                "type_preset": "h4"
-              }
-            },
-            "brand_text": {
-              "type": "text",
-              "settings": {
-                "text": "<p>MOCK COPY — replace. Comfortable, durable kids clothing for every adventure, from first steps to the teenage years.</p>",
-                "width": "100%",
-                "alignment": "left",
-                "type_preset": "rte"
-              }
-            }
-          },
-          "block_order": [
-            "brand_heading",
-            "brand_text"
-          ]
-        },
-        "group_discover": {
-          "type": "group",
-          "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "flex-start",
-            "gap": 10,
-            "width": "fill",
-            "inherit_color_scheme": true
-          },
-          "blocks": {
-            "discover_heading": {
-              "type": "text",
-              "settings": {
-                "text": "<h4>Discover</h4>",
-                "width": "100%",
-                "alignment": "left",
-                "type_preset": "h4"
-              }
-            },
-            "discover_all": {
-              "type": "button",
-              "settings": {
-                "label": "All Products",
-                "link": "shopify://collections/all",
-                "style_class": "link",
-                "width": "fit-content"
-              }
-            },
-            "discover_boys": {
-              "type": "button",
-              "settings": {
-                "label": "Boys",
-                "link": "shopify://collections/boys",
-                "style_class": "link",
-                "width": "fit-content"
-              }
-            },
-            "discover_girls": {
-              "type": "button",
-              "settings": {
-                "label": "Girls",
-                "link": "shopify://collections/girls",
-                "style_class": "link",
-                "width": "fit-content"
-              }
-            },
-            "discover_winter": {
-              "type": "button",
-              "settings": {
-                "label": "Winter Collection",
-                "link": "shopify://collections/2026-winter-collection",
-                "style_class": "link",
-                "width": "fit-content"
-              }
-            }
-          },
-          "block_order": [
-            "discover_heading",
-            "discover_all",
-            "discover_boys",
-            "discover_girls",
-            "discover_winter"
-          ]
-        },
-        "group_support": {
-          "type": "group",
-          "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "flex-start",
-            "gap": 10,
-            "width": "fill",
-            "inherit_color_scheme": true
-          },
-          "blocks": {
-            "support_heading": {
-              "type": "text",
-              "settings": {
-                "text": "<h4>Support</h4>",
-                "width": "100%",
-                "alignment": "left",
-                "type_preset": "h4"
-              }
-            },
-            "support_contact": {
-              "type": "button",
-              "settings": {
-                "label": "Contact Us",
-                "link": "shopify://pages/contact",
-                "style_class": "link",
-                "width": "fit-content"
-              }
-            },
-            "support_size": {
-              "type": "button",
-              "settings": {
-                "label": "Size Guide (MOCK — add page)",
-                "link": "#",
-                "style_class": "link",
-                "width": "fit-content"
-              }
-            },
-            "support_delivery": {
-              "type": "button",
-              "settings": {
-                "label": "Delivery & Returns (MOCK — add page)",
-                "link": "#",
-                "style_class": "link",
-                "width": "fit-content"
-              }
-            },
-            "support_privacy": {
-              "type": "button",
-              "settings": {
-                "label": "Privacy Policy",
-                "link": "shopify://policies/privacy-policy",
-                "style_class": "link",
-                "width": "fit-content"
-              }
-            }
-          },
-          "block_order": [
-            "support_heading",
-            "support_contact",
-            "support_size",
-            "support_delivery",
-            "support_privacy"
           ]
         }
       },
@@ -313,6 +517,8 @@
       ],
       "name": "t:names.footer",
       "settings": {
+        "show_wave_divider": true,
+        "wave_divider_reveal_scheme": "",
         "section_width": "page-width",
         "gap": 20,
         "color_scheme": "scheme-4",
