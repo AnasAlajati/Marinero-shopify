@@ -288,7 +288,7 @@
         "cta_label": "Full size guide",
         "cta_link": "",
         "section_width": "page-width",
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-1",
         "padding-block-start": 64,
         "padding-block-end": 64
       }
@@ -466,7 +466,6 @@
           ]
         }
       },
-      "disabled": true,
       "name": "Featured collection",
       "settings": {
         "collection": "all",
