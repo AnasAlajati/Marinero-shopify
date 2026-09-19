@@ -352,7 +352,8 @@
   */
   .architecture-scroller--horizonta .architecture-card {
     flex: 0 0 auto;
-    width: clamp(260px, 32vw, 460px);
+    /* 30% smaller than the original clamp(260px, 32vw, 460px). */
+    width: clamp(182px, 22vw, 322px);
     scroll-snap-align: start;
   }
 
@@ -538,7 +539,8 @@
     }
 
     .architecture-scroller--horizonta .architecture-card {
-      width: 72vw;
+      /* 30% smaller than the original 72vw. */
+      width: 50vw;
     }
   }
 {% endstylesheet %}
