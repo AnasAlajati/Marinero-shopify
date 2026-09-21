@@ -50,8 +50,15 @@
   </div>
 
   <div class="marinero-footer-bottom">
-    <span class="marinero-footer-anchor" aria-hidden="true">⚓</span>
-    <span class="marinero-footer-wordmark">MARINERO</span>
+    {%- if settings.logo != blank -%}
+      <span class="marinero-footer-logo">
+        {% render 'image', image: settings.logo, height: 36, alt_text_fallback: shop.name %}
+      </span>
+    {%- else -%}
+      {%- comment -%} Falls back to the text wordmark if no logo is set in Theme settings > Logo. {%- endcomment -%}
+      <span class="marinero-footer-anchor" aria-hidden="true">⚓</span>
+      <span class="marinero-footer-wordmark">MARINERO</span>
+    {%- endif -%}
     <span class="marinero-footer-tagline">Style for the whole family.</span>
     <span class="marinero-footer-copy">&copy; {{ 'now' | date: '%Y' }} Marinero. All rights reserved.</span>
   </div>
@@ -115,6 +122,17 @@
     font-size: 1.6rem;
     opacity: 0.7;
     margin-bottom: 0.3rem;
+  }
+
+  .marinero-footer-logo {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .marinero-footer-logo img {
+    display: block;
+    height: 36px;
+    width: auto;
   }
 
   .marinero-footer-wordmark {
