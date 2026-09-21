@@ -81,7 +81,7 @@
             "brand_text": {
               "type": "text",
               "settings": {
-                "text": "<p>MOCK COPY — replace. Comfortable, durable kids clothing for every adventure, from first steps to the teenage years.</p>",
+                "text": "<p>Comfortable, durable kids clothing for every adventure, from first steps to the teenage years.</p>",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
