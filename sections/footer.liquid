@@ -50,9 +50,15 @@
   </div>
 
   <div class="marinero-footer-bottom">
-    {%- if settings.logo != blank -%}
+    {%- liquid
+      assign footer_logo = settings.logo_inverse
+      if footer_logo == blank
+        assign footer_logo = settings.logo
+      endif
+    -%}
+    {%- if footer_logo != blank -%}
       <span class="marinero-footer-logo">
-        {% render 'image', image: settings.logo, height: 36, alt_text_fallback: shop.name %}
+        {% render 'image', image: footer_logo, height: 36, alt_text_fallback: shop.name %}
       </span>
     {%- else -%}
       {%- comment -%} Falls back to the text wordmark if no logo is set in Theme settings > Logo. {%- endcomment -%}
