@@ -13,6 +13,7 @@
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div
+  id="AgeCollections-{{ section.id }}"
   class="age-collections section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
   style="
     --age-columns: {{ section.settings.columns }};
@@ -71,7 +72,72 @@
       </article>
     {%- endfor -%}
   </div>
+
+  {%- if section.blocks.size > 1 -%}
+    <div class="age-collections__dots" role="tablist" aria-label="Age groups" aria-hidden="true">
+      {%- for block in section.blocks -%}
+        <button
+          type="button"
+          class="age-collections__dot{% if forloop.first %} age-collections__dot--active{% endif %}"
+          data-index="{{ forloop.index0 }}"
+          aria-label="Go to {{ block.settings.label }}"
+          tabindex="-1"
+        ></button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
 </div>
+
+{%- if section.blocks.size > 1 -%}
+  <script>
+  (function() {
+    function initDots(sectionId) {
+      const root = document.getElementById('AgeCollections-' + sectionId);
+      if (!root) return;
+
+      const grid = root.querySelector('.age-collections__grid');
+      const dots = root.querySelectorAll('.age-collections__dot');
+      if (!grid || !dots.length) return;
+
+      function setActive() {
+        const cards = grid.querySelectorAll('.age-tile');
+        if (!cards.length) return;
+        // Nearest card to the scroll container's left edge is the "active" one.
+        let closest = 0;
+        let closestDist = Infinity;
+        cards.forEach((card, i) => {
+          const dist = Math.abs(card.offsetLeft - grid.scrollLeft);
+          if (dist < closestDist) {
+            closestDist = dist;
+            closest = i;
+          }
+        });
+        dots.forEach((d, i) => d.classList.toggle('age-collections__dot--active', i === closest));
+      }
+
+      let ticking = false;
+      grid.addEventListener('scroll', () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          setActive();
+          ticking = false;
+        });
+      }, { passive: true });
+
+      dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+          const cards = grid.querySelectorAll('.age-tile');
+          const target = cards[parseInt(dot.dataset.index, 10)];
+          if (target) grid.scrollTo({ left: target.offsetLeft, behavior: 'smooth' });
+        });
+      });
+    }
+
+    initDots('{{ section.id }}');
+  })();
+  </script>
+{%- endif -%}
 
 {% stylesheet %}
   /* `.section` is a 3-col grid; never override its `display` here. */
@@ -175,6 +241,11 @@
     opacity: 0.85;
   }
 
+  /* Dot indicators: only meaningful for the mobile carousel (hidden below). */
+  .age-collections__dots {
+    display: none;
+  }
+
   @media screen and (max-width: 749px) {
     /*
       Swipeable horizontal row instead of a stacked grid: keeps each tile's
@@ -195,6 +266,12 @@
       gap: 0.75rem;
       padding-inline: var(--util-page-margin-offset, 1.25rem);
       scroll-padding-inline: var(--util-page-margin-offset, 1.25rem);
+      /*
+        Fades the trailing edge of whichever card is peeking in, reinforcing
+        that it's a cut-off preview rather than a deliberately narrow tile.
+      */
+      -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+      mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
     }
 
     .age-collections__grid::-webkit-scrollbar {
@@ -208,6 +285,31 @@
 
     .age-tile__label {
       font-size: 1.2rem;
+    }
+
+    /* Pagination dots make the swipeability explicit and show progress. */
+    .age-collections__dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .age-collections__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: none;
+      padding: 0;
+      background: color-mix(in srgb, var(--color-foreground, #2c2c2a) 25%, transparent);
+      cursor: pointer;
+      transition: background 0.3s ease, width 0.3s ease, border-radius 0.3s ease;
+    }
+
+    .age-collections__dot--active {
+      background: var(--color-foreground, #2c2c2a);
+      width: 22px;
+      border-radius: 4px;
     }
   }
 {% endstylesheet %}
