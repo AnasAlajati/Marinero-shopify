@@ -17,11 +17,11 @@
           "settings": {
             "image": "shopify://shop_images/WhatsApp_Image_2026-09-19_at_4.29.09_PM.jpg",
             "eyebrow": "KIDS · BOYS · GIRLS",
-            "heading": "Marinero",
+            "heading": "The Winter Collection Is Here",
             "subtext": "Durable, comfortable, loved by families across Egypt.",
             "cta_label": "Browse Catalog",
             "cta_link": "shopify://collections/all",
-            "overlay_opacity": 0
+            "overlay_opacity": 55
           }
         }
       },
@@ -33,7 +33,7 @@
         "autoplay": false,
         "autoplay_speed": 5,
         "color_scheme": "scheme-3",
-        "show_wave_divider": true,
+        "show_wave_divider": false,
         "wave_divider_color_scheme": ""
       }
     },

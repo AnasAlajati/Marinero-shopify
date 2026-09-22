@@ -297,11 +297,27 @@
     background: linear-gradient(145deg, #0B1F3A 0%, #1B3A5C 100%);
   }
 
-  /* Overlay */
+  /*
+    Overlay: two layers instead of one flat tint.
+    1. A left-to-right gradient darkens the side the text sits on
+       (`.m-hero-slider__content` is left-aligned) while leaving the rest of
+       the photo clear, so the copy reads without dulling the whole image.
+    2. A bottom fade melts the last ~120px of the photo into the section's
+       own background color (its `color-scheme` class, e.g. navy), replacing
+       the wave divider with a soft, intentional-looking edge instead of a
+       hard photo/section cut.
+  */
   .m-hero-slider__overlay {
     position: absolute;
     inset: 0;
-    background: rgba(11, 31, 58, var(--overlay-opacity, 0.45));
+    background:
+      linear-gradient(0deg, var(--color-background) 0%, transparent 120px),
+      linear-gradient(
+        100deg,
+        rgba(11, 31, 58, var(--overlay-opacity, 0.45)) 0%,
+        rgba(11, 31, 58, calc(var(--overlay-opacity, 0.45) * 0.45)) 42%,
+        transparent 70%
+      );
     pointer-events: none;
   }
 
