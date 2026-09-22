@@ -177,25 +177,33 @@
 
   @media screen and (max-width: 749px) {
     /*
-      A hardcoded 2-column grid orphans the last tile whenever the count is
-      odd (3 tiles is the common case for this section), leaving it alone
-      with dead space beside it. Single column avoids that regardless of how
-      many tiles are configured, and gives each one a full-width tap target.
+      Swipeable horizontal row instead of a stacked grid: keeps each tile's
+      photo large enough to stay legible (a 3-across grid would crop them to
+      slivers) while still letting all tiles live within one screen's worth
+      of vertical space. Bleeds to the viewport edge so the next card peeks
+      in and signals swipeability; scroll-padding keeps snapped cards
+      aligned with the heading text above.
     */
     .age-collections__grid {
-      grid-template-columns: 1fr;
+      grid-column: 1 / -1;
+      display: flex;
+      grid-template-columns: none;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
       gap: 0.75rem;
+      padding-inline: var(--util-page-margin-offset, 1.25rem);
+      scroll-padding-inline: var(--util-page-margin-offset, 1.25rem);
     }
 
-    /*
-      Full-width at the section's normal 3:4 portrait ratio would make each
-      tile quite tall — three of them stacked becomes a lot of scrolling for
-      what's meant to be a quick, scannable routing decision. A shorter
-      landscape ratio keeps all three within a reasonable scroll length.
-      Expects mobile-cropped photos framed for this ratio.
-    */
-    .age-tile__media {
-      aspect-ratio: 16 / 9;
+    .age-collections__grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .age-tile {
+      flex: 0 0 78%;
+      scroll-snap-align: start;
     }
 
     .age-tile__label {
