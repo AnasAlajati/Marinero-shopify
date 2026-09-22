@@ -211,6 +211,19 @@
 </script>
 
 {% stylesheet %}
+  /*
+    A global rule (.section-wrapper { padding-block: var(--section-padding-block, 5rem); })
+    adds ~112px of top/bottom breathing room to every section — right for
+    normal content sections, but here it left a 112px gap of plain page
+    background between the transparent floating header and the hero photo,
+    which read as a solid white header bar rather than a see-through one.
+    Higher specificity than that shared rule so it wins regardless of load
+    order; the hero manages its own height via --m-hero-height instead.
+  */
+  .hero-wrapper.section-wrapper {
+    padding-block: 0;
+  }
+
   .m-hero-slider {
     position: relative;
     width: 100%;
