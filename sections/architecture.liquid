@@ -418,6 +418,13 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    /*
+      These product photos have a lot of empty space below the model's feet,
+      so a centered crop (the default) cuts into the head before it runs out
+      of blank floor to trim. Anchoring near the top keeps the head in frame
+      and crops the empty space at the bottom instead.
+    */
+    object-position: center 12%;
   }
 
   .architecture-card__title,
