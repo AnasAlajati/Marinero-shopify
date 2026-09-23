@@ -193,6 +193,18 @@
   .product-recommendations-wrapper:has(product-recommendations[data-shopify-editor-preview]) {
     width: 100vw;
   }
+
+  /*
+    Same fix as the other product photo grids on the site: these photos have
+    a lot of empty space below the model's feet, so the theme's default
+    centered crop cuts into the head before it runs out of blank floor to
+    trim. Scoped to this block only, rather than the shared
+    .product-media-container rule, so it doesn't affect product cards
+    elsewhere (collection/search) that haven't been reported as an issue.
+  */
+  .product-recommendations .product-media-container img {
+    object-position: center 12%;
+  }
 {% endstylesheet %}
 
 {% schema %}
