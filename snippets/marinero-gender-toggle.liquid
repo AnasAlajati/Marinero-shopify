@@ -1,0 +1,109 @@
+{%- comment -%}
+  MARINERO — Big Boys/Girls toggle for collection pages.
+
+  Reuses the collection's own native tag filter (Boys / Girls tags added in
+  admin) rather than building a separate filtering mechanism, so it stays in
+  sync with the standard Filter panel and combines correctly with every
+  other filter (price, availability, age tags, etc). Selecting both Boys and
+  Girls shows both, since they're two values of the same tag filter and
+  Shopify OR's values within one filter group.
+
+  Renders nothing if the collection has no Boys/Girls tag values, so it's
+  safe to include on every collection page.
+
+  @param {object} collection - The collection object
+
+  @example
+  {% render 'marinero-gender-toggle', collection: collection %}
+{%- endcomment -%}
+
+{%- liquid
+  assign boys_value = null
+  assign girls_value = null
+
+  for filter in collection.filters
+    if filter.type == 'list'
+      for value in filter.values
+        assign value_label_down = value.label | downcase
+        if value_label_down == 'boys'
+          assign boys_value = value
+        elsif value_label_down == 'girls'
+          assign girls_value = value
+        endif
+      endfor
+    endif
+  endfor
+-%}
+
+{%- if boys_value or girls_value -%}
+  <div class="marinero-gender-toggle" role="group" aria-label="Filter by">
+    {%- if boys_value -%}
+      {%- assign boys_href = boys_value.url_to_add -%}
+      {%- if boys_value.active -%}
+        {%- assign boys_href = boys_value.url_to_remove -%}
+      {%- endif -%}
+      <a
+        href="{{ boys_href }}"
+        class="marinero-gender-toggle__btn{% if boys_value.active %} marinero-gender-toggle__btn--active{% endif %}"
+        aria-pressed="{{ boys_value.active }}"
+      >
+        Boys
+      </a>
+    {%- endif -%}
+
+    {%- if girls_value -%}
+      {%- assign girls_href = girls_value.url_to_add -%}
+      {%- if girls_value.active -%}
+        {%- assign girls_href = girls_value.url_to_remove -%}
+      {%- endif -%}
+      <a
+        href="{{ girls_href }}"
+        class="marinero-gender-toggle__btn{% if girls_value.active %} marinero-gender-toggle__btn--active{% endif %}"
+        aria-pressed="{{ girls_value.active }}"
+      >
+        Girls
+      </a>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .marinero-gender-toggle {
+    display: flex;
+    gap: 0.75rem;
+    margin: 0 0 1.5rem;
+  }
+
+  .marinero-gender-toggle__btn {
+    flex: 1 1 0;
+    text-align: center;
+    padding: 1rem 1.5rem;
+    border: 1px solid var(--color-border, #d3cebe);
+    border-radius: 2px;
+    text-decoration: none;
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-foreground, #2c2c2a);
+    background: transparent;
+    transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+  }
+
+  .marinero-gender-toggle__btn:hover {
+    border-color: var(--color-primary, #0b1f3a);
+  }
+
+  .marinero-gender-toggle__btn--active {
+    background: var(--color-primary, #0b1f3a);
+    border-color: var(--color-primary, #0b1f3a);
+    color: var(--color-primary-button-text, #ffffff);
+  }
+
+  @media screen and (min-width: 750px) {
+    .marinero-gender-toggle {
+      max-width: 32rem;
+    }
+  }
+{% endstylesheet %}
