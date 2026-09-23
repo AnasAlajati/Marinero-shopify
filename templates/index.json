@@ -147,12 +147,15 @@
         "teaser_heading": "",
         "teaser_link": "",
         "products": [
-          "ss222",
-          "ss230",
-          "ss224",
-          "ss229",
-          "ss221",
-          "ss227"
+          "261230003",
+          "261220001",
+          "261240001",
+          "261220003",
+          "261220002",
+          "261230004",
+          "261230002",
+          "261240002",
+          "261230001"
         ],
         "cards_scroll_direction": "horizonta",
         "products_additionaly": [],
@@ -174,10 +177,11 @@
         "heading": "Winter, revealed",
         "image_overlay": "rgba(0,0,0,0)",
         "products": [
-          "ss230",
-          "ss224",
-          "ss229",
-          "ss221"
+          "261130003",
+          "261130002",
+          "261130001",
+          "261120003",
+          "261120001"
         ],
         "columns": 4,
         "card_overlap": 18,
