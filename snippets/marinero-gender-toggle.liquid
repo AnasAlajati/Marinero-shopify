@@ -4,9 +4,10 @@
   Reuses the collection's own native tag filter (Boys / Girls tags added in
   admin) rather than building a separate filtering mechanism, so it stays in
   sync with the standard Filter panel and combines correctly with every
-  other filter (price, availability, age tags, etc). Selecting both Boys and
-  Girls shows both, since they're two values of the same tag filter and
-  Shopify OR's values within one filter group.
+  other filter (price, availability, age tags, etc). No product is tagged
+  both Boys and Girls, so the two buttons behave as a mutually exclusive
+  toggle (picking one clears the other) rather than a pair of independent
+  checkboxes that could otherwise combine into a zero-result state.
 
   Renders nothing if the collection has no Boys/Girls tag values, so it's
   safe to include on every collection page.
@@ -38,9 +39,19 @@
 {%- if boys_value or girls_value -%}
   <div class="marinero-gender-toggle" role="group" aria-label="Filter by">
     {%- if boys_value -%}
+      {%- comment -%}
+        Boys' own url_to_add already includes Girls' tag param too if Girls
+        is currently active (Shopify stacks both into one repeated
+        filter.p.tag query param). Strip that out so selecting Boys always
+        results in Boys alone, never both combined into a zero-result state.
+      {%- endcomment -%}
       {%- assign boys_href = boys_value.url_to_add -%}
       {%- if boys_value.active -%}
         {%- assign boys_href = boys_value.url_to_remove -%}
+      {%- elsif girls_value.active -%}
+        {%- assign strip_a = '&filter.p.tag=' | append: girls_value.value -%}
+        {%- assign strip_b = 'filter.p.tag=' | append: girls_value.value | append: '&' -%}
+        {%- assign boys_href = boys_href | remove: strip_a | remove: strip_b -%}
       {%- endif -%}
       <a
         href="{{ boys_href }}"
@@ -55,6 +66,10 @@
       {%- assign girls_href = girls_value.url_to_add -%}
       {%- if girls_value.active -%}
         {%- assign girls_href = girls_value.url_to_remove -%}
+      {%- elsif boys_value.active -%}
+        {%- assign strip_a = '&filter.p.tag=' | append: boys_value.value -%}
+        {%- assign strip_b = 'filter.p.tag=' | append: boys_value.value | append: '&' -%}
+        {%- assign girls_href = girls_href | remove: strip_a | remove: strip_b -%}
       {%- endif -%}
       <a
         href="{{ girls_href }}"
