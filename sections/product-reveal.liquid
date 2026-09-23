@@ -316,6 +316,13 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    /*
+      Same fix as the scroller cards: these product photos leave a lot of
+      empty space below the model's feet, so a centered crop (the default)
+      cuts into the head before it runs out of blank floor to trim.
+      Anchoring near the top keeps the head in frame instead.
+    */
+    object-position: center 12%;
     display: block;
   }
 
