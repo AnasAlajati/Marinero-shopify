@@ -89,6 +89,20 @@
   .product-grid-container .product-media-container img {
     object-position: center 12%;
   }
+
+  /*
+    Same legacy bug as the hero: a global rule (.section-wrapper {
+    padding-block: 7rem }) stacks an extra 112px of top/bottom padding on
+    top of every section's own configured padding. The collection heading
+    banner already has its own 48px/48px set via its normal admin settings
+    (applied on an inner element) — this legacy layer just adds ~224px of
+    pure dead space around it. Targets specifically whichever section sits
+    directly before this product grid (the heading banner), not
+    .section-wrapper sections generally elsewhere on the site.
+  */
+  .shopify-section.section-wrapper:has(+ .shopify-section .product-grid-container) {
+    padding-block: 0 !important;
+  }
 {% endstylesheet %}
 
 {% schema %}
