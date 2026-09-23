@@ -76,6 +76,19 @@
   </div>
 </results-list>
 
+{% stylesheet %}
+  /*
+    Same fix as the other product photo grids on the site: these photos have
+    a lot of empty space below the model's feet, so the theme's default
+    centered crop cuts into the head before it runs out of blank floor to
+    trim. Scoped to this section's own wrapper so it only affects collection
+    pages, not search results (which share the same product-grid snippet).
+  */
+  .product-grid-container .product-media-container img {
+    object-position: center 12%;
+  }
+{% endstylesheet %}
+
 {% schema %}
 {
   "name": "t:names.collection_container",
