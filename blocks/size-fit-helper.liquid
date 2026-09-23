@@ -57,7 +57,7 @@
             {%- for row in row_list -%}
               {%- assign cells = row | split: '|' -%}
               {%- if cells.size > 1 -%}
-                <tr>
+                <tr data-age="{{ cells[1] | strip | escape }}">
                   <th scope="row">{{ cells[0] | strip }}</th>
                   <td>{{ cells[1] | strip }}</td>
                   <td>{{ cells[2] | strip }}</td>
@@ -74,6 +74,88 @@
     </div>
   </details>
 </div>
+
+{%- comment -%}
+  Highlights the size chart row matching the customer's currently selected
+  size when the guide is opened, fading after 2s, and re-highlights
+  instantly if they change size while it's open. Matches by prefix (the
+  selected size's value, e.g. "4-5", against each row's age text, e.g.
+  "4-5 Years") rather than needing an exact match, and simply ignores any
+  currently-selected value that doesn't match a row (e.g. a Color
+  selection), so it degrades gracefully.
+{%- endcomment -%}
+<script>
+  if (!window.__marineroSizeFitHighlightBound) {
+    window.__marineroSizeFitHighlightBound = true;
+
+    const HIGHLIGHT_MS = 2000;
+    const timers = new WeakMap();
+
+    function highlightMatchingRow(details) {
+      if (!details.open) return;
+
+      const table = details.querySelector('.size-fit-helper__table');
+      if (!table) return;
+
+      const checkedInputs = document.querySelectorAll(
+        'variant-picker input:checked, fieldset input:checked'
+      );
+
+      let matchedRow = null;
+      for (const input of checkedInputs) {
+        const value = (input.value || '').trim().toLowerCase();
+        if (!value) continue;
+
+        for (const row of table.querySelectorAll('tr[data-age]')) {
+          const age = (row.dataset.age || '').trim().toLowerCase();
+          if (age && age.startsWith(value)) {
+            matchedRow = row;
+            break;
+          }
+        }
+        if (matchedRow) break;
+      }
+
+      for (const row of table.querySelectorAll('.size-fit-helper__row--highlight')) {
+        row.classList.remove('size-fit-helper__row--highlight');
+      }
+
+      if (!matchedRow) return;
+
+      const existingTimer = timers.get(table);
+      if (existingTimer) clearTimeout(existingTimer);
+
+      matchedRow.classList.add('size-fit-helper__row--highlight');
+      matchedRow.scrollIntoView({ block: 'nearest' });
+
+      timers.set(
+        table,
+        setTimeout(() => {
+          matchedRow.classList.remove('size-fit-helper__row--highlight');
+        }, HIGHLIGHT_MS)
+      );
+    }
+
+    function initSizeFitHighlight() {
+      const detailsList = document.querySelectorAll('.size-fit-helper__details');
+
+      detailsList.forEach((details) => {
+        details.addEventListener('toggle', () => highlightMatchingRow(details));
+        if (details.open) highlightMatchingRow(details);
+      });
+
+      document.addEventListener('variant:selected', () => {
+        detailsList.forEach((details) => highlightMatchingRow(details));
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSizeFitHighlight);
+    } else {
+      initSizeFitHighlight();
+    }
+  }
+</script>
 
 {% stylesheet %}
   .size-fit-helper {
@@ -156,6 +238,16 @@
   .size-fit-helper__table tbody th {
     font-weight: 600;
     white-space: nowrap;
+  }
+
+  .size-fit-helper__table tbody tr {
+    background: transparent;
+    transition: background-color 400ms ease;
+  }
+
+  .size-fit-helper__table tbody tr.size-fit-helper__row--highlight {
+    background: color-mix(in srgb, var(--color-primary, #0b1f3a) 12%, transparent);
+    transition: background-color 150ms ease;
   }
 {% endstylesheet %}
 
