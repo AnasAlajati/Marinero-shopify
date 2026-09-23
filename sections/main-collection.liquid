@@ -50,21 +50,110 @@
       {% assign products_per_page = section.settings.products_per_page %}
     {% endif %}
 
+    {%- liquid
+      # Age grouping only activates on collections that actually use the
+      # 4-8 / 10-14 / 16-18 Years tags, so every other collection keeps
+      # rendering as a plain flat grid exactly as before.
+      assign enable_age_grouping = false
+      for filter in collection.filters
+        if filter.type == 'list'
+          for value in filter.values
+            case value.label
+              when '4-8 Years', '10-14 Years', '16-18 Years'
+                assign enable_age_grouping = true
+            endcase
+          endfor
+        endif
+      endfor
+    -%}
+
     {% paginate collection.products by products_per_page %}
       {% capture children %}
-        {% for product in collection.products %}
-          <li
-            id="{{ section.id }}-{{ product.id }}"
-            class="product-grid__item product-grid__item--{{ forloop.index0 }}"
-            data-page="{{ paginate.current_page }}"
-            data-product-id="{{ product.id }}"
-            ref="cards[]"
-          >
-            {% # theme-check-disable %}
-            {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
-            {% # theme-check-enable %}
-          </li>
-        {% endfor %}
+        {% if enable_age_grouping %}
+          {%- assign age_groups = '4-8 Years,10-14 Years,16-18 Years' | split: ',' -%}
+          {%- for age_tag in age_groups -%}
+            {% capture bucket_items %}
+              {% for product in collection.products %}
+                {% if product.tags contains age_tag %}
+                  <li
+                    id="{{ section.id }}-{{ product.id }}"
+                    class="product-grid__item product-grid__item--{{ forloop.index0 }}"
+                    data-page="{{ paginate.current_page }}"
+                    data-product-id="{{ product.id }}"
+                    ref="cards[]"
+                  >
+                    {% # theme-check-disable %}
+                    {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
+                    {% # theme-check-enable %}
+                  </li>
+                {% endif %}
+              {% endfor %}
+            {% endcapture %}
+            {%- assign bucket_items = bucket_items | strip -%}
+            {%- if bucket_items != blank -%}
+              {%- liquid
+                assign age_collection = blank
+                case age_tag
+                  when '4-8 Years'
+                    assign age_collection = collections['4-8-years']
+                  when '10-14 Years'
+                    assign age_collection = collections['10-14']
+                  when '16-18 Years'
+                    assign age_collection = collections['16-18-years']
+                endcase
+              -%}
+              <li class="product-grid__age-heading">
+                <h2 class="product-grid__age-heading-title">{{ age_tag }}</h2>
+                {%- if age_collection != blank -%}
+                  <a href="{{ age_collection.url }}" class="product-grid__age-heading-link">
+                    View all {{ age_tag }} &rarr;
+                  </a>
+                {%- endif -%}
+              </li>
+              {{ bucket_items }}
+            {%- endif -%}
+          {%- endfor -%}
+
+          {% comment %} Safety net: products with none of the three known age tags still show, rather than silently vanishing, so an untagged product is obvious instead of hidden. {% endcomment %}
+          {% capture undefined_items %}
+            {% for product in collection.products %}
+              {% unless product.tags contains '4-8 Years' or product.tags contains '10-14 Years' or product.tags contains '16-18 Years' %}
+                <li
+                  id="{{ section.id }}-{{ product.id }}"
+                  class="product-grid__item product-grid__item--{{ forloop.index0 }}"
+                  data-page="{{ paginate.current_page }}"
+                  data-product-id="{{ product.id }}"
+                  ref="cards[]"
+                >
+                  {% # theme-check-disable %}
+                  {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
+                  {% # theme-check-enable %}
+                </li>
+              {% endunless %}
+            {% endfor %}
+          {% endcapture %}
+          {%- assign undefined_items = undefined_items | strip -%}
+          {%- if undefined_items != blank -%}
+            <li class="product-grid__age-heading product-grid__age-heading--undefined">
+              <h2 class="product-grid__age-heading-title">Age group not set</h2>
+            </li>
+            {{ undefined_items }}
+          {%- endif -%}
+        {% else %}
+          {% for product in collection.products %}
+            <li
+              id="{{ section.id }}-{{ product.id }}"
+              class="product-grid__item product-grid__item--{{ forloop.index0 }}"
+              data-page="{{ paginate.current_page }}"
+              data-product-id="{{ product.id }}"
+              ref="cards[]"
+            >
+              {% # theme-check-disable %}
+              {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
+              {% # theme-check-enable %}
+            </li>
+          {% endfor %}
+        {% endif %}
       {% endcapture %}
 
       {% render 'product-grid',
@@ -102,6 +191,51 @@
   */
   .shopify-section.section-wrapper:has(+ .shopify-section .product-grid-container) {
     padding-block: 0 !important;
+  }
+
+  /* Full-bleed age-group heading row inside the product grid (a CSS grid). */
+  .product-grid__age-heading {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    padding-block: 1.5rem 1rem;
+    border-block-start: 1px solid var(--color-border, #d3cebe);
+  }
+
+  .product-grid__age-heading:first-child {
+    border-block-start: none;
+    padding-block-start: 0;
+  }
+
+  .product-grid__age-heading-title {
+    margin: 0;
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+  }
+
+  .product-grid__age-heading-link {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--color-foreground, #2c2c2a);
+    opacity: 0.75;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .product-grid__age-heading-link:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+
+  .product-grid__age-heading--undefined .product-grid__age-heading-title {
+    opacity: 0.6;
+    font-style: italic;
   }
 {% endstylesheet %}
 
