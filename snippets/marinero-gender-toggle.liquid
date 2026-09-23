@@ -80,6 +80,31 @@
       </a>
     {%- endif -%}
   </div>
+
+  {%- comment -%}
+    Reuses the theme's own AJAX filter engine (the same one the native
+    Filter panel checkboxes use) instead of a plain page navigation, so
+    clicking Boys/Girls updates the grid instantly rather than reloading
+    the whole page. Delegated on document (not the links themselves) since
+    this markup gets replaced whenever the filter grid re-renders; scripts
+    inserted via that replacement don't re-run, but a document-level
+    listener bound once on first load keeps matching the new elements by
+    selector regardless. Falls back to a normal link click if the AJAX
+    component isn't found for any reason.
+  {%- endcomment -%}
+  <script>
+    if (!window.__marineroGenderToggleBound) {
+      window.__marineroGenderToggleBound = true;
+      document.addEventListener('click', (event) => {
+        const link = event.target.closest('.marinero-gender-toggle__btn');
+        if (!link) return;
+        const facetsForm = document.querySelector('facets-form-component');
+        if (!facetsForm || typeof facetsForm.updateFiltersByURL !== 'function') return;
+        event.preventDefault();
+        facetsForm.updateFiltersByURL(link.href);
+      });
+    }
+  </script>
 {%- endif -%}
 
 {% stylesheet %}
