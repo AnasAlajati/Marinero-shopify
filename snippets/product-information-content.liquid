@@ -140,6 +140,18 @@
     height: 100%;
   }
 
+  /*
+    Same fix as the other product photo grids on the site: these photos
+    have a lot of empty space below the model's feet, so the theme's
+    default centered crop cuts into the head before it runs out of blank
+    floor to trim. Scoped to this product page's own media gallery wrapper
+    so it doesn't affect other places this gallery markup gets reused
+    (e.g. the featured-product carousel).
+  */
+  .product-information__media .media-fit-cover :is(img, video, .deferred-media__poster-image) {
+    object-position: center 12%;
+  }
+
   /* Mobile styles */
   @media screen and (max-width: 749px) {
     .product-information__media {
