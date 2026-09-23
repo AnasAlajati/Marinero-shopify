@@ -187,6 +187,21 @@
               },
               "blocks": {}
             },
+            "size_fit_helper": {
+              "type": "size-fit-helper",
+              "settings": {
+                "heading": "Size guide — find the right age",
+                "icon": true,
+                "open_by_default": false,
+                "intro": "Sizes are based on the child's body measurements, not the garment. Between sizes? Size up.",
+                "col_1": "Size",
+                "col_2": "Age",
+                "col_3": "Height (cm)",
+                "size_rows": "4 | 4-5 Years | 104-110\n6 | 6-7 Years | 116-122\n8 | 8-9 Years | 128-134\n10 | 10-11 Years | 140-146\n12 | 12-13 Years | 152-158\n14 | 14-15 Years | 158-164\n16 | 16-18 Years | 170-182",
+                "note": "MOCK COPY — replace. Not sure which size? Message us with your child's height and we'll recommend one."
+              },
+              "blocks": {}
+            },
             "buy_buttons_eYQEYi": {
               "type": "buy-buttons",
               "settings": {
@@ -247,10 +262,6 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
-            },
-            "size_fit_helper": {
-              "type": "size-fit-helper",
-              "settings": {}
             }
           },
           "block_order": [
