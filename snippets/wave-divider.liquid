@@ -10,9 +10,9 @@
   @param {number} [height] - Wave box height in px (desktop). Default 100.
   @param {string} [reveal_color_scheme] - Scheme id for the flat color the wave dips into. Optional —
     omit when the wave sits over an image (e.g. a hero photo) that should show through instead.
-  @param {string} [shape] - 'asymmetric' (default) or 'layered'. 'layered' is reserved for the
-    footer — its own distinct, slightly busier signature — everywhere else uses the plainer,
-    more minimal single off-center swell.
+  @param {string} [shape] - 'single' (default) or 'layered'. 'layered' is reserved for the
+    footer — its own distinct, slightly busier signature — everywhere else uses one long,
+    gentle, symmetric wave.
 
   @example
   {% render 'wave-divider', color_scheme: 'scheme-4', position: 'top', reveal_color_scheme: 'scheme-1' %}
@@ -21,7 +21,7 @@
 {%- liquid
   assign wave_position = position | default: 'bottom'
   assign wave_height = height | default: 100
-  assign wave_shape = shape | default: 'asymmetric'
+  assign wave_shape = shape | default: 'single'
 -%}
 
 <div
@@ -85,13 +85,10 @@
       exposed the background layer as one big blob at the center instead of
       subtly peeking through in a couple of offset spots).
 
-      'asymmetric' (everywhere else): a single off-center swell, not a
-      repeating/periodic pattern at all — same anchor-point technique
-      (genuine y=0/y=100 endpoints, not control points merely pulling
-      toward them) but with unequal segment widths either side of the one
-      trough, so the curve doesn't mirror itself the way a normal wave
-      does. Plainer and more minimal; reserved as the default everywhere
-      the busier layered look isn't wanted.
+      'single' (everywhere else): one long, gentle, symmetric wave — the
+      same 1-cycle curve as the layered shape's foreground, just on its
+      own with no second layer behind it. Plainer and calmer than the
+      busier layered look; the default everywhere that isn't the footer.
     {%- endcomment -%}
     {%- case wave_shape -%}
       {%- when 'layered' -%}
@@ -110,11 +107,11 @@
       {%- else -%}
         <path
           class="wave-divider__fill"
-          d="M0,0 C250,0 250,100 500,100 C970,100 970,0 1440,0 L1440,100 L0,100 Z"
+          d="M0,0 C360,0 360,100 720,100 C1080,100 1080,0 1440,0 L1440,100 L0,100 Z"
         />
         <path
           class="wave-divider__line"
-          d="M0,0 C250,0 250,100 500,100 C970,100 970,0 1440,0"
+          d="M0,0 C360,0 360,100 720,100 C1080,100 1080,0 1440,0"
         />
     {%- endcase -%}
   </svg>
