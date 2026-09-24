@@ -28,7 +28,6 @@
 <div
   class="reviews section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
   style="
-    --reviews-columns: {{ section.settings.columns }};
     padding-block-start: {{ section.settings.padding-block-start }}px;
     padding-block-end: {{ section.settings.padding-block-end }}px;
   "
@@ -66,10 +65,15 @@
           {%- endfor -%}
         </span>
 
-        <blockquote class="review-card__text">{{ block.settings.text }}</blockquote>
+        {%- comment -%}
+          dir="auto" lets the browser pick RTL/LTR per-card from the text's
+          own first strong-direction character, since reviews are a mix of
+          Arabic and English rather than a single fixed direction.
+        {%- endcomment -%}
+        <blockquote class="review-card__text" dir="auto">{{ block.settings.text }}</blockquote>
 
         <figcaption class="review-card__meta">
-          <span class="review-card__author">{{ block.settings.author }}</span>
+          <span class="review-card__author" dir="auto">{{ block.settings.author }}</span>
           {%- if block.settings.verified -%}
             <span class="review-card__verified">
               <svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true">
@@ -133,13 +137,32 @@
     opacity: 0.7;
   }
 
+  /*
+    Horizontal scroll-snap carousel rather than a fixed grid: with closer
+    to a dozen reviews now instead of 3, a static grid would either be a
+    very tall wall of cards or force pagination. Bleeds to the viewport
+    edge (grid-column: 1/-1) so the next card peeks in, same pattern as
+    the "Shop by age" mobile carousel.
+  */
   .reviews__grid {
-    display: grid;
-    grid-template-columns: repeat(var(--reviews-columns, 3), minmax(0, 1fr));
+    grid-column: 1 / -1;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
     gap: var(--space-sm, 1rem);
+    padding-inline: var(--util-page-margin-offset, 1.25rem);
+  }
+
+  .reviews__grid::-webkit-scrollbar {
+    display: none;
   }
 
   .review-card {
+    flex: 0 0 auto;
+    width: min(85vw, 360px);
+    scroll-snap-align: start;
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
@@ -147,6 +170,12 @@
     padding: var(--space-sm, 1rem);
     background: var(--color-background, #fff);
     box-shadow: var(--shadow-card, 0 2px 16px rgba(11, 31, 58, 0.08));
+  }
+
+  @media screen and (min-width: 750px) {
+    .review-card {
+      width: 320px;
+    }
   }
 
   .review-card__text {
@@ -183,11 +212,6 @@
     opacity: 0.6;
   }
 
-  @media screen and (max-width: 749px) {
-    .reviews__grid {
-      grid-template-columns: 1fr;
-    }
-  }
 {% endstylesheet %}
 
 {% schema %}

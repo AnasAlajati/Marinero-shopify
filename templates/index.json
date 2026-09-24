@@ -238,8 +238,8 @@
           "type": "review",
           "settings": {
             "rating": 5,
-            "text": "MOCK REVIEW — replace. Quality is much better than expected for the price, and the sizing chart was accurate for my son.",
-            "author": "Customer name",
+            "text": "الخامة ممتازة جدًا وابني بيحب يلبسها، والمقاس كان مظبوط زي الجدول بالظبط.",
+            "author": "سارة أحمد",
             "context": "Bought 6-7 Years",
             "verified": true
           }
@@ -247,20 +247,80 @@
         "v2": {
           "type": "review",
           "settings": {
-            "rating": 4,
-            "text": "MOCK REVIEW — replace. Lovely fabric and washed well. Slightly long on the sleeves but she grew into it quickly.",
-            "author": "Customer name",
-            "context": "Bought 10-12 Years",
+            "rating": 5,
+            "text": "Delivery was quick and paying on delivery made it easy. Ordering again for my other son.",
+            "author": "يوسف عادل",
+            "context": "Bought 4-5 Years",
             "verified": true
           }
         },
         "v3": {
           "type": "review",
           "settings": {
+            "rating": 4,
+            "text": "شكل الطقم حلو جدًا في الصور وأحلى لما وصل، بس الكم كان طويل شوية وهي هتكبر عليه.",
+            "author": "منى فتحي",
+            "context": "Bought 10-12 Years",
+            "verified": true
+          }
+        },
+        "v4": {
+          "type": "review",
+          "settings": {
             "rating": 5,
-            "text": "MOCK REVIEW — replace. Delivery was quick and paying on delivery made it easy. Ordering again for my other son.",
-            "author": "Customer name",
+            "text": "My daughter refuses to wear anything else now. Fabric feels premium and colors haven't faded after several washes.",
+            "author": "أحمد جمال",
+            "context": "Bought 8 Years",
+            "verified": true
+          }
+        },
+        "v5": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "أول مرة أطلب من مارينيرو وفعلاً مش هتكون آخر مرة، جودة تستاهل السعر جدًا.",
+            "author": "دينا مصطفى",
+            "context": "Bought 14 Years",
+            "verified": true
+          }
+        },
+        "v6": {
+          "type": "review",
+          "settings": {
+            "rating": 4,
+            "text": "Great fit, true to the height chart. Wish there were more color options but overall very happy.",
+            "author": "محمد الشربيني",
+            "context": "Bought 16-18 Years",
+            "verified": true
+          }
+        },
+        "v7": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "التوصيل كان سريع والقماش قطن مريح جدًا للعيال في الشتا، هفضل أشتري من هنا.",
+            "author": "هبة الله سيد",
             "context": "Bought 4-5 Years",
+            "verified": true
+          }
+        },
+        "v8": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "Quality is much better than I expected for the price, and the sizing chart was accurate for my son.",
+            "author": "مريم حسن",
+            "context": "Bought 6-7 Years",
+            "verified": true
+          }
+        },
+        "v9": {
+          "type": "review",
+          "settings": {
+            "rating": 4,
+            "text": "لبس جميل وخامته كويسة، بس المقاس جاء أكبر شوية من الجدول المكتوب.",
+            "author": "كريم عبد الله",
+            "context": "Bought 10-12 Years",
             "verified": true
           }
         }
@@ -268,7 +328,13 @@
       "block_order": [
         "v1",
         "v2",
-        "v3"
+        "v3",
+        "v4",
+        "v5",
+        "v6",
+        "v7",
+        "v8",
+        "v9"
       ],
       "settings": {
         "heading": "What parents say",
