@@ -6,7 +6,7 @@
   style="position: relative;"
 >
   {%- if section.settings.show_wave_divider -%}
-    {% render 'wave-divider', color_scheme: section.settings.color_scheme, position: 'top', reveal_color_scheme: section.settings.wave_divider_reveal_scheme %}
+    {% render 'wave-divider', color_scheme: section.settings.color_scheme, position: 'top', reveal_color_scheme: section.settings.wave_divider_reveal_scheme, shape: 'layered' %}
   {%- endif -%}
   {% liquid
     assign total_blocks = section.blocks.size

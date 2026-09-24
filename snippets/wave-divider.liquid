@@ -10,6 +10,9 @@
   @param {number} [height] - Wave box height in px (desktop). Default 100.
   @param {string} [reveal_color_scheme] - Scheme id for the flat color the wave dips into. Optional —
     omit when the wave sits over an image (e.g. a hero photo) that should show through instead.
+  @param {string} [shape] - 'asymmetric' (default) or 'layered'. 'layered' is reserved for the
+    footer — its own distinct, slightly busier signature — everywhere else uses the plainer,
+    more minimal single off-center swell.
 
   @example
   {% render 'wave-divider', color_scheme: 'scheme-4', position: 'top', reveal_color_scheme: 'scheme-1' %}
@@ -18,6 +21,7 @@
 {%- liquid
   assign wave_position = position | default: 'bottom'
   assign wave_height = height | default: 100
+  assign wave_shape = shape | default: 'asymmetric'
 -%}
 
 <div
@@ -70,32 +74,49 @@
       line-only path repeats just the curve itself with no closing edges, so
       the stroke only ever traces the actual wave.
 
-      Wavelength: 1 full cycle across the 1440-wide viewBox (peaks at x=0,
-      1440; trough at x=720) — half the frequency of the previous 2-cycle
-      version, for one long, gentle undulation instead of several repeated
-      bumps.
+      Two shapes, picked by the `shape` param:
 
-      Layered look: a second, smaller "swell" sits behind the main wave —
-      1.5 cycles (3 half-waves: peak, trough, peak, trough) at reduced
-      amplitude (y=20 to 80 instead of 0 to 100, so it never reaches the
-      very top or bottom) and lower opacity. Deliberately out of step with
-      the foreground's own peak/trough at x=0/720/1440 — an earlier version
-      used a period that shared those same points, so the two curves lined
-      up and fully exposed the background layer as one big blob at the
-      center instead of subtly peeking through in a couple of offset spots.
+      'layered' (footer only): one long wave (1 full cycle, peaks at x=0,
+      1440, trough at x=720) plus a second, smaller "swell" sitting behind
+      it — 1.5 cycles (3 half-waves) at reduced amplitude (y=20 to 80
+      instead of 0 to 100) and lower opacity, deliberately out of step with
+      the foreground's own peak/trough at x=0/720/1440 (an earlier attempt
+      shared those same points, so the two curves lined up and fully
+      exposed the background layer as one big blob at the center instead of
+      subtly peeking through in a couple of offset spots).
+
+      'asymmetric' (everywhere else): a single off-center swell, not a
+      repeating/periodic pattern at all — same anchor-point technique
+      (genuine y=0/y=100 endpoints, not control points merely pulling
+      toward them) but with unequal segment widths either side of the one
+      trough, so the curve doesn't mirror itself the way a normal wave
+      does. Plainer and more minimal; reserved as the default everywhere
+      the busier layered look isn't wanted.
     {%- endcomment -%}
-    <path
-      class="wave-divider__fill-back"
-      d="M0,20 C240,20 240,80 480,80 C720,80 720,20 960,20 C1200,20 1200,80 1440,80 L1440,100 L0,100 Z"
-    />
-    <path
-      class="wave-divider__fill"
-      d="M0,0 C360,0 360,100 720,100 C1080,100 1080,0 1440,0 L1440,100 L0,100 Z"
-    />
-    <path
-      class="wave-divider__line"
-      d="M0,0 C360,0 360,100 720,100 C1080,100 1080,0 1440,0"
-    />
+    {%- case wave_shape -%}
+      {%- when 'layered' -%}
+        <path
+          class="wave-divider__fill-back"
+          d="M0,20 C240,20 240,80 480,80 C720,80 720,20 960,20 C1200,20 1200,80 1440,80 L1440,100 L0,100 Z"
+        />
+        <path
+          class="wave-divider__fill"
+          d="M0,0 C360,0 360,100 720,100 C1080,100 1080,0 1440,0 L1440,100 L0,100 Z"
+        />
+        <path
+          class="wave-divider__line"
+          d="M0,0 C360,0 360,100 720,100 C1080,100 1080,0 1440,0"
+        />
+      {%- else -%}
+        <path
+          class="wave-divider__fill"
+          d="M0,0 C250,0 250,100 500,100 C970,100 970,0 1440,0 L1440,100 L0,100 Z"
+        />
+        <path
+          class="wave-divider__line"
+          d="M0,0 C250,0 250,100 500,100 C970,100 970,0 1440,0"
+        />
+    {%- endcase -%}
   </svg>
   </span>
 </div>
