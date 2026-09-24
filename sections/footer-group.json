@@ -333,8 +333,8 @@
             "support_delivery": {
               "type": "button",
               "settings": {
-                "label": "Delivery & Returns (MOCK — add page)",
-                "link": "#",
+                "label": "Delivery & Returns",
+                "link": "shopify://policies/refund-policy",
                 "open_in_new_tab": false,
                 "style_class": "link",
                 "width": "fit-content",
