@@ -138,21 +138,18 @@
   }
 
   /*
-    Horizontal scroll-snap carousel rather than a fixed grid: with closer
-    to a dozen reviews now instead of 3, a static grid would either be a
-    very tall wall of cards or force pagination. Bleeds to the viewport
-    edge (grid-column: 1/-1) so the next card peeks in, same pattern as
-    the "Shop by age" mobile carousel.
+    Horizontal scroll-snap row instead of a fixed grid, so the rest of the
+    reviews are reachable by scrolling rather than needing pagination —
+    but sized to keep the same "3 across" look the static grid had rather
+    than bleeding to the viewport edge or showing a partial peek card.
   */
   .reviews__grid {
-    grid-column: 1 / -1;
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     gap: var(--space-sm, 1rem);
-    padding-inline: var(--util-page-margin-offset, 1.25rem);
   }
 
   .reviews__grid::-webkit-scrollbar {
@@ -160,8 +157,7 @@
   }
 
   .review-card {
-    flex: 0 0 auto;
-    width: min(85vw, 360px);
+    flex: 0 0 100%;
     scroll-snap-align: start;
     display: flex;
     flex-direction: column;
@@ -174,7 +170,7 @@
 
   @media screen and (min-width: 750px) {
     .review-card {
-      width: 320px;
+      flex-basis: calc((100% - (2 * var(--space-sm, 1rem))) / 3);
     }
   }
 
