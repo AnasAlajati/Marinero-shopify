@@ -319,8 +319,8 @@
             "support_size": {
               "type": "button",
               "settings": {
-                "label": "Size Guide (MOCK — add page)",
-                "link": "#",
+                "label": "Size Guide",
+                "link": "/#size-guide",
                 "open_in_new_tab": false,
                 "style_class": "link",
                 "width": "fit-content",
