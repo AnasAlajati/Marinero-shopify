@@ -84,7 +84,19 @@
         data-currency="{{ localization.country.currency.iso_code }}"
         on:change="/updatePriceFilterAndResults"
       >
-        <div class="facets__inputs-wrapper facets__inputs-wrapper--row">
+        {%- comment -%}
+          The two text inputs stay in the DOM and drive the actual filtering
+          (updatePriceFilterAndResults reads them by ref, validates them,
+          updates the URL) — nothing about that logic changes. They're just
+          visually replaced by the slider below: hidden from sighted users
+          and out of the tab order/accessibility tree (aria-hidden +
+          tabindex="-1"), since the range inputs become the real accessible
+          controls, each with their own label. The slider writes into these
+          on drag and dispatches a real 'change' event so the existing
+          on:change="/updatePriceFilterAndResults" binding on this
+          component fires exactly as if the customer had typed a value.
+        {%- endcomment -%}
+        <div class="facets__inputs-wrapper facets__inputs-wrapper--row price-facet__legacy-inputs" aria-hidden="true">
           <div
             class="price-facet__inputs-wrapper"
           >
@@ -103,7 +115,7 @@
                 data-max="{{ min_input_max_value | money_without_currency }}"
                 ref="minInput"
                 autocomplete="off"
-                aria-label="{{ 'accessibility.price_filter_low' | t }}"
+                tabindex="-1"
               >
 
               <label
@@ -131,7 +143,7 @@
                 data-max="{{ filter.range_max | money_without_currency }}"
                 ref="maxInput"
                 autocomplete="off"
-                aria-label="{{ 'accessibility.price_filter_high' | t }}"
+                tabindex="-1"
               >
               <label
                 class="field__label price-facet__label"
@@ -143,16 +155,38 @@
           </div>
         </div>
 
-        <div
-          class="
-            price-facet__highest-price
-            {%- if filter_style == 'horizontal' %}
-              price-facet__highest-price--horizontal
-            {%- endif %}
-          "
-        >
-          {%- assign formatted_highest_price = filter.range_max | money -%}
-          {{ 'content.price_filter_html' | t: price: formatted_highest_price }}
+        {%- assign slider_min_value = filter.min_value.value | default: 0 -%}
+        {%- assign slider_max_value = filter.max_value.value | default: filter.range_max -%}
+        <div class="price-slider" ref="slider">
+          <div class="price-slider__readout">
+            <span ref="sliderReadoutMin">{{ slider_min_value | money }}</span>
+            <span class="price-slider__readout-dash">–</span>
+            <span ref="sliderReadoutMax">{{ slider_max_value | money }}</span>
+          </div>
+          <div class="price-slider__track-wrapper">
+            <div class="price-slider__track"></div>
+            <div class="price-slider__range" ref="sliderRange"></div>
+            <input
+              type="range"
+              class="price-slider__input price-slider__input--min"
+              min="0"
+              max="{{ filter.range_max }}"
+              step="1"
+              value="{{ slider_min_value }}"
+              ref="sliderMin"
+              aria-label="{{ 'accessibility.price_filter_low' | t }}"
+            >
+            <input
+              type="range"
+              class="price-slider__input price-slider__input--max"
+              min="0"
+              max="{{ filter.range_max }}"
+              step="1"
+              value="{{ slider_max_value }}"
+              ref="sliderMax"
+              aria-label="{{ 'accessibility.price_filter_high' | t }}"
+            >
+          </div>
         </div>
 
         {% if filter.min_value.value != null or filter.max_value.value != null %}
@@ -199,49 +233,218 @@
     min-width: 360px;
   }
 
-  .price-facet__inputs-wrapper {
-    display: flex;
-    flex-direction: row;
-    padding: var(--style-border-width-inputs);
-    gap: calc(var(--gap-sm) + (var(--style-border-width-inputs) * 2));
+  /*
+    The real text inputs that drive filtering stay in the DOM (see comment
+    in the markup) but are removed from view and from the a11y tree — the
+    slider below is what sighted and assistive-tech users actually
+    interact with.
+  */
+  .price-facet__legacy-inputs {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
-  @container (max-width: 199px) {
-    .price-facet__inputs-wrapper {
-      flex-wrap: wrap;
-    }
-  }
-
-  .price-facet__input {
-    width: 100%;
-    text-align: right;
-    padding-left: calc(2.5 * var(--input-padding-x));
-  }
-
-  .price-facet__input::placeholder {
-    color: var(--facets-input-label-color);
-  }
-
-  .price-facet__separator {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: var(--font-paragraph--size);
-  }
-
-  .price-facet__highest-price {
+  .price-slider {
     padding: var(--padding-xs) 0 var(--padding-sm);
   }
 
-  .price-facet__highest-price--horizontal {
+  .price-facet--horizontal .price-slider {
     padding: 0 var(--padding-md) var(--padding-xs);
+    min-width: 280px;
   }
 
-  .price-facet__label {
+  .price-slider__readout {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--font-paragraph--size);
+    margin-block-end: var(--padding-md, 1rem);
+  }
+
+  .price-slider__readout-dash {
+    opacity: 0.5;
+  }
+
+  /*
+    Two native range inputs stacked on the same track (the classic
+    dual-handle slider technique): each input is fully transparent and
+    spans the whole width, with pointer-events disabled on the track so
+    clicks fall through to whichever input's thumb is actually under the
+    cursor — the thumb itself re-enables pointer-events so it stays
+    draggable. `.price-slider__range` is a separate div, positioned via JS
+    from the two values, that paints the filled portion between the
+    handles; the inputs' own (invisible) tracks paint nothing.
+  */
+  .price-slider__track-wrapper {
+    position: relative;
+    height: 20px;
+  }
+
+  .price-slider__track,
+  .price-slider__range {
+    position: absolute;
+    top: 50%;
+    height: 4px;
+    transform: translateY(-50%);
+    border-radius: 2px;
+  }
+
+  .price-slider__track {
+    left: 0;
+    right: 0;
+    background: var(--color-border, #d3cebe);
+  }
+
+  .price-slider__range {
+    background: var(--color-primary, #0b1f3a);
+  }
+
+  .price-slider__input {
+    position: absolute;
     top: 0;
     left: 0;
-    color: var(--facets-input-label-color);
-    padding: var(--input-padding-y) var(--input-padding-x);
-    transform: none;
+    width: 100%;
+    height: 20px;
+    margin: 0;
+    background: transparent;
+    appearance: none;
+    -webkit-appearance: none;
+    pointer-events: none;
+  }
+
+  .price-slider__input::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    background: transparent;
+  }
+
+  .price-slider__input::-moz-range-track {
+    background: transparent;
+    border: none;
+  }
+
+  .price-slider__input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    pointer-events: auto;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--color-primary, #0b1f3a);
+    border: 2px solid var(--color-background, #fff);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    margin-top: -7px;
+  }
+
+  .price-slider__input::-moz-range-thumb {
+    pointer-events: auto;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--color-primary, #0b1f3a);
+    border: 2px solid var(--color-background, #fff);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
   }
 {% endstylesheet %}
+
+{% javascript %}
+  if (!window.__marineroPriceSliderBound) {
+    window.__marineroPriceSliderBound = true;
+
+    // filter.range_max (and so the slider's own min/max/value) comes from
+    // Shopify in minor units (cents) — the same raw value the `money`
+    // filter expects, which is why the server-rendered readout needed no
+    // conversion. Client-side formatting needs it explicit.
+    const centsToDecimal = (cents) => cents / 100;
+
+    const formatMoney = (cents, currency) => {
+      try {
+        return new Intl.NumberFormat(undefined, { style: 'currency', currency }).format(centsToDecimal(cents));
+      } catch {
+        return String(centsToDecimal(cents));
+      }
+    };
+
+    const syncFill = (root) => {
+      const sliderMin = root.querySelector('.price-slider__input--min');
+      const sliderMax = root.querySelector('.price-slider__input--max');
+      const range = root.querySelector('.price-slider__range');
+      if (!sliderMin || !sliderMax || !range) return;
+
+      const trackMax = Number(sliderMin.max) || 1;
+      const minPercent = (Number(sliderMin.value) / trackMax) * 100;
+      const maxPercent = (Number(sliderMax.value) / trackMax) * 100;
+      range.style.left = minPercent + '%';
+      range.style.right = 100 - maxPercent + '%';
+    };
+
+    const syncReadout = (root, currency) => {
+      const sliderMin = root.querySelector('.price-slider__input--min');
+      const sliderMax = root.querySelector('.price-slider__input--max');
+      const readoutMin = root.querySelector('[ref="sliderReadoutMin"]');
+      const readoutMax = root.querySelector('[ref="sliderReadoutMax"]');
+      if (!sliderMin || !sliderMax || !readoutMin || !readoutMax) return;
+
+      readoutMin.textContent = formatMoney(Number(sliderMin.value), currency);
+      readoutMax.textContent = formatMoney(Number(sliderMax.value), currency);
+    };
+
+    const handleInput = (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLInputElement) || !target.classList.contains('price-slider__input')) return;
+
+      const component = target.closest('price-facet-component');
+      if (!component) return;
+
+      const sliderMin = component.querySelector('.price-slider__input--min');
+      const sliderMax = component.querySelector('.price-slider__input--max');
+
+      // Keep the two handles from crossing over each other.
+      if (Number(sliderMin.value) > Number(sliderMax.value)) {
+        if (target === sliderMin) sliderMin.value = sliderMax.value;
+        else sliderMax.value = sliderMin.value;
+      }
+
+      syncFill(component);
+      syncReadout(component, component.dataset.currency || 'USD');
+    };
+
+    const handleChange = (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLInputElement) || !target.classList.contains('price-slider__input')) return;
+
+      const component = target.closest('price-facet-component');
+      if (!component) return;
+
+      const minInput = component.querySelector('[ref="minInput"]');
+      const maxInput = component.querySelector('[ref="maxInput"]');
+      const sliderMin = component.querySelector('.price-slider__input--min');
+      const sliderMax = component.querySelector('.price-slider__input--max');
+      if (!minInput || !maxInput || !sliderMin || !sliderMax) return;
+
+      // The legacy inputs expect a plain decimal amount (what a customer
+      // would type, e.g. "1859.99"), not the slider's raw minor-unit value.
+      minInput.value = centsToDecimal(Number(sliderMin.value));
+      maxInput.value = centsToDecimal(Number(sliderMax.value));
+      // Bubbles up to price-facet-component's own on:change binding, which
+      // runs the theme's existing validation + AJAX filter update — the
+      // same path a typed value would take.
+      minInput.dispatchEvent(new Event('change', { bubbles: true }));
+    };
+
+    document.addEventListener('input', handleInput);
+    document.addEventListener('change', handleChange);
+
+    document.querySelectorAll('price-facet-component').forEach((component) => {
+      syncFill(component);
+      syncReadout(component, component.dataset.currency || 'USD');
+    });
+  }
+{% endjavascript %}
