@@ -306,7 +306,7 @@
               "type": "button",
               "settings": {
                 "label": "Contact Us",
-                "link": "shopify://pages/contact",
+                "link": "shopify://policies/contact-information",
                 "open_in_new_tab": false,
                 "style_class": "link",
                 "width": "fit-content",
