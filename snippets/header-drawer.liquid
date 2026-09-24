@@ -1131,6 +1131,22 @@
     object-fit: cover;
   }
 
+  /*
+    Same fix as the other product photo grids on the site: these photos
+    have a lot of empty space below the model's feet, so the theme's
+    default centered crop cuts into the head before it runs out of blank
+    floor to trim. Scoped to the drawer's featured-products carousel only,
+    not the shared .resource-card__image rule used elsewhere (predictive
+    search, other menus) that hasn't been reported as an issue.
+
+    !important because Shopify writes each image's focal point as an
+    inline style (object-position: 50% 50% by default), which always
+    beats a plain stylesheet rule regardless of selector specificity.
+  */
+  .menu-drawer__featured-content-list-item .resource-card__image {
+    object-position: center 12% !important;
+  }
+
   /* Fix alignment for collection image mode links without images in drawer */
 
   /* Target menu items in grids that have images */
