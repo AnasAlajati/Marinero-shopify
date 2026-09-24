@@ -767,6 +767,13 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    /*
+      Same fix as the other product photo grids on the site: these photos
+      have a lot of empty space below the model's feet, so the theme's
+      default centered crop cuts into the head before it runs out of blank
+      floor to trim. Anchoring near the top keeps the head in frame.
+    */
+    object-position: center 12%;
   }
 
   .cart-suggestion__title {
