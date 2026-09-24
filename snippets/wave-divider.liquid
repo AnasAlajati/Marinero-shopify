@@ -74,7 +74,20 @@
       1440; trough at x=720) — half the frequency of the previous 2-cycle
       version, for one long, gentle undulation instead of several repeated
       bumps.
+
+      Layered look: a second, smaller "swell" sits behind the main wave —
+      1.5 cycles (3 half-waves: peak, trough, peak, trough) at reduced
+      amplitude (y=20 to 80 instead of 0 to 100, so it never reaches the
+      very top or bottom) and lower opacity. Deliberately out of step with
+      the foreground's own peak/trough at x=0/720/1440 — an earlier version
+      used a period that shared those same points, so the two curves lined
+      up and fully exposed the background layer as one big blob at the
+      center instead of subtly peeking through in a couple of offset spots.
     {%- endcomment -%}
+    <path
+      class="wave-divider__fill-back"
+      d="M0,20 C240,20 240,80 480,80 C720,80 720,20 960,20 C1200,20 1200,80 1440,80 L1440,100 L0,100 Z"
+    />
     <path
       class="wave-divider__fill"
       d="M0,0 C360,0 360,100 720,100 C1080,100 1080,0 1440,0 L1440,100 L0,100 Z"
@@ -169,6 +182,11 @@
     display: block;
     width: 100%;
     height: 100%;
+  }
+
+  .wave-divider__fill-back {
+    fill: color-mix(in srgb, var(--color-background) 55%, transparent);
+    stroke: none;
   }
 
   .wave-divider__fill {
