@@ -95,15 +95,15 @@
           "settings": {
             "icon": "truck",
             "title": "Delivery across Egypt",
-            "text": "MOCK — your real delivery time & cost"
+            "text": "We deliver anywhere in Egypt"
           }
         },
         "i2": {
           "type": "item",
           "settings": {
             "icon": "cash",
-            "title": "Cash on delivery",
-            "text": "MOCK — accepted payment methods"
+            "title": "Apple Pay",
+            "text": "Multiple payment methods available"
           }
         },
         "i3": {
@@ -111,7 +111,7 @@
           "settings": {
             "icon": "ruler",
             "title": "Size help",
-            "text": "MOCK — height charts on every product"
+            "text": "height charts on every product"
           }
         },
         "i4": {
@@ -119,7 +119,7 @@
           "settings": {
             "icon": "return",
             "title": "Easy exchanges",
-            "text": "MOCK — your real returns window"
+            "text": "Returns accepted up to 14 Days"
           }
         }
       },
