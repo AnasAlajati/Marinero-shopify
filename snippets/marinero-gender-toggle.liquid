@@ -1,16 +1,30 @@
 {%- comment -%}
   MARINERO — Big Boys/Girls toggle for collection pages.
 
-  Reuses the collection's own native tag filter (Boys / Girls tags added in
-  admin) rather than building a separate filtering mechanism, so it stays in
-  sync with the standard Filter panel and combines correctly with every
-  other filter (price, availability, age tags, etc). No product is tagged
-  both Boys and Girls, so the two buttons behave as a mutually exclusive
-  toggle (picking one clears the other) rather than a pair of independent
-  checkboxes that could otherwise combine into a zero-result state.
+  Two distinct modes:
 
-  Renders nothing if the collection has no Boys/Girls tag values, so it's
-  safe to include on every collection page.
+  1. On the dedicated Boys or Girls collection itself, tag-filtering
+     doesn't make sense — that collection only contains one gender's
+     products to begin with, so Shopify never exposes the OTHER gender as
+     a filter value there at all (a filter value with zero matching
+     products in the current collection is omitted), which is why only one
+     button used to show, and pressing it did nothing (100% of the
+     collection already matched). Instead this renders both buttons as
+     plain navigation links between /collections/boys and
+     /collections/girls, with whichever one we're currently on marked
+     active — simple cross-navigation, not filtering.
+
+  2. On every other collection (e.g. Winter Collection, where both
+     genders' products coexist), reuses the collection's own native tag
+     filter (Boys / Girls tags added in admin) rather than a separate
+     mechanism, so it stays in sync with the standard Filter panel and
+     combines correctly with every other filter (price, availability, age
+     tags, etc). No product is tagged both Boys and Girls, so the two
+     buttons behave as a mutually exclusive toggle (picking one clears the
+     other) rather than a pair of independent checkboxes that could
+     otherwise combine into a zero-result state. Renders nothing here if
+     the collection has no Boys/Girls tag values, so it's safe to include
+     on every collection page regardless.
 
   @param {object} collection - The collection object
 
@@ -19,92 +33,121 @@
 {%- endcomment -%}
 
 {%- liquid
-  assign boys_value = null
-  assign girls_value = null
-
-  for filter in collection.filters
-    if filter.type == 'list'
-      for value in filter.values
-        assign value_label_down = value.label | downcase
-        if value_label_down == 'boys'
-          assign boys_value = value
-        elsif value_label_down == 'girls'
-          assign girls_value = value
-        endif
-      endfor
-    endif
-  endfor
+  assign is_boys_collection = false
+  assign is_girls_collection = false
+  if collection.handle == 'boys'
+    assign is_boys_collection = true
+  elsif collection.handle == 'girls'
+    assign is_girls_collection = true
+  endif
 -%}
 
-{%- if boys_value or girls_value -%}
-  <div class="marinero-gender-toggle" role="group" aria-label="Filter by">
-    {%- if boys_value -%}
-      {%- comment -%}
-        Boys' own url_to_add already includes Girls' tag param too if Girls
-        is currently active (Shopify stacks both into one repeated
-        filter.p.tag query param). Strip that out so selecting Boys always
-        results in Boys alone, never both combined into a zero-result state.
-      {%- endcomment -%}
-      {%- assign boys_href = boys_value.url_to_add -%}
-      {%- if boys_value.active -%}
-        {%- assign boys_href = boys_value.url_to_remove -%}
-      {%- elsif girls_value.active -%}
-        {%- assign strip_a = '&filter.p.tag=' | append: girls_value.value -%}
-        {%- assign strip_b = 'filter.p.tag=' | append: girls_value.value | append: '&' -%}
-        {%- assign boys_href = boys_href | remove: strip_a | remove: strip_b -%}
-      {%- endif -%}
-      <a
-        href="{{ boys_href }}"
-        class="marinero-gender-toggle__btn{% if boys_value.active %} marinero-gender-toggle__btn--active{% endif %}"
-        aria-pressed="{{ boys_value.active }}"
-      >
-        Boys
-      </a>
-    {%- endif -%}
-
-    {%- if girls_value -%}
-      {%- assign girls_href = girls_value.url_to_add -%}
-      {%- if girls_value.active -%}
-        {%- assign girls_href = girls_value.url_to_remove -%}
-      {%- elsif boys_value.active -%}
-        {%- assign strip_a = '&filter.p.tag=' | append: boys_value.value -%}
-        {%- assign strip_b = 'filter.p.tag=' | append: boys_value.value | append: '&' -%}
-        {%- assign girls_href = girls_href | remove: strip_a | remove: strip_b -%}
-      {%- endif -%}
-      <a
-        href="{{ girls_href }}"
-        class="marinero-gender-toggle__btn{% if girls_value.active %} marinero-gender-toggle__btn--active{% endif %}"
-        aria-pressed="{{ girls_value.active }}"
-      >
-        Girls
-      </a>
-    {%- endif -%}
+{%- if is_boys_collection or is_girls_collection -%}
+  <div class="marinero-gender-toggle" role="group" aria-label="Shop by">
+    <a
+      href="{{ collections['boys'].url }}"
+      class="marinero-gender-toggle__btn{% if is_boys_collection %} marinero-gender-toggle__btn--active{% endif %}"
+      aria-current="{{ is_boys_collection }}"
+    >
+      Boys
+    </a>
+    <a
+      href="{{ collections['girls'].url }}"
+      class="marinero-gender-toggle__btn{% if is_girls_collection %} marinero-gender-toggle__btn--active{% endif %}"
+      aria-current="{{ is_girls_collection }}"
+    >
+      Girls
+    </a>
   </div>
+{%- else -%}
+  {%- liquid
+    assign boys_value = null
+    assign girls_value = null
 
-  {%- comment -%}
-    Reuses the theme's own AJAX filter engine (the same one the native
-    Filter panel checkboxes use) instead of a plain page navigation, so
-    clicking Boys/Girls updates the grid instantly rather than reloading
-    the whole page. Delegated on document (not the links themselves) since
-    this markup gets replaced whenever the filter grid re-renders; scripts
-    inserted via that replacement don't re-run, but a document-level
-    listener bound once on first load keeps matching the new elements by
-    selector regardless. Falls back to a normal link click if the AJAX
-    component isn't found for any reason.
-  {%- endcomment -%}
-  <script>
-    if (!window.__marineroGenderToggleBound) {
-      window.__marineroGenderToggleBound = true;
-      document.addEventListener('click', (event) => {
-        const link = event.target.closest('.marinero-gender-toggle__btn');
-        if (!link) return;
-        const facetsForm = document.querySelector('facets-form-component');
-        if (!facetsForm || typeof facetsForm.updateFiltersByURL !== 'function') return;
-        event.preventDefault();
-        facetsForm.updateFiltersByURL(link.href);
-      });
-    }
-  </script>
+    for filter in collection.filters
+      if filter.type == 'list'
+        for value in filter.values
+          assign value_label_down = value.label | downcase
+          if value_label_down == 'boys'
+            assign boys_value = value
+          elsif value_label_down == 'girls'
+            assign girls_value = value
+          endif
+        endfor
+      endif
+    endfor
+  -%}
+
+  {%- if boys_value or girls_value -%}
+    <div class="marinero-gender-toggle" role="group" aria-label="Filter by">
+      {%- if boys_value -%}
+        {%- comment -%}
+          Boys' own url_to_add already includes Girls' tag param too if Girls
+          is currently active (Shopify stacks both into one repeated
+          filter.p.tag query param). Strip that out so selecting Boys always
+          results in Boys alone, never both combined into a zero-result state.
+        {%- endcomment -%}
+        {%- assign boys_href = boys_value.url_to_add -%}
+        {%- if boys_value.active -%}
+          {%- assign boys_href = boys_value.url_to_remove -%}
+        {%- elsif girls_value.active -%}
+          {%- assign strip_a = '&filter.p.tag=' | append: girls_value.value -%}
+          {%- assign strip_b = 'filter.p.tag=' | append: girls_value.value | append: '&' -%}
+          {%- assign boys_href = boys_href | remove: strip_a | remove: strip_b -%}
+        {%- endif -%}
+        <a
+          href="{{ boys_href }}"
+          class="marinero-gender-toggle__btn{% if boys_value.active %} marinero-gender-toggle__btn--active{% endif %}"
+          aria-pressed="{{ boys_value.active }}"
+        >
+          Boys
+        </a>
+      {%- endif -%}
+
+      {%- if girls_value -%}
+        {%- assign girls_href = girls_value.url_to_add -%}
+        {%- if girls_value.active -%}
+          {%- assign girls_href = girls_value.url_to_remove -%}
+        {%- elsif boys_value.active -%}
+          {%- assign strip_a = '&filter.p.tag=' | append: boys_value.value -%}
+          {%- assign strip_b = 'filter.p.tag=' | append: boys_value.value | append: '&' -%}
+          {%- assign girls_href = girls_href | remove: strip_a | remove: strip_b -%}
+        {%- endif -%}
+        <a
+          href="{{ girls_href }}"
+          class="marinero-gender-toggle__btn{% if girls_value.active %} marinero-gender-toggle__btn--active{% endif %}"
+          aria-pressed="{{ girls_value.active }}"
+        >
+          Girls
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%}
+      Reuses the theme's own AJAX filter engine (the same one the native
+      Filter panel checkboxes use) instead of a plain page navigation, so
+      clicking Boys/Girls updates the grid instantly rather than reloading
+      the whole page. Delegated on document (not the links themselves) since
+      this markup gets replaced whenever the filter grid re-renders; scripts
+      inserted via that replacement don't re-run, but a document-level
+      listener bound once on first load keeps matching the new elements by
+      selector regardless. Falls back to a normal link click if the AJAX
+      component isn't found for any reason.
+    {%- endcomment -%}
+    <script>
+      if (!window.__marineroGenderToggleBound) {
+        window.__marineroGenderToggleBound = true;
+        document.addEventListener('click', (event) => {
+          const link = event.target.closest('.marinero-gender-toggle__btn');
+          if (!link) return;
+          const facetsForm = document.querySelector('facets-form-component');
+          if (!facetsForm || typeof facetsForm.updateFiltersByURL !== 'function') return;
+          event.preventDefault();
+          facetsForm.updateFiltersByURL(link.href);
+        });
+      }
+    </script>
+  {%- endif -%}
 {%- endif -%}
 
 {% stylesheet %}
