@@ -39,6 +39,7 @@
     },
     "age_collections_1": {
       "type": "age-collections",
+      "disabled": true,
       "blocks": {
         "t1": {
           "type": "tile",
@@ -85,6 +86,38 @@
         "color_scheme": "scheme-1",
         "padding-block-start": 32,
         "padding-block-end": 48
+      }
+    },
+    "boys_girls_1": {
+      "type": "marinero-category-blocks",
+      "blocks": {
+        "boys": {
+          "type": "category",
+          "settings": {
+            "placeholder_icon": "👦",
+            "label": "Boys",
+            "cta": "Shop Now",
+            "link": "shopify://collections/boys"
+          }
+        },
+        "girls": {
+          "type": "category",
+          "settings": {
+            "placeholder_icon": "👧",
+            "label": "Girls",
+            "cta": "Shop Now",
+            "link": "shopify://collections/girls"
+          }
+        }
+      },
+      "block_order": [
+        "boys",
+        "girls"
+      ],
+      "settings": {
+        "label": "Shop by category",
+        "heading": "Boys & Girls",
+        "color_scheme": "scheme-1"
       }
     },
     "trust_bar_1": {
@@ -531,6 +564,7 @@
   "order": [
     "marinero_hero_slider",
     "age_collections_1",
+    "boys_girls_1",
     "trust_bar_1",
     "architecture_scroll_1",
     "product_reveal_1",
