@@ -237,6 +237,11 @@
               },
               "block_order": []
             },
+            "marinero_product_details": {
+              "type": "marinero-product-details",
+              "settings": {},
+              "blocks": {}
+            },
             "text_aEtTtq": {
               "type": "text",
               "name": "Product description",
@@ -270,7 +275,8 @@
             "variant_picker_R3rGDr",
             "size_fit_helper",
             "buy_buttons_eYQEYi",
-            "text_aEtTtq"
+            "text_aEtTtq",
+            "marinero_product_details"
           ]
         }
       },

@@ -235,6 +235,9 @@
           </span>
         {%- endif -%}
       {%- endform -%}
+      {% if product.selected_or_first_available_variant.requires_shipping %}
+        {% render 'marinero-delivery-note' %}
+      {% endif %}
     </product-form-component>
   {%- else -%}
     <div class="product-form-buttons">

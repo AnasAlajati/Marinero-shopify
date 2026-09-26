@@ -1,5 +1,17 @@
 [
   {
+    "name": "Marinero delivery",
+    "settings": [
+      {
+        "type": "number",
+        "id": "marinero_delivery_price",
+        "label": "Delivery price (EGP)",
+        "default": 118,
+        "info": "Displayed per order on products and in the cart. Keep this amount aligned with your Shopify shipping rates; this setting does not change checkout charges."
+      }
+    ]
+  },
+  {
     "name": "theme_info",
     "theme_name": "Horizon",
     "theme_version": "3.5.1",

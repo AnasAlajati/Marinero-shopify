@@ -220,6 +220,12 @@
   {% endif %}
 
   {%- liquid
+    assign show_delivery_total = false
+    if cart.requires_shipping and cart.item_count > 0 and cart.currency.iso_code == 'EGP'
+      assign show_delivery_total = true
+      assign delivery_price = settings.marinero_delivery_price | default: 118 | times: 100 | round
+      assign total_with_delivery = cart.total_price | plus: delivery_price
+    endif
     if settings.currency_code_enabled_cart_total
       assign total_price = cart.total_price | money_with_currency
     else
@@ -232,7 +238,7 @@
       class="cart-totals__item cart-totals__total"
       role="status"
     >
-      <span class="cart-totals__total-label cart-primary-typography">{{ 'content.cart_estimated_total' | t }}</span>
+      <span class="cart-totals__total-label cart-primary-typography">{{ 'content.cart_subtotal' | t }}</span>
       <text-component
         ref="cartTotal"
         value="{{ total_price | strip_html }}"
@@ -244,6 +250,21 @@
         {{ total_price }}
       </text-component>
     </span>
+    {% if show_delivery_total %}
+      <div class="cart-totals__item marinero-cart-delivery">
+        <span class="marinero-cart-delivery__label">
+          {% render 'icon-or-image', icon: 'truck', width: 22, class_name: 'marinero-cart-delivery__icon' %}
+          Delivery
+        </span>
+        <span>+ {{ delivery_price | money_with_currency }}</span>
+      </div>
+      <div class="cart-totals__item marinero-cart-grand-total" role="status" aria-live="polite" aria-atomic="true">
+        <span>{% if cart.taxes_included %}Total including delivery{% else %}Estimated total including delivery{% endif %}</span>
+        <strong data-testid="cart-total-with-delivery">{{ total_with_delivery | money_with_currency }}</strong>
+      </div>
+    {% elsif cart.requires_shipping and cart.item_count > 0 %}
+      {% render 'marinero-delivery-note' %}
+    {% endif %}
     {% if settings.show_installments %}
       <span class="cart-totals__item cart-totals__installments">
         {% form 'cart', cart %}
@@ -252,7 +273,21 @@
       </span>
     {% endif %}
     <div class="cart-totals__item cart-totals__tax-note cart-primary-typography">
-      {% render 'tax-info', has_discounts_enabled: settings.show_add_discount_code %}
+      {% if show_delivery_total %}
+        <small>
+          {% if cart.taxes_included and cart.duties_included %}
+            Duties and taxes included.
+          {% elsif cart.taxes_included %}
+            Taxes included.
+          {% elsif cart.duties_included %}
+            Duties included. Taxes calculated at checkout.
+          {% else %}
+            Taxes calculated at checkout.
+          {% endif %}
+        </small>
+      {% else %}
+        {% render 'tax-info', has_discounts_enabled: settings.show_add_discount_code %}
+      {% endif %}
     </div>
   </div>
 </div>
@@ -286,6 +321,29 @@
 </div>
 
 {% stylesheet %}
+  .marinero-cart-delivery {
+    gap: 16px;
+    padding: 14px 16px;
+    border-radius: 6px;
+    background: rgb(28 59 91 / 0.07);
+    font-size: 0.9375rem;
+  }
+  .marinero-cart-delivery__label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .marinero-cart-delivery__icon { flex-shrink: 0; }
+  .marinero-cart-grand-total {
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-block-start: 16px;
+    border-block-start: 1px solid var(--color-border);
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .marinero-cart-grand-total strong { font-size: 1.125rem; }
+
   .cart-actions {
     display: flex;
     flex-direction: column;

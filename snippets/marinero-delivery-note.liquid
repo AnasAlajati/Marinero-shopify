@@ -1,0 +1,31 @@
+{%- doc -%}
+  Displays the delivery charge before checkout. This does not configure Shopify shipping rates.
+{%- enddoc -%}
+<div class="marinero-delivery-note">
+  {% render 'icon-or-image', icon: 'truck', width: 22, class_name: 'marinero-delivery-note__icon' %}
+  <div>
+    <p class="marinero-delivery-note__heading">Delivery <strong>EGP {{ settings.marinero_delivery_price | default: 118 }}</strong></p>
+    <p class="marinero-delivery-note__caption">Per order, added at checkout.{% if shop.shipping_policy.body != blank %} <a href="{{ shop.shipping_policy.url }}">Delivery details</a>{% endif %}</p>
+  </div>
+</div>
+
+{% stylesheet %}
+  .marinero-delivery-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    margin-block: 12px 0;
+    padding: 14px 16px;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.1);
+    border-radius: 6px;
+    background: rgb(var(--color-foreground-rgb) / 0.025);
+    color: var(--color-foreground);
+    text-align: start;
+  }
+  .marinero-delivery-note__icon { flex: 0 0 22px; margin-block-start: 2px; }
+  .marinero-delivery-note__heading { margin: 0; font-size: 0.9375rem; line-height: 1.5; }
+  .marinero-delivery-note__heading strong { margin-inline-start: 6px; font-weight: 600; }
+  .marinero-delivery-note__caption { margin: 3px 0 0; font-size: 0.8125rem; line-height: 1.5; }
+  .marinero-delivery-note__caption a { text-decoration: underline; text-underline-offset: 3px; }
+{% endstylesheet %}

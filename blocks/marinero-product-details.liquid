@@ -1,0 +1,128 @@
+{% liquid
+  assign detail_product = closest.product | default: product
+  assign detail_keys = 'fabric_care,size_fit,delivery_returns' | split: ','
+%}
+
+<div class="marinero-product-facts" {{ block.shopify_attributes }}>
+  {% for detail_key in detail_keys %}
+    {% liquid
+      assign title_key = detail_key | append: '_title'
+      assign icon_key = detail_key | append: '_icon'
+      assign content = block.settings[detail_key]
+      assign title = block.settings[title_key]
+      assign icon = block.settings[icon_key]
+      assign product_content = detail_product.metafields.custom[detail_key]
+      assign product_icon = detail_product.metafields.custom[icon_key].value
+      assign product_title = detail_product.metafields.custom[title_key].value
+      assign allowed_icons = 'shirt,washing,ruler,silhouette,truck,return,box,heart,chat_bubble' | split: ','
+      if product_icon != blank and allowed_icons contains product_icon
+        assign icon = product_icon
+      endif
+      if product_title != blank
+        assign title = product_title
+      endif
+    %}
+    {% if title != blank %}
+      {% if content != blank or product_content != blank %}
+        <details class="marinero-product-facts__row" {% if forloop.first and block.settings.open_first %}open{% endif %}>
+          <summary class="marinero-product-facts__summary">
+            {% render 'icon-or-image', icon: icon, width: 28, class_name: 'marinero-product-facts__icon' %}
+            <span>{{ title | escape }}</span>
+            <svg class="marinero-product-facts__chevron" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </summary>
+          <div class="marinero-product-facts__body rte">
+            {% if product_content != blank %}
+              {{ product_content | metafield_tag }}
+            {% else %}
+              {{ content }}
+            {% endif %}
+          </div>
+        </details>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+</div>
+
+{% stylesheet %}
+  .marinero-product-facts {
+    width: 100%;
+    min-width: 0;
+    color: var(--color-foreground);
+  }
+
+  .marinero-product-facts__row {
+    border-block-start: 1px solid rgb(var(--color-foreground-rgb) / 0.14);
+  }
+
+  .marinero-product-facts__row:last-child {
+    border-block-end: 1px solid rgb(var(--color-foreground-rgb) / 0.14);
+  }
+
+  .marinero-product-facts__summary {
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr) 16px;
+    align-items: center;
+    gap: 16px;
+    padding-block: 20px;
+    cursor: pointer;
+    list-style: none;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .marinero-product-facts__summary::-webkit-details-marker { display: none; }
+  .marinero-product-facts__summary::marker { content: ''; }
+  .marinero-product-facts__summary:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+  }
+
+  .marinero-product-facts__icon { width: 28px; height: 28px; }
+  .marinero-product-facts__chevron { transition: transform 180ms ease; }
+  .marinero-product-facts__row[open] > summary .marinero-product-facts__chevron { transform: rotate(180deg); }
+  .marinero-product-facts__body {
+    padding-inline-start: 44px;
+    padding-block-end: 22px;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+  }
+  .marinero-product-facts__body > :first-child { margin-block-start: 0; }
+  .marinero-product-facts__body > :last-child { margin-block-end: 0; }
+  @media (prefers-reduced-motion: reduce) {
+    .marinero-product-facts__chevron { transition: none; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Marinero product details",
+  "tag": null,
+  "settings": [
+    { "type": "paragraph", "content": "Shared defaults below apply to this template. Product metafields custom.fabric_care, custom.size_fit and custom.delivery_returns override the text per product. Use Rich text metafields. See docs/product-details.md for icon and title overrides." },
+    { "type": "checkbox", "id": "open_first", "label": "Open Fabric & care initially", "default": false },
+    { "type": "header", "content": "Fabric & care" },
+    { "type": "text", "id": "fabric_care_title", "label": "Heading", "default": "Fabric & care" },
+    { "type": "select", "id": "fabric_care_icon", "label": "Icon", "default": "shirt", "options": [
+      { "value": "shirt", "label": "Clothing" }, { "value": "washing", "label": "Washing" }, { "value": "ruler", "label": "Ruler" }, { "value": "silhouette", "label": "Fit" }, { "value": "truck", "label": "Delivery" }, { "value": "return", "label": "Returns" }, { "value": "box", "label": "Package" }, { "value": "heart", "label": "Heart" }, { "value": "chat_bubble", "label": "Help" }
+    ] },
+    { "type": "richtext", "id": "fabric_care", "label": "Details", "default": "<p>Check the garment label for exact fabric composition and washing instructions. Follow the care label when washing, drying and ironing.</p>" },
+    { "type": "header", "content": "Size & fit" },
+    { "type": "text", "id": "size_fit_title", "label": "Heading", "default": "Size & fit" },
+    { "type": "select", "id": "size_fit_icon", "label": "Icon", "default": "ruler", "options": [
+      { "value": "shirt", "label": "Clothing" }, { "value": "washing", "label": "Washing" }, { "value": "ruler", "label": "Ruler" }, { "value": "silhouette", "label": "Fit" }, { "value": "truck", "label": "Delivery" }, { "value": "return", "label": "Returns" }, { "value": "box", "label": "Package" }, { "value": "heart", "label": "Heart" }, { "value": "chat_bubble", "label": "Help" }
+    ] },
+    { "type": "richtext", "id": "size_fit", "label": "Details", "default": "<p>Use the size guide beside the size options to compare your child's measurements before choosing. Need help? Contact us with their height and the size you are considering.</p>" },
+    { "type": "header", "content": "Delivery & returns" },
+    { "type": "text", "id": "delivery_returns_title", "label": "Heading", "default": "Delivery & returns" },
+    { "type": "select", "id": "delivery_returns_icon", "label": "Icon", "default": "truck", "options": [
+      { "value": "shirt", "label": "Clothing" }, { "value": "washing", "label": "Washing" }, { "value": "ruler", "label": "Ruler" }, { "value": "silhouette", "label": "Fit" }, { "value": "truck", "label": "Delivery" }, { "value": "return", "label": "Returns" }, { "value": "box", "label": "Package" }, { "value": "heart", "label": "Heart" }, { "value": "chat_bubble", "label": "Help" }
+    ] },
+    { "type": "richtext", "id": "delivery_returns", "label": "Details", "default": "<p>Contact us before ordering to confirm delivery timing for your area and the exchange or return conditions for this item.</p>" }
+  ],
+  "presets": [{ "name": "Marinero product details", "category": "Product" }]
+}
+{% endschema %}
