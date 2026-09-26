@@ -54,7 +54,8 @@
     {%- endif -%}
   </div>
 
-  <div class="reviews__grid">
+  <reviews-scroller class="reviews__scroller">
+  <div class="reviews__grid" tabindex="0" aria-label="{{ section.settings.heading | escape }}">
     {%- for block in section.blocks -%}
       <figure class="review-card" {{ block.shopify_attributes }}>
         <span class="reviews__stars review-card__stars" aria-label="{{ block.settings.rating }} out of 5 stars">
@@ -89,7 +90,129 @@
       </figure>
     {%- endfor -%}
   </div>
+  <div class="reviews__dots" hidden></div>
+  </reviews-scroller>
 </div>
+
+{% javascript %}
+  if (!customElements.get('reviews-scroller')) {
+    customElements.define(
+      'reviews-scroller',
+      class extends HTMLElement {
+        connectedCallback() {
+          this.grid = this.querySelector('.reviews__grid');
+          this.dots = this.querySelector('.reviews__dots');
+          if (!this.grid || !this.dots) return;
+          this.cards = [...this.grid.children];
+          this.pageCount = 0;
+
+          this.update = this.update.bind(this);
+          this.grid.addEventListener('scroll', this.update, { passive: true });
+          this.resizeObserver = new ResizeObserver(this.update);
+          this.resizeObserver.observe(this.grid);
+
+          this.dots.addEventListener('click', (event) => {
+            const dot = event.target.closest('button');
+            if (dot) this.goToPage(Number(dot.dataset.page));
+          });
+
+          this.setUpMouseDrag();
+        }
+
+        disconnectedCallback() {
+          this.resizeObserver?.disconnect();
+        }
+
+        // Touch swiping is native; this adds the same click-and-drag swipe for mouse users.
+        setUpMouseDrag() {
+          let startX = 0;
+          let startScroll = 0;
+          let dragging = false;
+
+          this.grid.addEventListener('pointerdown', (event) => {
+            if (event.pointerType !== 'mouse' || event.button !== 0) return;
+            dragging = true;
+            startX = event.clientX;
+            startScroll = this.grid.scrollLeft;
+            this.grid.setPointerCapture(event.pointerId);
+            this.grid.classList.add('is-dragging');
+          });
+
+          this.grid.addEventListener('pointermove', (event) => {
+            if (!dragging) return;
+            this.grid.scrollLeft = startScroll - (event.clientX - startX);
+          });
+
+          const end = () => {
+            if (!dragging) return;
+            dragging = false;
+            this.grid.classList.remove('is-dragging');
+            this.scrollToCard(Math.round(Math.abs(this.grid.scrollLeft) / this.cardStep));
+          };
+          this.grid.addEventListener('pointerup', end);
+          this.grid.addEventListener('pointercancel', end);
+        }
+
+        get cardStep() {
+          if (this.cards.length < 2) return this.grid.clientWidth || 1;
+          return Math.abs(this.cards[1].offsetLeft - this.cards[0].offsetLeft) || 1;
+        }
+
+        get perView() {
+          return Math.max(1, Math.round((this.grid.clientWidth + this.gap) / this.cardStep));
+        }
+
+        get gap() {
+          return parseFloat(getComputedStyle(this.grid).columnGap) || 0;
+        }
+
+        scrollToCard(index) {
+          const card = this.cards[Math.min(Math.max(index, 0), this.cards.length - 1)];
+          if (!card) return;
+          const direction = getComputedStyle(this.grid).direction === 'rtl' ? -1 : 1;
+          this.grid.scrollTo({
+            left: direction * Math.abs(card.offsetLeft - this.cards[0].offsetLeft),
+            behavior: 'smooth',
+          });
+        }
+
+        goToPage(page) {
+          this.scrollToCard(page * this.perView);
+        }
+
+        update() {
+          const max = this.grid.scrollWidth - this.grid.clientWidth;
+          const pageCount = max > 1 ? Math.ceil(this.cards.length / this.perView) : 0;
+          this.dots.hidden = pageCount < 2;
+
+          if (pageCount !== this.pageCount) {
+            this.pageCount = pageCount;
+            this.dots.replaceChildren(
+              ...Array.from({ length: pageCount }, (_, page) => {
+                const dot = document.createElement('button');
+                dot.type = 'button';
+                dot.className = 'reviews__dot';
+                dot.dataset.page = page;
+                dot.setAttribute('aria-label', `Show reviews ${page + 1} of ${pageCount}`);
+                return dot;
+              })
+            );
+          }
+          if (pageCount < 2) return;
+
+          const scrolled = Math.abs(this.grid.scrollLeft);
+          const active =
+            scrolled >= max - 2
+              ? pageCount - 1
+              : Math.min(pageCount - 1, Math.round(scrolled / this.cardStep / this.perView));
+          [...this.dots.children].forEach((dot, page) => {
+            dot.setAttribute('aria-current', page === active ? 'true' : 'false');
+          });
+        }
+      }
+    );
+  }
+{% endjavascript %}
 
 {% stylesheet %}
   .reviews {
@@ -137,47 +260,133 @@
     opacity: 0.7;
   }
 
-  /*
-    Horizontal scroll-snap row instead of a fixed grid, so the rest of the
-    reviews are reachable by scrolling rather than needing pagination —
-    but sized to keep the same "3 across" look the static grid had rather
-    than bleeding to the viewport edge or showing a partial peek card.
-  */
+  .reviews__scroller {
+    --reviews-per-view: 2;
+    --reviews-gap: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    min-width: 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .reviews__scroller {
+      --reviews-per-view: 3;
+      --reviews-gap: 1.25rem;
+    }
+  }
+
+  @media screen and (min-width: 1600px) {
+    .reviews__scroller {
+      --reviews-per-view: 4;
+    }
+  }
+
+  /* Padding offset by negative margin keeps card borders and shadows from being clipped by overflow-x. */
   .reviews__grid {
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
+    scroll-padding-inline: 0.75rem;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    gap: var(--space-sm, 1rem);
+    gap: var(--reviews-gap);
+    padding: 0.75rem;
+    margin: -0.75rem;
+    cursor: grab;
+  }
+
+  .reviews__grid.is-dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+    user-select: none;
   }
 
   .reviews__grid::-webkit-scrollbar {
     display: none;
   }
 
+  .reviews__grid:focus-visible {
+    outline: 2px solid rgb(var(--color-foreground-rgb) / 0.5);
+    outline-offset: 4px;
+    border-radius: 16px;
+  }
+
   .review-card {
-    flex: 0 0 100%;
+    flex: 0 0
+      calc((100% - (var(--reviews-per-view) - 1) * var(--reviews-gap)) / var(--reviews-per-view));
+    min-width: 0;
     scroll-snap-align: start;
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
     margin: 0;
-    padding: var(--space-sm, 1rem);
-    background: var(--color-background, #fff);
-    box-shadow: var(--shadow-card, 0 2px 16px rgba(11, 31, 58, 0.08));
+    padding: 1rem;
+    background: #fff;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.08);
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgb(11 31 58 / 0.07);
   }
 
   @media screen and (min-width: 750px) {
     .review-card {
-      flex-basis: calc((100% - (2 * var(--space-sm, 1rem))) / 3);
+      gap: 0.75rem;
+      padding: 1.5rem;
+      border-radius: 16px;
     }
+  }
+
+  .reviews__dots {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .reviews__dots[hidden] {
+    display: none;
+  }
+
+  /* 24px hit area around an 8px dot. */
+  .reviews__dot {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+
+  .reviews__dot::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: rgb(var(--color-foreground-rgb) / 0.2);
+    transition: width 0.25s ease, background-color 0.25s ease;
+  }
+
+  .reviews__dot[aria-current='true']::before {
+    width: 20px;
+    background: rgb(var(--color-foreground-rgb) / 0.8);
+  }
+
+  .reviews__dot:focus-visible {
+    outline: 2px solid rgb(var(--color-foreground-rgb) / 0.5);
+    border-radius: 999px;
   }
 
   .review-card__text {
     margin: 0;
-    font-size: 0.92rem;
+    font-size: 0.82rem;
     line-height: 1.55;
+  }
+
+  @media screen and (min-width: 750px) {
+    .review-card__text {
+      font-size: 0.92rem;
+    }
   }
 
   .review-card__meta {
