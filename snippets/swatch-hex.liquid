@@ -1,0 +1,29 @@
+{%- doc -%}
+  Looks up a shop color option value (English, Arabic, or a known misspelled
+  variant) in a fixed name -> hex map and outputs the hex. Turning a name
+  into a CSS value directly (e.g. "Sky Blue" -> sky-blue) produces an invalid
+  color that browsers render fully transparent rather than falling back to
+  anything, which is why swatches for multi-word and Arabic color names were
+  showing as blank/cut-off circles. Falls back to a neutral grey hex for any
+  value not in the map, so an unmapped color still renders as a solid circle.
+
+  @param {string} value - The option value's display name, e.g. "Sky Blue".
+
+  @example
+  {% capture swatch_hex %}{% render 'swatch-hex', value: value %}{% endcapture %}
+{%- enddoc -%}
+
+{%- liquid
+  assign color_pairs = 'army green:#4b5320|army green tie-dye:#4b5320|beige:#e8dcc3|black:#111111|brown:#5b3a29|burgundy:#6d071a|cashmere beige:#e3d5b8|coffee:#4b3621|coffee tie-dye:#4b3621|dark olive:#3c341f|green:#3f7d20|grey:#8a8a8a|havana brown:#4e3524|indigo:#3b3179|indigo tie-dye:#3b3179|light cashmere beige:#efe4cc|mint:#9fe2bf|navy:#132257|off-white:#f2efe9|olive:#6b6f2a|orange/beige:#d98a4f|orange/navy:#d9772c|pink:#f2b8c6|rose:#d68fa0|salmon:#f79489|sky blue:#7ec8e3|wine:#5e1f34|أسود:#111111|اوف وايت:#f2efe9|بدى روز:#f2b8c6|بستاج:#8a8f5c|بيستاج:#8a8f5c|سماوي:#7ec8e3|سيمون:#f79489|كافية:#4b3621|كافيه:#4b3621|ليموني:#d7d34a|مينت:#9fe2bf' | split: '|'
+  assign lookup_key = value | strip | downcase
+  assign swatch_hex = ''
+  for pair in color_pairs
+    assign parts = pair | split: ':'
+    if parts[0] == lookup_key
+      assign swatch_hex = parts[1]
+    endif
+  endfor
+  if swatch_hex == blank
+    assign swatch_hex = '#c9c2b3'
+  endif
+-%}{{ swatch_hex }}

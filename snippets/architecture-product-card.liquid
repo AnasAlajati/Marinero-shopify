@@ -36,9 +36,11 @@
         {%- if option_name contains 'color' or option_name contains 'colour' -%}
           <ul class="architecture-card__swatches" aria-label="{{ option.name }}">
             {%- for value in option.values limit: 5 -%}
+              {%- capture swatch_hex %}{% render 'swatch-hex', value: value %}{% endcapture -%}
+              {%- assign swatch_hex = swatch_hex | strip -%}
               <li
                 class="architecture-card__swatch"
-                style="--swatch: {{ value | handleize }};"
+                style="--swatch: {{ swatch_hex }};"
                 title="{{ value }}"
               >
                 <span class="visually-hidden">{{ value }}</span>

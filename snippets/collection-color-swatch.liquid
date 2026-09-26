@@ -1,0 +1,29 @@
+{%- doc -%}
+  Renders the small color-swatch row shown on collection grid cards.
+  Color hex values come from the shared swatch-hex snippet (see that file
+  for why this is needed rather than deriving a CSS value directly from
+  the option value name).
+
+  @param {object} product - The product resource (closest.product) to read color options from.
+
+  @example
+  {% render 'collection-color-swatch', product: closest.product %}
+{%- enddoc -%}
+
+{%- for option in product.options_with_values -%}
+  {%- assign option_name_down = option.name | downcase -%}
+  {%- if option_name_down contains 'color' or option_name_down contains 'colour' -%}
+    <ul class="collection-swatches" aria-label="{{ option.name }}">
+      {%- for value in option.values limit: 5 -%}
+        {%- capture swatch_hex %}{% render 'swatch-hex', value: value %}{% endcapture -%}
+        {%- assign swatch_hex = swatch_hex | strip -%}
+        <li class="collection-swatches__item" style="--swatch: {{ swatch_hex }};" title="{{ value }}">
+          <span class="visually-hidden">{{ value }}</span>
+        </li>
+      {%- endfor -%}
+      {%- if option.values.size > 5 -%}
+        <li class="collection-swatches__more">+{{ option.values.size | minus: 5 }}</li>
+      {%- endif -%}
+    </ul>
+  {%- endif -%}
+{%- endfor -%}

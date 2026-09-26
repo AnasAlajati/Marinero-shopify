@@ -205,7 +205,7 @@
             "swatches_collection": {
               "type": "custom-liquid",
               "settings": {
-                "custom_liquid": "{%- for option in closest.product.options_with_values -%}{%- assign option_name_down = option.name | downcase -%}{%- if option_name_down contains 'color' or option_name_down contains 'colour' -%}<ul class=\"collection-swatches\" aria-label=\"{{ option.name }}\">{%- for value in option.values limit: 5 -%}<li class=\"collection-swatches__item\" style=\"--swatch: {{ value | handleize }};\" title=\"{{ value }}\"><span class=\"visually-hidden\">{{ value }}</span></li>{%- endfor -%}{%- if option.values.size > 5 -%}<li class=\"collection-swatches__more\">+{{ option.values.size | minus: 5 }}</li>{%- endif -%}</ul>{%- endif -%}{%- endfor -%}"
+                "custom_liquid": "{% render 'collection-color-swatch', product: closest.product %}"
               },
               "blocks": {}
             }

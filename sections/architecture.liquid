@@ -432,22 +432,19 @@
     margin: 0;
   }
 
-  /*
-    Swatch hit area follows Baymard's mobile guidance: minimum 7mm x 7mm with
-    2mm spacing, so they stay tappable rather than decorative.
-  */
+  /* Matches the swatch size used on collection grid cards (.collection-swatches__item) for consistency across the site. */
   .architecture-card__swatches {
     display: flex;
     flex-wrap: wrap;
-    gap: 2mm;
+    gap: 0.35rem;
     margin: 0.4rem 0 0;
     padding: 0;
     list-style: none;
   }
 
   .architecture-card__swatch {
-    width: 7mm;
-    height: 7mm;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     background: var(--swatch, #ccc);
     border: 1px solid color-mix(in srgb, var(--color-foreground, #2c2c2a) 25%, transparent);
@@ -455,7 +452,7 @@
 
   .architecture-card__swatch-more {
     font-size: 0.7rem;
-    line-height: 7mm;
+    line-height: 16px;
     opacity: 0.65;
   }
 
