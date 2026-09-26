@@ -72,12 +72,39 @@
         {% if enable_age_grouping %}
           {%- assign age_groups = '4-8 Years,10-14 Years,16-18 Years' | split: ',' -%}
           {%- for age_tag in age_groups -%}
+            {%- comment -%}
+              Mobile is a fixed 2-column grid, so a bucket with an odd number
+              of products leaves its last card alone in the final row with a
+              blank cell beside it. bucket_count is counted up front so the
+              render pass below can tell, while rendering that exact card,
+              whether it's the odd one out.
+            {%- endcomment -%}
+            {%- assign bucket_count = 0 -%}
+            {%- for product in collection.products -%}
+              {%- if product.tags contains age_tag -%}
+                {%- assign bucket_count = bucket_count | plus: 1 -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- assign bucket_mod = bucket_count | modulo: 2 -%}
+            {%- assign bucket_is_odd = false -%}
+            {%- if bucket_mod == 1 -%}
+              {%- assign bucket_is_odd = true -%}
+            {%- endif -%}
             {% capture bucket_items %}
+              {% assign running_index = 0 %}
               {% for product in collection.products %}
                 {% if product.tags contains age_tag %}
+                  {% assign running_index = running_index | plus: 1 %}
+                  {% assign is_last_in_bucket = false %}
+                  {% if bucket_is_odd and running_index == bucket_count %}
+                    {% assign is_last_in_bucket = true %}
+                  {% endif %}
                   <li
                     id="{{ section.id }}-{{ product.id }}"
-                    class="product-grid__item product-grid__item--{{ forloop.index0 }}"
+                    class="product-grid__item product-grid__item--{{ forloop.index0 }}{% if is_last_in_bucket %} product-grid__item--isolated-mobile{% endif %}"
+                    {% if is_last_in_bucket %}
+                      style="--isolated-gap-h: {{ section.settings.columns_gap_horizontal | at_most: 12 }}px;"
+                    {% endif %}
                     data-page="{{ paginate.current_page }}"
                     data-product-id="{{ product.id }}"
                     ref="cards[]"
@@ -115,12 +142,32 @@
           {%- endfor -%}
 
           {% comment %} Safety net: products with none of the three known age tags still show, rather than silently vanishing, so an untagged product is obvious instead of hidden. {% endcomment %}
+          {%- assign undefined_count = 0 -%}
+          {%- for product in collection.products -%}
+            {%- unless product.tags contains '4-8 Years' or product.tags contains '10-14 Years' or product.tags contains '16-18 Years' -%}
+              {%- assign undefined_count = undefined_count | plus: 1 -%}
+            {%- endunless -%}
+          {%- endfor -%}
+          {%- assign undefined_mod = undefined_count | modulo: 2 -%}
+          {%- assign undefined_is_odd = false -%}
+          {%- if undefined_mod == 1 -%}
+            {%- assign undefined_is_odd = true -%}
+          {%- endif -%}
           {% capture undefined_items %}
+            {% assign running_index = 0 %}
             {% for product in collection.products %}
               {% unless product.tags contains '4-8 Years' or product.tags contains '10-14 Years' or product.tags contains '16-18 Years' %}
+                {% assign running_index = running_index | plus: 1 %}
+                {% assign is_last_in_bucket = false %}
+                {% if undefined_is_odd and running_index == undefined_count %}
+                  {% assign is_last_in_bucket = true %}
+                {% endif %}
                 <li
                   id="{{ section.id }}-{{ product.id }}"
-                  class="product-grid__item product-grid__item--{{ forloop.index0 }}"
+                  class="product-grid__item product-grid__item--{{ forloop.index0 }}{% if is_last_in_bucket %} product-grid__item--isolated-mobile{% endif %}"
+                  {% if is_last_in_bucket %}
+                    style="--isolated-gap-h: {{ section.settings.columns_gap_horizontal | at_most: 12 }}px;"
+                  {% endif %}
                   data-page="{{ paginate.current_page }}"
                   data-product-id="{{ product.id }}"
                   ref="cards[]"
@@ -180,6 +227,25 @@
   }
 
   /*
+    Mobile is a fixed 2-column grid (see product-grid.liquid). When an age
+    bucket has an odd number of products, its last card is otherwise left
+    alone in the final row with an empty cell beside it. Spanning it across
+    both columns and capping its own width to one column's share (via the
+    --isolated-gap-h custom property set inline per card) centers it instead
+    of leaving that gap.
+  */
+  @media screen and (max-width: 749px) {
+    .product-grid__item--isolated-mobile {
+      grid-column: 1 / -1;
+    }
+
+    .product-grid__item--isolated-mobile > * {
+      max-width: calc((100% - var(--isolated-gap-h, 12px)) / 2);
+      margin-inline: auto;
+    }
+  }
+
+  /*
     Same legacy bug as the hero: a global rule (.section-wrapper {
     padding-block: 7rem }) stacks an extra 112px of top/bottom padding on
     top of every section's own configured padding. The collection heading
@@ -194,12 +260,11 @@
   }
 
   /*
-    Color swatches on collection grid cards. Uses the option value's own
-    name as a CSS color (e.g. "Navy" -> navy, a valid CSS named color)
-    rather than Shopify's native swatch system, which needs each color
-    value manually mapped to a real swatch in admin and isn't set up for
-    these products yet — this works immediately with no admin config,
-    same technique already used on the homepage product scroller.
+    Color swatches on collection grid cards. The --swatch hex value comes
+    from the shared swatch-hex snippet's name -> color lookup (see that
+    file), rather than Shopify's native swatch system, which needs each
+    color value manually mapped to a real swatch in admin and isn't set up
+    for these products yet.
   */
   .collection-swatches {
     display: flex;
