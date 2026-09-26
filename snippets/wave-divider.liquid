@@ -169,15 +169,7 @@
     bottom: 100%;
   }
 
-  /*
-    Extends a little past its own box on the side facing away from the curve
-    — not just inset:0 — as a safety margin against the wrapper/inner-box gap
-    described above (measured at ~12px in this theme's footer). Kept modest
-    on purpose: this cap sits in front of whatever precedes the section, and
-    if that's real content (product images, text) rather than open flat
-    background, an oversized margin would start covering it up. 48px gives a
-    4x buffer over the measured gap without reaching into unrelated content.
-  */
+  /* Bottom waves: extends 48px past the curve's far side as a safety margin against the wrapper/inner-box gap described above. */
   .wave-divider__reveal {
     position: absolute;
     left: 0;
@@ -185,9 +177,26 @@
     background: var(--color-background);
   }
 
+  /*
+    Top waves get no reveal cap: it's positioned in front of whatever
+    precedes the section, and when that's real content (e.g. the last row of
+    a product grid) it painted a white band over it. The navy sliver the cap
+    used to hide is instead prevented at its source by the section-background
+    offset below, so the area above the curve simply shows the page behind.
+  */
   .wave-divider--top .wave-divider__reveal {
-    top: -48px;
-    bottom: 0;
+    display: none;
+  }
+
+  /*
+    .section-wrapper sections pad their outer box, and .section-background
+    fills that whole box — including the padding band the top wave sits in,
+    which showed as a flat strip of this section's color above the curve.
+    Starting the background at the padding's end (where the wave ends) keeps
+    everything above the curve transparent.
+  */
+  .shopify-section.section-wrapper:has(> .section > .wave-divider--top) > .section-background {
+    top: var(--section-padding-block, 5rem);
   }
 
   .wave-divider--bottom .wave-divider__reveal {
