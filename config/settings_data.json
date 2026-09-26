@@ -114,7 +114,7 @@
       },
       "9515275478148931359": {
         "type": "shopify://apps/whatflow-official-api/blocks/whatsapp_chat_button/019df76e-923a-7ba7-8425-6782ad1655be",
-        "disabled": true,
+        "disabled": false,
         "settings": {
           "button_size": 56,
           "responsive_icon_size": true,
@@ -125,9 +125,9 @@
           "font_size": 14,
           "font_weight": "600",
           "shape": "pill",
-          "button_background": "#07B850",
-          "button_text_color": "#0B2615",
-          "icon_color": "#0B2615",
+          "button_background": "#07b850",
+          "button_text_color": "#0b2615",
+          "icon_color": "#0b2615",
           "shadow_style": "0 10px 24px rgba(2, 48, 20, 0.28)",
           "enable_pulse": true,
           "show_on_mobile": true,
