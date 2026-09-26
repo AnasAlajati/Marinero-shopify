@@ -105,7 +105,7 @@
           "settings": {
             "image": "shopify://shop_images/WhatsApp_Image_2026-09-26_at_12.28.04_PM.jpg",
             "placeholder_icon": "👧",
-            "label": "Girls",
+            "label": "",
             "cta": "Shop Now",
             "link": "shopify://collections/girls"
           }
