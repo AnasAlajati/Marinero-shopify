@@ -683,10 +683,19 @@
     overflow: hidden;
   }
 
+  /*
+    Product photos are tall; a square crop from the centre cut off the
+    model's head. A portrait box anchored near the top (same as the site's
+    product grids) keeps the head in frame at a readable size.
+  */
+  .cart-items__media-container {
+    aspect-ratio: 3 / 4;
+  }
+
   .cart-items__media-image {
     aspect-ratio: inherit;
     object-fit: cover;
-    object-position: center center;
+    object-position: center 12%;
     width: 100%;
     height: auto;
   }

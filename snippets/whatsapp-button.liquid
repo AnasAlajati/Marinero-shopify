@@ -42,7 +42,7 @@
       background: #25d366;
       color: #fff;
       box-shadow: 0 6px 20px rgb(0 0 0 / 0.2);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, inset-block-end 0.3s ease;
     }
 
     .whatsapp-button--right {
@@ -51,6 +51,11 @@
 
     .whatsapp-button--left {
       left: 20px;
+    }
+
+    /* Sits above the product page's sticky add-to-cart bar (74px tall, 20px off the bottom on desktop, flush on mobile) instead of covering its button. */
+    body:has(sticky-add-to-cart[data-variant-available='true'] .sticky-add-to-cart__bar[data-stuck='true']) .whatsapp-button {
+      inset-block-end: calc(110px + env(safe-area-inset-bottom, 0px));
     }
 
     .whatsapp-button:hover {
@@ -76,6 +81,10 @@
 
       .whatsapp-button--left {
         left: 16px;
+      }
+
+      body:has(sticky-add-to-cart[data-variant-available='true'] .sticky-add-to-cart__bar[data-stuck='true']) .whatsapp-button {
+        inset-block-end: calc(90px + env(safe-area-inset-bottom, 0px));
       }
     }
   </style>
