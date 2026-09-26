@@ -335,7 +335,14 @@
     gap: var(--padding-md, 16px);
   }
 
+  /*
+    position: relative makes this row the containing block for absolutely
+    positioned descendants (the swatches' .visually-hidden labels). Without
+    it they're positioned against the section instead, escape this row's
+    overflow clipping, and stretch the whole page sideways on mobile.
+  */
   .architecture-scroller--horizonta {
+    position: relative;
     overflow-x: auto;
     overflow-y: hidden;
     flex-direction: row;

@@ -136,6 +136,11 @@
     margin-top: var(--margin-6xl);
   }
 
+  /* Centered items shrink-wrap to content, so without a cap the suggestions row's full width pushes the page sideways on mobile. */
+  .cart-page--empty .cart-page__items {
+    max-width: 100%;
+  }
+
   .cart-page__more-blocks {
     width: 100%;
   }
