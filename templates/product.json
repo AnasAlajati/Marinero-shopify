@@ -395,12 +395,20 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "swatches_recommendations": {
+              "type": "custom-liquid",
+              "settings": {
+                "custom_liquid": "{% render 'collection-color-swatch', product: closest.product %}"
+              },
+              "blocks": {}
             }
           },
           "block_order": [
             "product_card_gallery_DNizbJ",
             "product_title_M7MJkb",
-            "price_gLWgA6"
+            "price_gLWgA6",
+            "swatches_recommendations"
           ]
         }
       },

@@ -31,7 +31,7 @@
 <product-recommendations
   id="product-recommendations-{{ section.id }}"
   class="product-recommendations"
-  data-url="{{ routes.product_recommendations_url }}?limit={{ section.settings.max_products }}"
+  data-url="{{ routes.product_recommendations_url }}?limit=10"
   data-section-id="{{ section.id }}"
   data-product-id="{{ section.settings.product.id | default: product.id }}"
   data-intent="{{ section.settings.recommendation_type }}"
@@ -81,9 +81,86 @@
         else
           assign products = recommendations.products
         endif
+
+        # Keep recommendations within the current product's audience (Boys /
+        # Girls). Many products carry the audience only in their title, not a
+        # tag, so both are checked. Fill order: Shopify's suggestions in the
+        # same age group, then the rest of the catalog in the same age group,
+        # then Shopify's other suggestions, then the rest of the catalog.
+        assign picked = ''
+        assign picked_count = 0
+        assign current = section.settings.product
+        if current != blank and recommendations.performed and section.settings.recommendation_type == 'related'
+          assign current_title = current.title | downcase
+          assign audience = ''
+          if current.tags contains 'Girls' or current_title contains 'girl'
+            assign audience = 'girls'
+          elsif current.tags contains 'Boys' or current_title contains 'boy'
+            assign audience = 'boys'
+          endif
+
+          assign age_tag = ''
+          for tag in current.tags
+            if tag == '4-8 Years' or tag == '10-14 Years' or tag == '16-18 Years'
+              assign age_tag = tag
+            endif
+          endfor
+
+          if audience != blank
+            assign seen = ',' | append: current.handle | append: ','
+            for pass in (1..4)
+              if pass == 1 or pass == 3
+                assign pool = recommendations.products
+              else
+                assign pool = collections.all.products
+              endif
+              for candidate in pool
+                if picked_count >= section.settings.max_products
+                  break
+                endif
+                assign key = ',' | append: candidate.handle | append: ','
+                if seen contains key
+                  continue
+                endif
+                assign candidate_title = candidate.title | downcase
+                assign candidate_audience = ''
+                if candidate.tags contains 'Girls' or candidate_title contains 'girl'
+                  assign candidate_audience = 'girls'
+                elsif candidate.tags contains 'Boys' or candidate_title contains 'boy'
+                  assign candidate_audience = 'boys'
+                endif
+                if candidate_audience != audience
+                  continue
+                endif
+                if pass <= 2
+                  if age_tag == blank
+                    continue
+                  endif
+                  unless candidate.tags contains age_tag
+                    continue
+                  endunless
+                endif
+                assign seen = seen | append: candidate.handle | append: ','
+                assign picked = picked | append: candidate.handle | append: ','
+                assign picked_count = picked_count | plus: 1
+              endfor
+            endfor
+          endif
+        endif
+
+        if picked_count > 0
+          assign products = picked | split: ','
+        endif
       %}
       {% capture list_items %}
-        {% for product in products limit: section.settings.max_products %}
+        {% for item in products limit: section.settings.max_products %}
+          {% liquid
+            if picked_count > 0
+              assign product = all_products[item]
+            else
+              assign product = item
+            endif
+          %}
           <div class="resource-list__item">
             {% content_for 'block', type: '_product-card', id: 'static-product-card', closest.product: product %}
           </div>
@@ -102,6 +179,11 @@
           assign has_recommendations = 'true'
         else
           assign has_recommendations = 'false'
+        endif
+
+        assign slide_count = recommendations.products.size | at_most: section.settings.max_products
+        if picked_count > 0
+          assign slide_count = picked_count
         endif
       %}
 
@@ -128,7 +210,7 @@
             {% render 'resource-list-carousel',
               ref: 'resourceListCarousel',
               slides: slides,
-              slide_count: recommendations.products.size,
+              slide_count: slide_count,
               settings: section.settings
             %}
         {% endcase %}
@@ -152,7 +234,7 @@
           {% render 'resource-list-carousel',
             ref: 'resourceListCarouselMobile',
             slides: slides,
-            slide_count: recommendations.products.size,
+            slide_count: slide_count,
             settings: section.settings
           %}
         </div>
