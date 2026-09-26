@@ -80,41 +80,12 @@
     "variant_button_border_width": 1,
     "variant_button_radius": 14,
     "variant_button_width": "equal-width-buttons",
+    "whatsapp_number": "+20 102 222 5861",
     "content_for_index": [],
     "blocks": {
-      "5685434155906765400": {
-        "type": "shopify://apps/whatflow-chat-automation/blocks/whatsapp_chat_button/ea957967-ac26-4ed9-a3f0-e749fab355ab",
-        "disabled": false,
-        "settings": {
-          "hide_on_desktop": false,
-          "hide_on_mobile": false,
-          "show_on_home": true,
-          "show_on_product": true,
-          "show_on_collection": true,
-          "show_on_cart": true,
-          "show_on_other": true,
-          "show_singleagent_popup": true,
-          "popup_store_name": "default",
-          "popup_header_color": "#242833",
-          "popup_background_color": "#f3f3f3",
-          "popup_text_box_color": "#ffffff",
-          "popup_text": "Hello! How can I help you today?",
-          "live_chat_prefill_message": "Tell me more about [PRODUCT_NAME]",
-          "whatsapp_button_bg_color": "#242833",
-          "show_button_text": false,
-          "button_text": "Chat Now",
-          "button_shape": "circle",
-          "button_size": "medium",
-          "logo_type": "whatsapp",
-          "button_background_color": "#25D366",
-          "button_position_horizontal": 97,
-          "button_position_vertical": 97,
-          "welcome_message": "Hi! I have a question"
-        }
-      },
       "9515275478148931359": {
         "type": "shopify://apps/whatflow-official-api/blocks/whatsapp_chat_button/019df76e-923a-7ba7-8425-6782ad1655be",
-        "disabled": false,
+        "disabled": true,
         "settings": {
           "button_size": 56,
           "responsive_icon_size": true,
@@ -138,6 +109,36 @@
           "greeting_text": "Need help choosing? Chat with us on WhatsApp.",
           "enable_greeting": true,
           "greeting_delay_ms": 1000
+        }
+      },
+      "5685434155906765400": {
+        "type": "shopify://apps/whatflow-chat-automation/blocks/whatsapp_chat_button/ea957967-ac26-4ed9-a3f0-e749fab355ab",
+        "disabled": true,
+        "settings": {
+          "hide_on_desktop": false,
+          "hide_on_mobile": false,
+          "show_on_home": true,
+          "show_on_product": true,
+          "show_on_collection": true,
+          "show_on_cart": true,
+          "show_on_other": true,
+          "show_singleagent_popup": true,
+          "popup_store_name": "default",
+          "popup_header_color": "#242833",
+          "popup_background_color": "#f3f3f3",
+          "popup_text_box_color": "#ffffff",
+          "popup_text": "Hello! How can I help you today?",
+          "live_chat_prefill_message": "Tell me more about [PRODUCT_NAME]",
+          "whatsapp_button_bg_color": "#242833",
+          "show_button_text": false,
+          "button_text": "Chat Now",
+          "button_shape": "circle",
+          "button_size": "medium",
+          "logo_type": "whatsapp",
+          "button_background_color": "#25d366",
+          "button_position_horizontal": 97,
+          "button_position_vertical": 97,
+          "welcome_message": "Hi! I have a question"
         }
       }
     },
