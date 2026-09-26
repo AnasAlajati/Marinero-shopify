@@ -2313,5 +2313,38 @@
         "default": "equal-width-buttons"
       }
     ]
+  },
+  {
+    "name": "WhatsApp button",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "whatsapp_enabled",
+        "label": "Show WhatsApp button",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "whatsapp_number",
+        "label": "WhatsApp number",
+        "info": "Include the country code, e.g. +20 100 123 4567. The button stays hidden until a number is entered."
+      },
+      {
+        "type": "text",
+        "id": "whatsapp_message",
+        "label": "Pre-filled message",
+        "default": "Hi! I have a question"
+      },
+      {
+        "type": "select",
+        "id": "whatsapp_position",
+        "label": "Position",
+        "options": [
+          { "value": "right", "label": "Bottom right" },
+          { "value": "left", "label": "Bottom left" }
+        ],
+        "default": "right"
+      }
+    ]
   }
 ]
