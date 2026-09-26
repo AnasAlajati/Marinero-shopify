@@ -358,8 +358,8 @@
           "settings": {
             "age": "4-5 Years",
             "height": "98-112",
-            "chest": "51-57",
-            "waist": "48-54"
+            "chest": "55-59",
+            "waist": "53-57"
           }
         },
         "r2": {
@@ -367,8 +367,8 @@
           "settings": {
             "age": "6-7 Years",
             "height": "113-124",
-            "chest": "58-61",
-            "waist": "55-57"
+            "chest": "60-64.5",
+            "waist": "58-60"
           }
         },
         "r3": {
@@ -376,8 +376,8 @@
           "settings": {
             "age": "8-9 Years",
             "height": "125-134",
-            "chest": "62-65",
-            "waist": "58-60"
+            "chest": "65-69.5",
+            "waist": "61-63"
           }
         },
         "r4": {
@@ -385,8 +385,8 @@
           "settings": {
             "age": "10-11 Years",
             "height": "135-146",
-            "chest": "66-69",
-            "waist": "61-64"
+            "chest": "70-74.5",
+            "waist": "64-67"
           }
         },
         "r5": {
@@ -394,8 +394,8 @@
           "settings": {
             "age": "12-13 Years",
             "height": "147-158",
-            "chest": "70-74",
-            "waist": "65-68"
+            "chest": "75-80",
+            "waist": "68-71"
           }
         },
         "r6": {
@@ -403,8 +403,8 @@
           "settings": {
             "age": "14-15 Years",
             "height": "159-168",
-            "chest": "75-80",
-            "waist": "69-71"
+            "chest": "81-85",
+            "waist": "72-74"
           }
         },
         "r7": {
@@ -412,8 +412,8 @@
           "settings": {
             "age": "16-17 Years",
             "height": "169-174",
-            "chest": "81-86",
-            "waist": "72-74"
+            "chest": "86-90",
+            "waist": "75-78"
           }
         },
         "r8": {
@@ -421,8 +421,8 @@
           "settings": {
             "age": "18-19 Years",
             "height": "175-186",
-            "chest": "87-95",
-            "waist": "75-80"
+            "chest": "91-97",
+            "waist": "77-84"
           }
         }
       },
