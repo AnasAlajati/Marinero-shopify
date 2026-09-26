@@ -39,7 +39,6 @@
     },
     "age_collections_1": {
       "type": "age-collections",
-      "disabled": true,
       "blocks": {
         "t1": {
           "type": "tile",
@@ -77,6 +76,7 @@
         "t2",
         "t3"
       ],
+      "disabled": true,
       "settings": {
         "heading": "Shop by age",
         "subheading": "MOCK COPY — replace. Every piece sized to fit, with height guidance on each product.",
@@ -103,6 +103,7 @@
         "girls": {
           "type": "category",
           "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-09-26_at_12.28.04_PM.jpg",
             "placeholder_icon": "👧",
             "label": "Girls",
             "cta": "Shop Now",
