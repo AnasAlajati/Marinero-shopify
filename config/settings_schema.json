@@ -7,7 +7,14 @@
         "id": "marinero_delivery_price",
         "label": "Delivery price (EGP)",
         "default": 118,
-        "info": "Displayed per order on products and in the cart. Keep this amount aligned with your Shopify shipping rates; this setting does not change checkout charges."
+        "info": "Used to calculate the estimated total including delivery in the cart. Keep this amount aligned with your Shopify shipping rates; this setting does not change checkout charges."
+      },
+      {
+        "type": "number",
+        "id": "marinero_free_shipping_threshold",
+        "label": "Free shipping threshold (EGP)",
+        "default": 2500,
+        "info": "Displayed as a free shipping note on products and in the cart. This does not configure a free shipping rate in Shopify."
       }
     ]
   },

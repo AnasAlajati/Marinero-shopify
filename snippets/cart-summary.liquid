@@ -224,6 +224,12 @@
     if cart.requires_shipping and cart.item_count > 0 and cart.currency.iso_code == 'EGP'
       assign show_delivery_total = true
       assign delivery_price = settings.marinero_delivery_price | default: 118 | times: 100 | round
+      assign free_shipping_threshold = settings.marinero_free_shipping_threshold | default: 2500 | times: 100 | round
+      assign free_shipping_remaining = free_shipping_threshold | minus: cart.total_price
+      if free_shipping_remaining <= 0
+        assign delivery_price = 0
+      endif
+      assign free_shipping_progress = cart.total_price | times: 100 | divided_by: free_shipping_threshold | at_most: 100
       assign total_with_delivery = cart.total_price | plus: delivery_price
     endif
     if settings.currency_code_enabled_cart_total
@@ -251,12 +257,28 @@
       </text-component>
     </span>
     {% if show_delivery_total %}
+      <div class="cart-totals__item marinero-free-shipping" role="status" aria-live="polite">
+        <p class="marinero-free-shipping__msg">
+          {% if free_shipping_remaining > 0 %}
+            Add <strong>{{ free_shipping_remaining | money_with_currency }}</strong> more for free shipping
+          {% else %}
+            <strong>You've unlocked free shipping!</strong>
+          {% endif %}
+        </p>
+        <div class="marinero-free-shipping__track" aria-hidden="true">
+          <div class="marinero-free-shipping__fill" style="width: {{ free_shipping_progress }}%;"></div>
+        </div>
+      </div>
       <div class="cart-totals__item marinero-cart-delivery">
         <span class="marinero-cart-delivery__label">
           {% render 'icon-or-image', icon: 'truck', width: 22, class_name: 'marinero-cart-delivery__icon' %}
           Delivery
         </span>
-        <span>+ {{ delivery_price | money_with_currency }}</span>
+        {% if delivery_price == 0 %}
+          <strong>Free</strong>
+        {% else %}
+          <span>+ {{ delivery_price | money_with_currency }}</span>
+        {% endif %}
       </div>
       <div class="cart-totals__item marinero-cart-grand-total" role="status" aria-live="polite" aria-atomic="true">
         <span>{% if cart.taxes_included %}Total including delivery{% else %}Estimated total including delivery{% endif %}</span>
@@ -334,6 +356,24 @@
     gap: 10px;
   }
   .marinero-cart-delivery__icon { flex-shrink: 0; }
+  .cart-totals__item.marinero-free-shipping {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .marinero-free-shipping__msg { margin: 0; font-size: 0.875rem; line-height: 1.4; }
+  .marinero-free-shipping__track {
+    height: 6px;
+    border-radius: 999px;
+    background: rgb(28 59 91 / 0.12);
+    overflow: hidden;
+  }
+  .marinero-free-shipping__fill {
+    height: 100%;
+    border-radius: inherit;
+    background: #1c3b5b;
+    transition: width 0.3s ease;
+  }
   .marinero-cart-grand-total {
     gap: 16px;
     flex-wrap: wrap;
