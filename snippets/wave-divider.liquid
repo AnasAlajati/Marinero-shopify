@@ -92,18 +92,19 @@
     {%- endcomment -%}
     {%- case wave_shape -%}
       {%- when 'layered' -%}
-        <path
-          class="wave-divider__fill-back"
-          d="M0,20 C240,20 240,80 480,80 C720,80 720,20 960,20 C1200,20 1200,80 1440,80 L1440,100 L0,100 Z"
-        />
-        <path
-          class="wave-divider__fill"
-          d="M0,0 C360,0 360,100 720,100 C1080,100 1080,0 1440,0 L1440,100 L0,100 Z"
-        />
-        <path
-          class="wave-divider__line"
-          d="M0,0 C360,0 360,100 720,100 C1080,100 1080,0 1440,0"
-        />
+        {%- comment -%}
+          Animated: each layer is drawn as repeating copies of one full cycle
+          (front = 1440 wide, back = 960 wide) inside a <g> that slides by
+          exactly one cycle and loops, so the restart is invisible. The outer
+          <svg> clips whatever sticks out.
+        {%- endcomment -%}
+        <g class="wave-divider__drift wave-divider__drift--back">
+          <path class="wave-divider__fill-back" d="M0,20 C240,20 240,80 480,80 C720,80 720,20 960,20 C1200,20 1200,80 1440,80 C1680,80 1680,20 1920,20 C2160,20 2160,80 2400,80 C2640,80 2640,20 2880,20 L2880,101 L0,101 Z" />
+        </g>
+        <g class="wave-divider__drift wave-divider__drift--front">
+          <path class="wave-divider__fill" d="M0,0 C360,0 360,100 720,100 C1080,100 1080,0 1440,0 C1800,0 1800,100 2160,100 C2520,100 2520,0 2880,0 L2880,101 L0,101 Z" />
+          <path class="wave-divider__line" d="M0,0 C360,0 360,100 720,100 C1080,100 1080,0 1440,0 C1800,0 1800,100 2160,100 C2520,100 2520,0 2880,0" />
+        </g>
       {%- else -%}
         <path
           class="wave-divider__fill"
@@ -227,6 +228,34 @@
     stroke-width: 3;
     /* Keeps the stroke a consistent weight despite preserveAspectRatio="none" stretching the two axes unevenly. */
     vector-effect: non-scaling-stroke;
+  }
+
+  /*
+    Gentle footer drift: slow, small, endless sideways slide. Front layer
+    moves left, back layer drifts the opposite way at a different pace so the
+    two slowly shift against each other. Disabled for reduced-motion users.
+  */
+  @keyframes wave-drift-front {
+    to { transform: translateX(-1440px); }
+  }
+
+  @keyframes wave-drift-back {
+    from { transform: translateX(-960px); }
+    to { transform: translateX(0); }
+  }
+
+  .wave-divider__drift--front {
+    animation: wave-drift-front 45s linear infinite;
+  }
+
+  .wave-divider__drift--back {
+    animation: wave-drift-back 60s linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wave-divider__drift {
+      animation: none;
+    }
   }
 
   @media screen and (max-width: 749px) {
