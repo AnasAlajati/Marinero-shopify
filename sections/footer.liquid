@@ -50,21 +50,6 @@
   </div>
 
   <div class="marinero-footer-bottom">
-    {%- liquid
-      assign footer_logo = settings.logo_inverse
-      if footer_logo == blank
-        assign footer_logo = settings.logo
-      endif
-    -%}
-    {%- if footer_logo != blank -%}
-      <span class="marinero-footer-logo">
-        {% render 'image', image: footer_logo, height: 36, alt_text_fallback: shop.name %}
-      </span>
-    {%- else -%}
-      {%- comment -%} Falls back to the text wordmark if no logo is set in Theme settings > Logo. {%- endcomment -%}
-      <span class="marinero-footer-anchor" aria-hidden="true">⚓</span>
-      <span class="marinero-footer-wordmark">MARINERO</span>
-    {%- endif -%}
     <span class="marinero-footer-tagline">Style for the whole family.</span>
     <span class="marinero-footer-copy">&copy; {{ 'now' | date: '%Y' }} Marinero. All rights reserved.</span>
   </div>
