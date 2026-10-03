@@ -235,6 +235,16 @@
     of leaving that gap.
   */
   @media screen and (max-width: 749px) {
+    /* Breathing room on small screens: extra side margin, wider column gap, taller row gap. */
+    .product-grid-container {
+      padding-inline: 0.5rem;
+    }
+
+    .product-grid-container .product-grid {
+      column-gap: 1.25rem !important;
+      row-gap: 2.25rem !important;
+    }
+
     .product-grid__item--isolated-mobile {
       grid-column: 1 / -1;
     }

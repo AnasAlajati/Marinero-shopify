@@ -166,7 +166,7 @@
   }
 
   .wave-divider--top {
-    bottom: 100%;
+    bottom: calc(100% - 1px);
   }
 
   /* Bottom waves: extends 48px past the curve's far side as a safety margin against the wrapper/inner-box gap described above. */
@@ -196,7 +196,7 @@
     everything above the curve transparent.
   */
   .shopify-section.section-wrapper:has(> .section > .wave-divider--top) > .section-background {
-    top: var(--section-padding-block, 5rem);
+    top: calc(var(--section-padding-block, 5rem) - 1px);
   }
 
   .wave-divider--bottom .wave-divider__reveal {
