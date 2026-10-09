@@ -1,0 +1,125 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "accessibility": {
+    "account": "حساب",
+    "active_filters": "عوامل التصفية النشطة:",
+    "cart": "عربة التسوق",
+    "cart_count": "إجمالي العناصر في السلة",
+    "close_dialog": "إغلاق مربع الحوار",
+    "country_region": "البلد/المنطقة",
+    "country_results_count": "{{ count }} نتائج",
+    "product_details": "تفاصيل المنتج",
+    "show_product_details": "عرض تفاصيل المنتج لـ {{ product_name }}",
+    "decrease_quantity": "تقليل الكمية",
+    "discount": "تطبيق رمز الخصم",
+    "discount_menu": "رموز الخصم",
+    "discount_applied": "رمز الخصم المطبق: {{ code }}",
+    "featured_product": "منتج مميز",
+    "filters": "عوامل التصفية",
+    "filter_count": {
+      "one": "{{ count }} فلتر مطبق",
+      "other": "{{ count }} عوامل تصفية مطبقة"
+    },
+    "home_logo_alt": "{{ store_name }} - الرئيسية",
+    "increase_quantity": "زيادة الكمية",
+    "inventory_status": "حالة المخزون",
+    "localization_region_and_language": "محدد المنطقة واللغة",
+    "menu": "القائمة",
+    "header_navigation_label": "أساسي",
+    "new_window": "يفتح في نافذة جديدة.",
+    "quantity": "الكمية",
+    "pause_video": "إيقاف الفيديو مؤقتًا",
+    "play_model": "تشغيل النموذج ثلاثي الأبعاد",
+    "play_video": "تشغيل الفيديو",
+    "loading_product_recommendations": "جارٍ تحميل توصيات المنتجات",
+    "rating": "تقييم هذا المنتج هو {{ rating }} من 5",
+    "remove_item": "إزالة {{ title}}",
+    "remove": "إزالة",
+    "reset_search": "إعادة ضبط البحث",
+    "scroll_to": "مرر إلى {{ title }}",
+    "search_results_count": "{{ count }} من نتائج البحث لـ \"{{ query }}\"",
+    "search_results_no_results": "لم يتم العثور على نتائج لـ \"{{ query }}\"",
+    "search_suggestions_available": "اقتراحات البحث المتاحة لـ \"{{ query }}\"",
+    "skip_to_product_info": "انتقل إلى معلومات المنتج",
+    "skip_to_results_list": "انتقل إلى قائمة النتائج",
+    "skip_to_text": "تخطَّ إلى المحتوى",
+    "slide_status": "شريحة {{ index }} من {{ length }}",
+    "slideshow": "عرض شرائح",
+    "slideshow_next": "الشريحة التالية",
+    "slideshow_pause": "إيقاف عرض الشرائح مؤقتاً",
+    "slideshow_play": "تشغيل عرض الشرائح",
+    "slideshow_previous": "الشريحة السابقة",
+    "unit_price": "سعر الوحدة",
+    "find_country": "ابحث عن دولة",
+    "view_pricing_info": "عرض معلومات الأسعار",
+    "price_filter_low": "سعر منخفض",
+    "price_filter_high": "سعر مرتفع"
+  },
+  "actions": {
+    "add": "إضافة",
+    "add_to_cart": "أضف إلى السلة",
+    "added": "تمت الإضافة",
+    "apply": "قدّم طلباً",
+    "back": "رجوع",
+    "back_to": "العودة إلى {{ title }}",
+    "choose": "اختر",
+    "clear": "واضح",
+    "clear_all": "مسح الكل",
+    "close": "إغلاق",
+    "open": "فتح",
+    "continue_shopping": "مواصلة التسوق",
+    "enter_password": "أدخل كلمة المرور",
+    "log_in_html": "هل لديك حساب؟ <a href=\"&lt;span%20class='notranslate'&gt;{{%20link%20}}&lt;/span&gt;\">سجّل الدخول</a> لإتمام عملية الدفع بشكل أسرع.",
+    "log_in": "تسجيل الدخول",
+    "log_out": "تسجيل الخروج",
+    "open_image_in_full_screen": "فتح الصورة في وضع ملء الشاشة",
+    "remove": "إزالة",
+    "remove_discount": "إزالة الخصم {{ code }}",
+    "show_all_options": "إظهار كل الخيارات",
+    "see_items": {
+      "one": "انظر {{ count }} عنصر",
+      "other": "شاهد {{ count }} عناصر"
+    },
+    "show_filters": "تصفية",
+    "show_less": "عرض أقل",
+    "show_more": "عرض المزيد",
+    "sign_in_options": "خيارات تسجيل دخول أخرى",
+    "view_in_your_space": "اعرضه في مساحتك",
+    "view_all": "عرض الكل",
+    "more": "المزيد",
+    "zoom": "زوم",
+    "zoom_media": "تكبير الوسائط {{ index }}",
+    "close_dialog": "إغلاق مربع الحوار",
+    "reset": "إعادة تعيين",
+    "enter_using_password": "الدخول باستخدام كلمة المرور",
+    "sign_up": "سجل الآن",
+    "submit": "إرسال",
+    "view_store_information": "عرض معلومات المتجر",
+    "sort": "فرز"
+  },
+  "blocks": {
+    "contact_form": {
+      "name": "الاسم",
+      "email": "بريد إلكتروني",
+      "phone": "هاتف",
+      "comment": "تعليق",
+      "post_success": "شكراً لتواصلكم معنا. سنرد عليكم في أقرب وقت ممكن.",
+      "error_heading": "يرجى إجراء التعديل التالي:"
+    },
+    "email_signup": {
+      "label": "بريد إلكتروني",
+      "placeholder": "عنوان البريد الإلكتروني",
+      "success": "شكراً لاشتراكك!"
+    },
+    "filter": "تصفية",
+    "load_video": "تحميل الفيديو: {{ description }}"
+  }
+}
