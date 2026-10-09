@@ -48,7 +48,7 @@
     when 'landscape'
       assign ratio = '16 / 9'
     when 'portrait'
-      assign ratio = '4 / 5'
+      assign ratio = '2 / 3'
     when 'square'
       assign ratio = '1'
     when 'adapt'
@@ -212,6 +212,10 @@
   .card-gallery__placeholder svg {
     height: 100%;
     width: 100%;
+  }
+
+  .card-gallery .product-media-container.media-fit {
+    --product-media-fit: contain;
   }
 
   .card-gallery svg {
