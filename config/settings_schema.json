@@ -15,6 +15,30 @@
         "label": "Free shipping threshold (EGP)",
         "default": 2500,
         "info": "Displayed as a free shipping note on products and in the cart. This does not configure a free shipping rate in Shopify."
+      },
+      {
+        "type": "header",
+        "content": "Product page reassurance"
+      },
+      {
+        "type": "checkbox",
+        "id": "marinero_show_cod",
+        "label": "Show \"Cash on delivery\"",
+        "info": "Only enable if Cash on Delivery is turned on in Settings > Payments.",
+        "default": true
+      },
+      {
+        "type": "number",
+        "id": "marinero_exchange_days",
+        "label": "Exchange window (days)",
+        "info": "Leave empty to hide.",
+        "default": 14
+      },
+      {
+        "type": "checkbox",
+        "id": "marinero_show_next_day_dispatch",
+        "label": "Show \"Ships next business day\"",
+        "default": true
       }
     ]
   },

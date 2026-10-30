@@ -1,24 +1,16 @@
 {%- liquid
-  assign wa_number = settings.whatsapp_number | remove: '+' | remove: ' ' | remove: '-' | remove: '(' | remove: ')' | remove: '.'
-  assign wa_prefix = wa_number | slice: 0, 2
-  if wa_prefix == '00'
-    assign wa_number = wa_number | remove_first: '00'
-  endif
-  # Local Egyptian numbers (e.g. 01001234567) get the +20 country code.
-  assign wa_prefix = wa_number | slice: 0
-  if wa_prefix == '0' and wa_number.size == 11
-    assign wa_number = wa_number | remove_first: '0' | prepend: '20'
-  endif
-
   assign wa_message = settings.whatsapp_message
   if product
     assign wa_message = wa_message | append: ' — ' | append: product.title | append: ' ' | append: shop.url | append: product.url
   endif
 -%}
 
-{%- if settings.whatsapp_enabled and wa_number != blank -%}
+{%- capture wa_url -%}{% render 'whatsapp-url', message: wa_message %}{%- endcapture -%}
+{%- assign wa_url = wa_url | strip -%}
+
+{%- if wa_url != blank -%}
   <a
-    href="https://wa.me/{{ wa_number }}{% if wa_message != blank %}?text={{ wa_message | url_encode | replace: '+', '%20' }}{% endif %}"
+    href="{{ wa_url }}"
     class="whatsapp-button whatsapp-button--{{ settings.whatsapp_position }}"
     target="_blank"
     rel="noopener"

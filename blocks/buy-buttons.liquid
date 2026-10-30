@@ -235,6 +235,7 @@
           </span>
         {%- endif -%}
       {%- endform -%}
+      {% render 'marinero-trust-points' %}
       {% if product.selected_or_first_available_variant.requires_shipping %}
         {% render 'marinero-delivery-note' %}
       {% endif %}

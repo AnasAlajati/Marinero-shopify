@@ -198,7 +198,8 @@
                 "col_2": "Age",
                 "col_3": "Height (cm)",
                 "size_rows": "4 | 4-5 Years | 98-112\n6 | 6-7 Years | 113-124\n8 | 8-9 Years | 125-134\n10 | 10-11 Years | 135-146\n12 | 12-13 Years | 147-158\n14 | 14-15 Years | 159-168\n16 | 16-17 Years | 169-174\n18 | 18-19 Years | 175-186",
-                "note": "Not sure which size? Message us with your child's height and we'll recommend one."
+                "note": "Not sure which size? Message us with your child's height and we'll recommend one.",
+                "show_whatsapp_help": true
               },
               "blocks": {}
             },

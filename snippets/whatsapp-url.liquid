@@ -1,0 +1,23 @@
+{%- doc -%}
+  Outputs a wa.me link to the store's WhatsApp number (Theme settings > WhatsApp button),
+  or nothing when WhatsApp is disabled or no number is set.
+
+  @param {string} [message] - Pre-filled message text
+{%- enddoc -%}
+
+{%- liquid
+  assign wa_number = settings.whatsapp_number | remove: '+' | remove: ' ' | remove: '-' | remove: '(' | remove: ')' | remove: '.'
+  assign wa_prefix = wa_number | slice: 0, 2
+  if wa_prefix == '00'
+    assign wa_number = wa_number | remove_first: '00'
+  endif
+  # Local Egyptian numbers (e.g. 01001234567) get the +20 country code.
+  assign wa_prefix = wa_number | slice: 0
+  if wa_prefix == '0' and wa_number.size == 11
+    assign wa_number = wa_number | remove_first: '0' | prepend: '20'
+  endif
+-%}
+
+{%- if settings.whatsapp_enabled and wa_number != blank -%}
+  https://wa.me/{{ wa_number }}{% if message != blank %}?text={{ message | url_encode | replace: '+', '%20' }}{% endif %}
+{%- endif -%}

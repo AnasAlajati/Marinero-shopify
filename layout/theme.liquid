@@ -38,6 +38,8 @@
       {%- render 'theme-editor' -%}
     {% endif %}
 
+    {%- comment -%} EasySell COD Form toggles its button animation on this interval (ms, default 1100); a pulse plays every other toggle. {%- endcomment -%}
+    <script>window.ES_ANIMATION_INTERVAL = 2500;</script>
     {{ content_for_header }}
     {% # theme-check-enable RemoteAsset %}
   </head>
