@@ -1,0 +1,17 @@
+{%- doc -%}
+  Judge.me crops product photos into squares (e.g. in the "How would you rate this product?"
+  popup), cutting off the child's head and feet. Shows the full photo instead. Only targets
+  store product images, so reviewer avatars and uploaded review photos keep Judge.me's styling.
+{%- enddoc -%}
+
+<style>
+  [class*='jdgm'] img[src*='/cdn/shop/'],
+  [class*='jdgm'] img[src*='cdn.shopify.com/s/files/'] {
+    object-fit: contain !important;
+  }
+
+  /* The product page already spaces sections; drop Judge.me's extra margin above the reviews. */
+  .jdgm-rev-widg {
+    margin-top: 0;
+  }
+</style>
