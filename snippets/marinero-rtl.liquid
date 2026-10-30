@@ -1,0 +1,54 @@
+{%- doc -%}
+  Right-to-left (Arabic) overrides. Sliders and marquees keep a left-to-right
+  track so their translateX animations still move correctly; only the text
+  inside them flows right-to-left.
+{%- enddoc -%}
+
+{% stylesheet %}
+  /* Stop the page scrolling sideways past the left edge */
+  html[dir='rtl'],
+  [dir='rtl'] body {
+    overflow-x: clip;
+  }
+
+  [dir='rtl'] .m-hero-slider__track,
+  [dir='rtl'] .m-topbar__track,
+  [dir='rtl'] .trust-bar__track {
+    direction: ltr;
+  }
+
+  [dir='rtl'] .m-hero-slider__slide,
+  [dir='rtl'] .m-topbar__text,
+  [dir='rtl'] .trust-bar__item {
+    direction: rtl;
+  }
+
+  /* Flip the dark text-side gradient to the right edge */
+  [dir='rtl'] .m-hero-slider__overlay {
+    background:
+      linear-gradient(0deg, var(--color-background) 0%, transparent 120px),
+      linear-gradient(
+        260deg,
+        rgba(11, 31, 58, var(--overlay-opacity, 0.45)) 0%,
+        rgba(11, 31, 58, calc(var(--overlay-opacity, 0.45) * 0.45)) 42%,
+        transparent 70%
+      );
+  }
+
+  [dir='rtl'] .m-hero-slider__cta:hover .m-hero-slider__cta-arrow {
+    transform: translateX(-4px);
+  }
+
+  /* Letter-spacing breaks Arabic letter joining */
+  [dir='rtl'] * {
+    letter-spacing: normal !important;
+  }
+
+  /* Sizes like "10-11 Years" and prices stay left-to-right */
+  [dir='rtl'] variant-picker label,
+  [dir='rtl'] .variant-option__button-label__text,
+  [dir='rtl'] .price,
+  [dir='rtl'] .cart-totals__total-value {
+    unicode-bidi: isolate;
+  }
+{% endstylesheet %}

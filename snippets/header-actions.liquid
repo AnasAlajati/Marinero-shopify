@@ -63,6 +63,30 @@
   {% endif %}
   {{- block.shopify_attributes -}}
 >
+  {%- if localization.available_languages.size > 1 -%}
+    {%- liquid
+      assign current_path = request.path
+      if request.locale.root_url != '/'
+        assign current_path = current_path | remove_first: request.locale.root_url
+      endif
+      if current_path == blank
+        assign current_path = '/'
+      endif
+    -%}
+    {%- for language in localization.available_languages -%}
+      {%- unless language.iso_code == localization.language.iso_code -%}
+        {%- if language.root_url == '/' -%}
+          {%- assign language_url = current_path -%}
+        {%- else -%}
+          {%- assign language_url = language.root_url | append: current_path -%}
+        {%- endif -%}
+        <a href="{{ language_url }}" class="marinero-lang-toggle__button" hreflang="{{ language.iso_code }}" lang="{{ language.iso_code }}" aria-label="{{ language.endonym_name }}">
+          {%- if language.iso_code == 'ar' -%}العربية{%- else -%}English{%- endif -%}
+        </a>
+      {%- endunless -%}
+    {%- endfor -%}
+  {%- endif -%}
+
   {% if shop.customer_accounts_enabled %}
     {% liquid
       assign account_actions_style = ''
@@ -266,6 +290,23 @@
 ></script>
 
 {% stylesheet %}
+  .marinero-lang-toggle__button {
+    align-self: center;
+    color: inherit;
+    font-family: var(--font-body--family);
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1;
+    padding: 0.25rem 0.5rem;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .marinero-lang-toggle__button:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
   .header {
     --account-offset-top: calc(
       var(--header-group-height) + (var(--header-height) * var(--transparent-header-offset-boolean))

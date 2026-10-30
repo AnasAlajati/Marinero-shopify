@@ -73,7 +73,7 @@
                 data-view-transition-type="slide"
               >
                 <span class="m-hero-slider__cta-text">{{ block.settings.cta_label }}</span>
-                <span class="m-hero-slider__cta-arrow" aria-hidden="true">→</span>
+                <span class="m-hero-slider__cta-arrow" aria-hidden="true">{% if request.locale.iso_code == 'ar' %}←{% else %}→{% endif %}</span>
               </a>
             {%- endif -%}
           </div>

@@ -4,6 +4,7 @@
     class="shopify-design-mode"
   {% endif %}
   lang="{{ request.locale.iso_code }}"
+  dir="{% if request.locale.iso_code == 'ar' %}rtl{% else %}ltr{% endif %}"
 >
   <head>
     {%- if settings.favicon != blank -%}
@@ -30,6 +31,7 @@
     {%- render 'fonts' -%}
     {%- render 'scripts' -%}
     {%- render 'theme-styles-variables' -%}
+    {%- if request.locale.iso_code == 'ar' -%}{%- render 'marinero-rtl' -%}{%- endif -%}
     {%- render 'color-schemes' -%}
 
     {% if request.design_mode %}
