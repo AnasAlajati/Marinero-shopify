@@ -30,21 +30,33 @@
           aria-roledescription="slide"
           aria-label="{{ forloop.index }} / {{ slide_count }}"
           role="group"
+          style="--m-hero-mobile-x: {{ block.settings.mobile_position_x }}%;{% if block.settings.image_mobile != blank %} --m-hero-mobile-ratio: {{ block.settings.image_mobile.aspect_ratio }};{% endif %}"
           {{ block.shopify_attributes }}
         >
           {%- comment -%} Background image {%- endcomment -%}
           {%- if block.settings.image != blank -%}
-            {{
-              block.settings.image
-              | image_url: width: 2400
-              | image_tag:
-                widths: '750, 1100, 1500, 1800, 2400',
-                sizes: '100vw',
-                alt: block.settings.image.alt | default: block.settings.heading,
-                class: 'm-hero-slider__img',
-                fetchpriority: forloop.first | default: 'auto',
-                loading: forloop.first | default: 'lazy'
-            }}
+            <picture>
+              {%- if block.settings.image_mobile != blank -%}
+                <source
+                  media="(max-width: 749px)"
+                  srcset="{{ block.settings.image_mobile | image_url: width: 750 }} 750w, {{ block.settings.image_mobile | image_url: width: 1100 }} 1100w"
+                  sizes="100vw"
+                  width="{{ block.settings.image_mobile.width }}"
+                  height="{{ block.settings.image_mobile.height }}"
+                >
+              {%- endif -%}
+              {{
+                block.settings.image
+                | image_url: width: 2400
+                | image_tag:
+                  widths: '750, 1100, 1500, 1800, 2400',
+                  sizes: '100vw',
+                  alt: block.settings.image.alt | default: block.settings.heading,
+                  class: 'm-hero-slider__img',
+                  fetchpriority: forloop.first | default: 'auto',
+                  loading: forloop.first | default: 'lazy'
+              }}
+            </picture>
           {%- else -%}
             <div class="m-hero-slider__img-fallback"></div>
           {%- endif -%}
@@ -277,7 +289,7 @@
   }
 
   /*
-    Image. Targets any direct-child <img> of a slide, not just the
+    Image. Targets any <img> in a slide's <picture>, not just the
     .m-hero-slider__img class — the class is set via the image_tag filter's
     class: param in the Liquid above, but on at least one image with a saved
     focal point it was not present in the rendered markup (Shopify's
@@ -290,7 +302,11 @@
     happen to match, most visibly on mobile's taller portrait viewport, and
     the slide's own background color shows through the gap left underneath.
   */
-  .m-hero-slider__slide > img {
+  .m-hero-slider__slide picture {
+    display: contents;
+  }
+
+  .m-hero-slider__slide picture > img {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -300,7 +316,7 @@
     transition: transform 8s ease;
   }
 
-  .m-hero-slider__slide:is(.m-hero-slider__slide--active) > img {
+  .m-hero-slider__slide:is(.m-hero-slider__slide--active) picture > img {
     transform: scale(1.04);
   }
 
@@ -505,6 +521,71 @@
     gap: 1rem;
     background: #0B1F3A;
   }
+
+  /*
+    Phones: a wide photo cropped to the tall hero loses most of its subject and
+    puts the text over it, so the image sits on top in its own frame (square, or
+    the mobile image's own shape) with the text below. Selectors out-rank the
+    [dir='rtl'] overlay override in marinero-rtl.
+  */
+  @media screen and (max-width: 749px) {
+    .m-hero-slider,
+    .m-hero-slider__track,
+    .m-hero-slider__slide {
+      min-height: 0;
+    }
+
+    .m-hero-slider .m-hero-slider__slide picture > img,
+    .m-hero-slider .m-hero-slider__slide .m-hero-slider__overlay {
+      aspect-ratio: var(--m-hero-mobile-ratio, 1);
+      max-height: 70svh;
+    }
+
+    .m-hero-slider .m-hero-slider__slide picture > img {
+      position: relative;
+      inset: auto;
+      display: block;
+      height: auto;
+      object-position: var(--m-hero-mobile-x, 50%) center;
+    }
+
+    .m-hero-slider .m-hero-slider__slide .m-hero-slider__overlay {
+      inset: 0 0 auto;
+      width: 100%;
+      background: linear-gradient(0deg, var(--color-background) 0%, transparent 40px);
+    }
+
+    .m-hero-slider .m-hero-slider__content {
+      position: relative;
+      inset: auto;
+      max-width: none;
+      padding: 1rem 1.25rem 1.75rem;
+    }
+
+    .m-hero-slider:has(.m-hero-slider__dots) .m-hero-slider__content {
+      padding-block-end: 3.25rem;
+    }
+
+    .m-hero-slider__subtext {
+      margin-bottom: 1.25rem;
+    }
+
+    .m-hero-slider__cta {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .m-hero-slider__img-fallback {
+      position: relative;
+      inset: auto;
+      aspect-ratio: 1;
+    }
+
+    /* Centred on the square image rather than the taller slide. */
+    .m-hero-slider__arrow {
+      top: 50vw;
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -522,6 +603,23 @@
           "type": "image_picker",
           "id": "image",
           "label": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Mobile image",
+          "info": "Optional. Shown on phones instead of the main image, in full above the text."
+        },
+        {
+          "type": "range",
+          "id": "mobile_position_x",
+          "label": "Phone image focus",
+          "info": "Which part of a wide image stays in view on phones: 0 is the left edge, 100 is the right edge.",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 50,
+          "unit": "%"
         },
         {
           "type": "text",

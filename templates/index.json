@@ -16,6 +16,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/Banner_jpg.jpg",
+            "mobile_position_x": 76,
             "eyebrow": "KIDS · BOYS · GIRLS",
             "heading": "The Winter Collection Is Here",
             "subtext": "Durable, comfortable, loved by families across Egypt.",
