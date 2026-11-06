@@ -19,7 +19,16 @@
 {% stylesheet %}
   .skip-to-content-link {
     position: absolute;
-    left: -99999px;
+    /* Keep the hidden link inside the viewport: a large negative left offset
+       creates scrollable overflow on right-to-left pages. */
+    inset-inline-start: var(--margin-lg);
+    top: var(--margin-lg);
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
   .skip-to-content-link:focus {
@@ -28,8 +37,9 @@
     width: auto;
     height: auto;
     padding: var(--padding-lg) var(--padding-4xl);
-    left: var(--margin-lg);
-    top: var(--margin-lg);
+    clip-path: none;
+    white-space: normal;
+    max-width: calc(100% - var(--margin-lg) * 2);
     background-color: var(--color-background);
     box-shadow: 0 0 0 var(--focus-outline-offset) var(--color-background);
   }
