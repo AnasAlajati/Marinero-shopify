@@ -7,6 +7,10 @@
   dir="{% if request.locale.iso_code == 'ar' %}rtl{% else %}ltr{% endif %}"
 >
   <head>
+    {% if template.name == 'product' %}
+      <script>if (/^#rail-media=\d+$/.test(location.hash)) document.documentElement.setAttribute('data-rail-arrival', '');</script>
+      <style>html[data-rail-arrival] main media-gallery:not([data-rail-arrival]) { visibility: hidden; }</style>
+    {% endif %}
     {%- if settings.favicon != blank -%}
       <link
         rel="icon"

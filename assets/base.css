@@ -276,7 +276,7 @@ p:empty {
 
   ::view-transition-group(product-image-transition),
   ::view-transition-group(product-details) {
-    animation-duration: var(--animation-speed);
+    animation-duration: 240ms;
     animation-timing-function: var(--animation-easing);
   }
 

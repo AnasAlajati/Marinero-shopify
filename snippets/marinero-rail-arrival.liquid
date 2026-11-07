@@ -1,0 +1,36 @@
+{%- comment -%}Runs while parsing, before deferred gallery modules or first paint.{%- endcomment -%}
+<script>
+  (() => {
+    const match = location.hash.match(/^#rail-media=(\d+)$/);
+    const gallery = document.currentScript.previousElementSibling;
+    if (!match || gallery?.tagName !== 'MEDIA-GALLERY' || !gallery.closest('main')) return;
+    const selector = `[data-media-id="${match[1]}"]`;
+    const slideshow = gallery.querySelector('slideshow-component');
+    const slides = [...(slideshow?.querySelectorAll('slideshow-slide') || [])];
+    const index = slides.findIndex(slide => slide.querySelector(selector));
+    if (index < 0) { document.documentElement.removeAttribute('data-rail-arrival'); return; }
+    const target = slides[index];
+    const grid = gallery.querySelector('.media-gallery__grid');
+    const gridItem = grid?.querySelector(selector)?.closest('li');
+    if (gridItem) grid.prepend(gridItem);
+    slideshow.setAttribute('initial-slide', String(index));
+    slideshow.setAttribute('in-viewport', '');
+    slides.forEach((slide, i) => slide.setAttribute('aria-hidden', String(i !== index)));
+    gallery.querySelectorAll('[data-view-transition-type]').forEach(el => el.removeAttribute('data-view-transition-type'));
+    [target, gridItem].filter(Boolean).forEach(container => {
+      container.setAttribute('data-view-transition-type', 'product-image-transition');
+      const image = container.querySelector('img');
+      if (image) { image.loading = 'eager'; image.fetchPriority = 'high'; }
+    });
+    const scroller = slideshow.querySelector('slideshow-slides');
+    const position = () => {
+      const rect = target.getBoundingClientRect();
+      const bounds = scroller.getBoundingClientRect();
+      const rtl = getComputedStyle(scroller).direction === 'rtl';
+      scroller.scrollTo({ left: scroller.scrollLeft + (rtl ? rect.right - bounds.right : rect.left - bounds.left), behavior: 'instant' });
+    };
+    position();
+    requestAnimationFrame(position);
+    gallery.dataset.railArrival = match[1];
+  })();
+</script>

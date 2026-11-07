@@ -1,0 +1,89 @@
+{%- doc -%}
+  A selectable garment on the clothing rail.
+  @param {object} product - Shopify product
+  @param {object} [block] - Optional product block with image overrides
+  @param {string} section_id - Parent section ID
+  @param {number} item_index - Unique position in this rail
+  @param {boolean} is_arabic - Whether to render Arabic labels
+{%- enddoc -%}
+{%- liquid
+  assign front = block.settings.front_image
+  assign side = block.settings.side_image
+  assign back = block.settings.back_image
+  assign prepared = false
+  if block.settings.prepared_images == 'move-on' or block.settings.prepared_images == 'social' or block.settings.prepared_images == 'cutie' or block.settings.prepared_images == 'bloom' or block.settings.prepared_images == 'awesome' or block.settings.prepared_images == 'ninety-six'
+    assign prepared = true
+  endif
+  assign prepared_prefix = block.settings.prepared_images | append: '-rail-'
+  assign prepared_side = prepared_prefix | append: 'side.png'
+  assign prepared_front = prepared_prefix | append: 'front.png'
+  assign prepared_back = prepared_prefix | append: 'back.png'
+  assign title = block.settings.title | default: product.title
+  if title == blank
+    assign title = 'Garment preview'
+    if is_arabic
+      assign title = 'معاينة القطعة'
+    endif
+  endif
+  assign front_media_id = block.settings.front_media_id | plus: 0
+  assign back_media_id = block.settings.back_media_id | plus: 0
+  assign gallery_front = product.media | where: 'id', front_media_id | first
+  assign gallery_front = gallery_front | default: product.selected_or_first_available_variant.featured_media | default: product.featured_media
+  assign gallery_back = product.media | where: 'id', back_media_id | first
+  assign gallery_back = gallery_back | default: gallery_front
+  assign product_link = product.url
+  if product != blank and block.settings.variant_id != blank
+    assign variant_id = block.settings.variant_id | url_encode
+    assign product_link = product_link | append: '?variant=' | append: variant_id
+  endif
+-%}
+<div id="RailItem-{{ section_id }}-{{ item_index }}" class="m-rail__item{% if prepared %} m-rail__item--prepared{% endif %}{% if side == blank and prepared == false %} m-rail__item--preview{% endif %}" role="listitem" {{ block.shopify_attributes }}
+  style="--garment-scale: {{ block.settings.display_scale | default: 100 | divided_by: 100.0 }};"
+  data-age="{{ block.settings.age_range | escape }}{% if block.settings.age_range != blank %} {% if is_arabic %}سنة{% else %}years{% endif %}{% endif %}"
+  data-front-media="{{ gallery_front.id }}" data-back-media="{{ gallery_back.id }}"
+  data-sold-as-set="{{ block.settings.sold_as_set }}"
+  data-title="{{ title | escape }}" data-price="{% if product != blank %}{{ product.price | money | strip_html | escape }}{% endif %}" data-url="{{ product_link | escape }}"
+  {% if back != blank or prepared %}data-has-back{% endif %}>
+  <a class="m-rail__garment" {% if product_link != blank %}href="{{ product_link }}#rail-media={{ gallery_front.id }}"{% endif %} aria-label="{{ title | escape }}">
+    <span class="m-rail__hook" aria-hidden="true"></span>
+    <span class="m-rail__images" aria-hidden="true">
+      <span class="m-rail__side">
+        {%- if side != blank -%}
+          {{ side | image_url: width: 720 | image_tag: widths: '180, 360, 540, 720', sizes: '180px', loading: 'lazy', alt: '', draggable: 'false' }}
+        {%- elsif prepared -%}
+          <img class="m-rail__prepared-img" src="{{ prepared_side | asset_url }}" width="1200" height="1600" loading="lazy" alt="" draggable="false">
+        {%- elsif front != blank -%}
+          {{ front | image_url: width: 720 | image_tag: widths: '180, 360, 540, 720', sizes: '260px', loading: 'lazy', alt: '', draggable: 'false' }}
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag }}
+        {%- endif -%}
+      </span>
+      <span class="m-rail__faces">
+        <span class="m-rail__face m-rail__front">
+          {%- if front != blank -%}
+            {{ front | image_url: width: 900 | image_tag: widths: '360, 540, 720, 900', sizes: '(max-width: 749px) 250px, 320px', loading: 'lazy', alt: '', draggable: 'false' }}
+          {%- elsif prepared -%}
+            <img class="m-rail__prepared-img{% if block.settings.prepared_images == 'cutie' %} m-rail__original-front{% elsif block.settings.prepared_images == 'bloom' %} m-rail__bloom-front{% elsif block.settings.prepared_images == 'ninety-six' %} m-rail__96-original{% elsif block.settings.prepared_images == 'awesome' %} m-rail__awesome-original{% endif %}" src="{{ prepared_front | asset_url }}" width="1200" height="1600" loading="lazy" alt="" draggable="false">
+          {%- endif -%}
+        </span>
+        {%- if back != blank or prepared -%}
+          <span class="m-rail__face m-rail__back">
+            {%- if back != blank -%}
+              {{ back | image_url: width: 900 | image_tag: widths: '360, 540, 720, 900', sizes: '(max-width: 749px) 250px, 320px', loading: 'lazy', alt: '', draggable: 'false' }}
+            {%- else -%}
+              <img class="m-rail__prepared-img{% if block.settings.prepared_images == 'cutie' %} m-rail__original-back{% elsif block.settings.prepared_images == 'ninety-six' %} m-rail__96-original{% elsif block.settings.prepared_images == 'awesome' %} m-rail__awesome-original{% endif %}" src="{{ prepared_back | asset_url }}" width="1200" height="1600" loading="lazy" alt="" draggable="false">
+            {%- endif -%}
+          </span>
+        {%- endif -%}
+      </span>
+    </span>
+    <span class="m-rail__number" aria-hidden="true">{% if block.settings.age_range != blank %}{{ block.settings.age_range | escape }} {% if is_arabic %}سنة{% else %}years{% endif %}{% else %}{{ item_index | prepend: '0' | slice: -2, 2 }}{% endif %}</span>
+  </a>
+  {% if back != blank or prepared %}
+    <div class="m-rail__views" role="group" aria-label="{% if is_arabic %}زاوية القطعة{% else %}Garment view{% endif %}">
+      <button type="button" data-rail-face="front" aria-pressed="true"><span>{% if is_arabic %}أمام{% else %}Front{% endif %}</span></button>
+      <button type="button" data-rail-face="back" aria-pressed="false"><span>{% if is_arabic %}خلف{% else %}Back{% endif %}</span></button>
+    </div>
+  {% endif %}
+  {%- if product != blank -%}<a class="m-rail__fallback" href="{{ product_link }}">{{ title | escape }} — {{ product.price | money }}</a>{%- endif -%}
+</div>

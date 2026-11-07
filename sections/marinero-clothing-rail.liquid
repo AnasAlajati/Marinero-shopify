@@ -1,0 +1,89 @@
+{{ 'marinero-clothing-rail.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'marinero-clothing-rail.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign is_arabic = false
+  if request.locale.iso_code == 'ar'
+    assign is_arabic = true
+  endif
+  assign garment_count = 0
+  for block in section.blocks
+    if block.settings.front_image != blank or block.settings.prepared_images == 'move-on' or block.settings.prepared_images == 'social' or block.settings.prepared_images == 'cutie' or block.settings.prepared_images == 'bloom' or block.settings.prepared_images == 'awesome' or block.settings.prepared_images == 'ninety-six'
+      assign garment_count = garment_count | plus: 1
+    endif
+  endfor
+-%}
+
+{%- if garment_count > 0 or request.design_mode -%}
+<marinero-clothing-rail
+  class="m-rail color-{{ section.settings.color_scheme }}"
+  aria-labelledby="RailHeading-{{ section.id }}"
+  data-front-label="{% if is_arabic %}الأمام{% else %}Front{% endif %}"
+  data-back-label="{% if is_arabic %}الخلف{% else %}Back{% endif %}"
+  style="--rail-height: {{ section.settings.garment_height }}px;"
+>
+  <header class="m-rail__header">
+    <div>
+      <p class="m-rail__eyebrow">{% if is_arabic %}اختَر إطلالتك{% else %}THE MARINERO WARDROBE{% endif %}</p>
+      <h2 id="RailHeading-{{ section.id }}">{% if is_arabic %}{{ section.settings.heading_ar | escape }}{% else %}{{ section.settings.heading | escape }}{% endif %}</h2>
+    </div>
+    <p class="m-rail__hint">{% if garment_count == 1 %}{% if is_arabic %}اضغط على القطعة لاستكشافها وقلبها.{% else %}Pick a piece. Explore every side.{% endif %}{% else %}{% if is_arabic %}اسحب للتصفح. اضغط على قطعة لاستكشافها.{% else %}Slide through. Pick a piece. Make it yours.{% endif %}{% endif %}</p>
+  </header>
+  <div class="m-rail__stage">
+    <div class="m-rail__viewport" tabindex="0" role="region" aria-label="{% if is_arabic %}علاقة الملابس{% else %}Clothing rail{% endif %}">
+      <div class="m-rail__track{% if garment_count == 1 %} m-rail__track--single{% endif %}" role="list">
+          {%- for block in section.blocks -%}
+            {%- unless block.settings.front_image != blank or block.settings.prepared_images == 'move-on' or block.settings.prepared_images == 'social' or block.settings.prepared_images == 'cutie' or block.settings.prepared_images == 'bloom' or block.settings.prepared_images == 'awesome' or block.settings.prepared_images == 'ninety-six' -%}{%- continue -%}{%- endunless -%}
+            {% render 'marinero-rail-item', product: block.settings.product, block: block, section_id: section.id, item_index: forloop.index, is_arabic: is_arabic %}
+          {%- endfor -%}
+      </div>
+    </div>
+  </div>
+  <div class="m-rail__selection" hidden>
+    <div class="m-rail__selection-copy"><p class="m-rail__age" data-rail-age hidden></p><h3 data-rail-title></h3><p data-rail-price></p><p class="m-rail__set-note" data-rail-set-note hidden>{% if is_arabic %}يُباع كطقم كامل{% else %}Sold as a complete set{% endif %}</p></div>
+  </div>
+  {% if section.settings.collection_link != blank %}
+    <div class="m-rail__collection"><a href="{{ section.settings.collection_link }}">{% if is_arabic %}تسوق مجموعة الشتاء{% else %}Shop all winter{% endif %}</a></div>
+  {% endif %}
+  <p class="m-rail__status visually-hidden" role="status" aria-live="polite" aria-atomic="true"></p>
+  {%- if request.design_mode -%}
+    <p class="m-rail__editor-note">Only garments you add here are shown. Add a Garment block, choose its product and upload dedicated front/side/back images, or choose a prepared image set. Product gallery and collection images are never loaded automatically. Blocks without a front image or prepared set stay hidden.</p>
+  {%- endif -%}
+</marinero-clothing-rail>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Marinero clothing rail",
+  "tag": "section",
+  "class": "marinero-rail-section",
+  "max_blocks": 16,
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "url", "id": "collection_link", "label": "Shop all winter link" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Find your next favourite." },
+    { "type": "text", "id": "heading_ar", "label": "Arabic heading", "default": "اختَر قطعتك المفضلة." },
+    { "type": "range", "id": "garment_height", "label": "Garment height", "min": 260, "max": 480, "step": 20, "unit": "px", "default": 380 },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "blocks": [{
+    "type": "garment", "name": "Garment",
+    "settings": [
+      { "type": "product", "id": "product", "label": "Product" },
+      { "type": "checkbox", "id": "sold_as_set", "label": "Sold as a complete set", "default": false },
+      { "type": "text", "id": "variant_id", "label": "Variant ID (optional)", "info": "Open a specific variant of the chosen product." },
+      { "type": "text", "id": "front_media_id", "label": "Product gallery front media ID" },
+      { "type": "text", "id": "back_media_id", "label": "Product gallery back media ID", "info": "Leave empty to open the front photo." },
+      { "type": "text", "id": "title", "label": "Display name (optional)" },
+      { "type": "text", "id": "age_range", "label": "Age range", "info": "For example: 4–8 or 16–18" },
+      { "type": "range", "id": "display_scale", "label": "Garment display scale", "min": 90, "max": 120, "step": 2, "unit": "%", "default": 100 },
+      { "type": "select", "id": "prepared_images", "label": "Prepared image set", "default": "none", "options": [{ "value": "none", "label": "Use uploaded images" }, { "value": "move-on", "label": "Black MOVE ON sweatshirt" }, { "value": "social", "label": "Blue SOCIAL sweatshirt" }, { "value": "cutie", "label": "Pink CUTIE hoodie" }, { "value": "bloom", "label": "Pink BLOOM sweatshirt" }, { "value": "awesome", "label": "Black AWESOME hoodie" }, { "value": "ninety-six", "label": "Charcoal 96 top" }] },
+      { "type": "image_picker", "id": "side_image", "label": "Side image" },
+      { "type": "image_picker", "id": "front_image", "label": "Front image" },
+      { "type": "image_picker", "id": "back_image", "label": "Back image" },
+      { "type": "paragraph", "content": "These images are only for this rail. Upload matching transparent front, side and back images. Uploaded images override the prepared set. No product gallery or collection images are used." }
+    ]
+  }],
+  "presets": [{ "name": "Marinero clothing rail", "category": "Products" }]
+}
+{% endschema %}

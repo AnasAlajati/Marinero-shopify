@@ -204,7 +204,8 @@
         "offset_bottom_desktop": 24,
         "offset_top_mobile": 16,
         "offset_bottom_mobile": 16
-      }
+      },
+      "disabled": false
     },
     "product_reveal_1": {
       "type": "product-reveal",
@@ -648,6 +649,104 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "clothing_rail": {
+      "type": "marinero-clothing-rail",
+      "blocks": {
+        "move_on": {
+          "type": "garment",
+          "settings": {
+            "product": "261120004",
+            "variant_id": "67833072681264",
+            "prepared_images": "move-on",
+            "age_range": "4–8",
+            "display_scale": 100,
+            "front_media_id": "45712370598192",
+            "back_media_id": "45712370762032",
+            "sold_as_set": true
+          }
+        },
+        "social": {
+          "type": "garment",
+          "settings": {
+            "product": "261140002",
+            "variant_id": "67833071960368",
+            "prepared_images": "social",
+            "age_range": "16–18",
+            "display_scale": 112,
+            "front_media_id": "45713031561520",
+            "back_media_id": "45713031790896",
+            "sold_as_set": true
+          }
+        },
+        "cutie": {
+          "type": "garment",
+          "settings": {
+            "product": "261220004",
+            "variant_id": "67833074385200",
+            "prepared_images": "cutie",
+            "age_range": "4–8",
+            "display_scale": 100,
+            "front_media_id": "45300506427696",
+            "back_media_id": "45300506493232",
+            "sold_as_set": true
+          }
+        },
+        "bloom": {
+          "type": "garment",
+          "settings": {
+            "product": "261230002",
+            "variant_id": "67914978132272",
+            "prepared_images": "bloom",
+            "age_range": "10–14",
+            "display_scale": 106,
+            "front_media_id": "45215888900400",
+            "back_media_id": "",
+            "sold_as_set": true
+          }
+        },
+        "ninety_six": {
+          "type": "garment",
+          "settings": {
+            "product": "261240001",
+            "variant_id": "67833073762608",
+            "prepared_images": "ninety-six",
+            "age_range": "16–18",
+            "display_scale": 112,
+            "front_media_id": "45215888212272",
+            "back_media_id": "45215888179504",
+            "sold_as_set": true
+          }
+        },
+        "awesome": {
+          "type": "garment",
+          "settings": {
+            "product": "261240002",
+            "variant_id": "67833073598768",
+            "prepared_images": "awesome",
+            "age_range": "16–18",
+            "display_scale": 112,
+            "front_media_id": "45215887556912",
+            "back_media_id": "45215887524144",
+            "sold_as_set": true
+          }
+        }
+      },
+      "block_order": [
+        "move_on",
+        "cutie",
+        "bloom",
+        "social",
+        "ninety_six",
+        "awesome"
+      ],
+      "settings": {
+        "heading": "Find your next favourite.",
+        "heading_ar": "اختَر قطعتك المفضلة.",
+        "garment_height": 380,
+        "color_scheme": "scheme-1",
+        "collection_link": "shopify://collections/2026-winter-collection"
+      }
     }
   },
   "order": [
@@ -655,8 +754,9 @@
     "age_collections_1",
     "boys_girls_1",
     "trust_bar_1",
-    "architecture_scroll_1",
+    "clothing_rail",
     "product_reveal_1",
+    "architecture_scroll_1",
     "reviews_1",
     "size_fit_1",
     "product_list_fa6P9H"
